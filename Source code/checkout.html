@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | Gimik Cafe</title>
+    <link rel="icon" type="image" href="Asset/Square Logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+
+<!-- HEADER / NAVIGATION -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <ul class="nav-links">
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="customer-dashboard.html" id="accountLink"><i class="fa-regular fa-user"></i></a>
+        </ul>
+    </nav>
+</header>
+
+<!-- MAIN CHECKOUT CONTAINER -->
+<main class="checkout">
+    <h1>Checkout</h1>
+    <p class="checkout-subtitle">Review your order before placing it.</p>
+    <div class="checkout-container">
+        <section class="order-section">
+            <h2>Your Order</h2>
+            <hr>
+            <div id="checkoutItems" class="checkout-items"></div>
+        </section>
+        <aside class="order-details">
+            <h2>Order Details</h2>
+            <hr>
+            <div class="summary-row">
+                <span>Total Items</span>
+                <span id="totalItems">0</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total</span>
+                <span id="checkoutTotal">₱0.00</span>
+            </div>
+            <div class="checkout-option">
+                <label>Payment Method</label>
+                <div style="background: white; color: #024E52; padding: 13px 15px; border-radius: 12px; font-weight: 600; font-size: 14px; font-family: 'Noto Serif', serif;">
+                    GCash
+                </div>
+            </div>
+            <button type="button" id="placeOrderBtn" class="place-order-btn">
+                <i class="fa-solid fa-check"></i> Place Order
+            </button>
+            <a href="cart.html" class="back-cart">
+                <i class="fa-solid fa-arrow-left"></i> Back to Cart
+            </a>
+        </aside>
+    </div>
+</main>
+
+<!-- AUTH REQUIRED MODAL -->
+<div id="authWarningModal" class="checkout-modal-overlay">
+    <div class="checkout-modal">
+        <div class="modal-icon-header" style="background: #fdf6e2; color: #b28200;">
+            <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <h2>Account Required</h2>
+        <p class="modal-subtitle">Please log in to your account to place an order.</p>
+        <div class="modal-actions" style="grid-template-columns: 1fr;">
+            <button type="button" id="modalLoginRedirectBtn" class="modal-btn-confirm">
+                <i class="fa-solid fa-right-to-bracket"></i> Go to Login
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ORDER CONFIRMATION MODAL -->
+<div id="orderConfirmModal" class="checkout-modal-overlay">
+    <div class="checkout-modal">
+        <div class="modal-icon-header">
+            <i class="fa-solid fa-receipt"></i>
+        </div>
+        <h2>Confirm Your Order</h2>
+        <p class="modal-subtitle">Please double-check your order details below:</p>
+        <div class="modal-summary-box">
+            <div class="modal-summary-row">
+                <span>Payment Method</span>
+                <strong id="modalPayment">GCash</strong>
+            </div>
+            <div class="modal-summary-row">
+                <span>Total Items</span>
+                <strong id="modalItemsCount">0</strong>
+            </div>
+            <div class="modal-summary-row total-row">
+                <span>Grand Total</span>
+                <strong id="modalTotalAmount">₱0.00</strong>
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button type="button" id="modalCancelBtn" class="modal-btn-cancel">Cancel</button>
+            <button type="button" id="modalConfirmBtn" class="modal-btn-confirm">
+                <i class="fa-solid fa-arrow-right"></i> Proceed to Payment
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- GCASH QR PAYMENT MODAL -->
+<div id="paymentQrModal" class="checkout-modal-overlay">
+    <div class="checkout-modal qr-modal-card">
+        <div class="modal-icon-header gcash-badge">
+            <i class="fa-solid fa-qrcode"></i>
+        </div>
+        <h2>Complete Your Payment</h2>
+        <p class="modal-subtitle qr-notice">
+            Please scan the QR code to pay within 5 minutes. We’ll process your order immediately and notify you once your drinks are ready.
+        </p>
+        <div class="qr-code-frame">
+            <img src="Asset/QR_Code.jpg" alt="Gimik Cafe GCash QR Code" id="paymentQrImg" onerror="this.onerror=null;this.src='Asset/Square Logo.jpg';">
+        </div>
+        <div class="qr-amount-pill">
+            <span>Amount to Pay</span>
+            <strong id="qrTotalDisplay">₱0.00</strong>
+        </div>
+        <div class="qr-ref-wrapper">
+            <label for="gcashRefInput">GCash Reference No. (15 Digits)</label>
+            <div class="qr-ref-input-box">
+                <input type="text" id="gcashRefInput" maxlength="15" inputmode="numeric" pattern="[0-9]{15}" autocomplete="off">
+            </div>
+            <span class="qr-ref-hint">Please enter the 15-digit transaction reference number from your receipt to enable checkout.</span>
+        </div>
+        <div class="modal-actions qr-actions">
+            <button type="button" id="qrCancelBtn" class="modal-btn-cancel">Cancel</button>
+            <button type="button" id="qrPaidConfirmBtn" class="modal-btn-confirm" disabled>
+                <i class="fa-solid fa-check"></i> I Have Paid
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS FEEDBACK MODAL -->
+<div id="orderSuccessModal" class="checkout-modal-overlay">
+    <div class="checkout-modal success-style">
+        <div class="modal-icon-header success">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h2>Order Placed!</h2>
+        <p class="modal-subtitle">Thank you for ordering with Gimik Cafe.</p>
+        <div class="order-id-badge">
+            <span>Order Number</span>
+            <strong id="modalOrderId">ORD-000000</strong>
+        </div>
+        <button type="button" id="modalSuccessDoneBtn" class="modal-btn-confirm">Back to Menu</button>
+    </div>
+</div>
+
+<!-- FOOTER SECTION -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <ul>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html" id="footerAccountLink">Account</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <p class="footer-map">
+                <a href="aboutus.html#maps" class="map-link">
+                    <i class="fa-solid fa-location-dot"></i> 2nd Floor Veraville Homes, Marcos Alvarez, Las Piñas City
+                </a>
+            </p>
+            <p><i class="fa-solid fa-phone"></i> 0926-344-8046</p>
+            <p><i class="fa-solid fa-envelope"></i> gimikcafe@email.com</p>
+        </div>
+        <div class="footer-section">
+            <div class="social-icons">
+                <a href="https://www.facebook.com/GimikCafe"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/gimikcafe"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@gimikcafe"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="footer-bottom">
+        <p>© 2026 Gimik Cafe. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script type="module" src="js/checkout.js"></script>
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/cart.js"></script>
+<script type="module" src="js/firebase-config.js"></script>
+<script type="module" src="js/notification.js"></script>
+<script type="module" src="js/admin-preview.js"></script>
+
+</body>
+</html>

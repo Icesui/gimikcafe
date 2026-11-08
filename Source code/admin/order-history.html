@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order History | Gimik Cafe</title>
+    <link rel="icon" type="image" href="../Asset/Square Logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-order-history.css">
+    <link rel="stylesheet" href="../css/admin-notifications.css">
+</head>
+
+<body>
+
+<!-- Header -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="../Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <div class="nav-links">
+            <button type="button" class="admin-profile-button" id="adminProfileButton" title="Staff Attendance & Profile">
+                <i class="fa-regular fa-user"></i>
+            </button>
+            <button type="button" class="admin-sidebar-button logout-button" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- Main Page Layout -->
+<main class="admin-page">
+
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+        <nav class="admin-navigation">
+
+            <div class="sidebar-header-action">
+                <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
+                </button>
+            </div>
+
+            <a href="index.html" class="admin-nav-link">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="attendance.html" class="admin-nav-link">
+                <i class="fa-solid fa-user-clock"></i>
+                <span>Staff Attendance</span>
+            </a>
+            <a href="pos.html" class="admin-nav-link">
+                <i class="fa-solid fa-cash-register"></i>
+                <span>POS</span>
+            </a>
+            <a href="orders.html" class="admin-nav-link">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Orders</span>
+            </a>
+            <a href="inventory.html" class="admin-nav-link">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="menu.html" class="admin-nav-link">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>Menu</span>
+            </a>
+            <a href="order-history.html" class="admin-nav-link active">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Order History</span>
+            </a>
+            <a href="customers.html" class="admin-nav-link">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="../index.html" class="admin-nav-link">
+                <i class="fa-solid fa-globe"></i>
+                <span>View Website</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Order History Main Section -->
+    <section class="admin-content order-history-page">
+
+        <!-- Top Header & Date Badge -->
+        <div class="pos-header">
+            <div>
+                <h1>Order History</h1>
+            </div>
+            <div class="pos-date">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="historyDate"></span>
+            </div>
+        </div>
+
+        <!-- 3-Card Summary Metric Grid -->
+        <div class="history-summary">
+            <div class="history-summary-card">
+                <div class="history-summary-icon">
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+                <div class="history-stat-details">
+                    <span>TOTAL ORDERS</span>
+                    <strong id="statHistoryTotal">0</strong>
+                </div>
+            </div>
+
+            <div class="history-summary-card">
+                <div class="history-summary-icon in-stock-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div class="history-stat-details">
+                    <span>COMPLETED</span>
+                    <strong id="statHistoryCompleted">0</strong>
+                </div>
+            </div>
+
+            <div class="history-summary-card">
+                <div class="history-summary-icon danger-icon">
+                    <i class="fa-solid fa-ban"></i>
+                </div>
+                <div class="history-stat-details">
+                    <span>CANCELLED</span>
+                    <strong id="statHistoryCancelled">0</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- Order Records Panel -->
+        <section class="history-panel">
+            <div class="history-panel-header">
+                <div>
+                    <h2>Previous Orders</h2>
+                </div>
+                <div class="history-header-actions">
+                    <button type="button" class="clear-history-system-btn" id="openClearHistoryModalBtn" title="Clear and reset monthly order logs">
+                        <i class="fa-solid fa-trash-can"></i> Clear History
+                    </button>
+                    <button type="button" class="export-history-btn" id="exportHistoryBtn">
+                        <i class="fa-solid fa-download"></i> Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search and Filter Bar -->
+            <div class="history-filters">
+                <div class="history-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        type="text"
+                        id="historySearchInput"
+                        placeholder="Search order #, customer, or items...">
+                </div>
+
+                <div class="history-filter">
+                    <label>Status</label>
+                    <select id="historyStatusFilter">
+                        <option value="All">All Status</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="history-filter">
+                    <label>Date</label>
+                    <select id="historyDateFilter">
+                        <option value="All">All Dates</option>
+                        <option value="Today">Today</option>
+                        <option value="Weekly">Weekly</option>
+                        <option value="Monthly">Monthly</option>
+                        <option value="Yearly">Yearly</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="history-table-container">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>ORDER #</th>
+                            <th>CUSTOMER</th>
+                            <th>DATE &amp; TIME</th>
+                            <th>ITEMS</th>
+                            <th>TOTAL</th>
+                            <th>STATUS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <tr>
+                            <td colspan="6" class="table-loading-cell">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Loading order records...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination Bar -->
+            <div class="history-pagination">
+                <span id="historyPaginationInfo">Showing 0 orders</span>
+                <div class="pagination-buttons" id="historyPaginationControls"></div>
+            </div>
+        </section>
+
+    </section>
+
+</main>
+
+<!-- Order Details Modal -->
+<div class="order-modal" id="historyDetailsModal" style="display: none;">
+    <div class="order-modal-overlay"></div>
+    <div class="order-modal-box">
+        <div class="order-modal-header">
+            <div>
+                <span class="history-tag"></span>
+                <h2 id="modalOrderNumber">Order #00001</h2>
+            </div>
+            <button type="button" class="order-modal-close" id="closeDetailsModal" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="order-modal-body">
+            <div class="modal-info-grid">
+                <div>
+                    <label>Customer Name</label>
+                    <strong id="modalCustomerName">-</strong>
+                </div>
+                <div>
+                    <label>Date &amp; Time</label>
+                    <strong id="modalOrderDate">-</strong>
+                </div>
+                <div>
+                    <label>Payment Method</label>
+                    <strong id="modalPaymentMethod">-</strong>
+                </div>
+                <div>
+                    <label>Order Status</label>
+                    <span id="modalStatusBadge" class="status-badge completed">Completed</span>
+                </div>
+            </div>
+
+            <div class="modal-items-section">
+                <label>Purchased Items</label>
+                <div class="modal-items-list" id="modalItemsList"></div>
+            </div>
+
+            <div class="modal-total-bar">
+                <span>Total Amount Paid</span>
+                <strong id="modalTotalAmount">₱0.00</strong>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Clear Order History Confirmation Modal -->
+<div class="product-modal" id="clearHistoryModal" style="display: none;">
+    <div class="product-modal-overlay" id="clearHistoryOverlay"></div>
+    <div class="product-modal-box modal-box-sm">
+        <div class="product-delete-content">
+            <div class="delete-warning-icon">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h3>Clear Order History?</h3>
+            <p>Are you sure you want to clear past order history for this month? Active pending orders will remain intact.</p>
+            <div class="delete-modal-actions">
+                <button type="button" class="modal-btn cancel" id="cancelClearHistoryBtn">
+                    Cancel
+                </button>
+                <button type="button" class="modal-btn danger-confirm" id="confirmClearHistoryBtn">
+                    <i class="fa-solid fa-trash"></i> Yes, Clear All
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="../js/admin.js"></script>
+<script type="module" src="../js/admin-order-history.js"></script>
+<script type="module" src="../js/admin-attendance.js"></script>
+<script type="module" src="../js/admin-notifications.js"></script>
+
+</body>
+</html>

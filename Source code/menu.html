@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu | Gimik Cafe</title>
+    <link rel="icon" type="image" href="Asset/Square Logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/menu.css"> 
+</head>
+<body>
+
+<!-- HEADER / NAVIGATION -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <ul class="nav-links">
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="customer-dashboard.html" id="accountLink"><i class="fa-regular fa-user"></i></a>
+        </ul>
+    </nav>
+</header>
+
+<!-- MENU SHOWCASE SECTION -->
+<section class="menu">
+    <h1 class="menu-title-wrap">
+        <img src="Asset/Gimikonly.png" alt="Gimik" class="menu-title-img">
+        <span>Menu</span>
+    </h1>
+    <p>Just like the 90s.</p>
+    <div class="category-nav">
+        <label for="categorySelect">Category</label>
+        <select id="categorySelect">
+            <option value="all" selected>All Categories</option>
+            <option value="milktea">Milk Tea</option>
+            <option value="iceblended">Ice Blended</option>
+            <option value="coffee">Coffee</option>
+            <option value="noncoffee">Non Coffee</option>
+            <option value="fruitsoda">Fruit Soda</option>
+            <option value="snacks">Snacks</option>
+        </select>
+    </div>
+    <div class="menu-grid"></div>
+</section>
+
+<!-- PRODUCT DETAIL OVERLAY MODAL -->
+<div id="productOverlay" class="overlay">
+    <div class="overlay-content">
+        <button class="close-btn" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="overlay-grid">
+            <div class="overlay-info">
+                <h1 id="overlayName">Product Name</h1>
+                <p id="overlayDescription">Description goes here.</p>
+                <div class="overlay-sizes-section" id="overlaySizesSection">
+                    <h3>Select Size</h3>
+                    <div class="overlay-sizes" id="overlaySizes"></div>
+                </div>
+                <div class="overlay-price" id="overlayPrice">₱0.00</div>
+                <button class="cart-btn" id="addToCartBtn">
+                    <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                </button>
+            </div>
+            <div class="overlay-image">
+                <img id="overlayImage" src="Asset/Square Logo.JPG" alt="Product Image">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST NOTIFICATION CONTAINER -->
+<div id="toastNotification" class="toast-notification">
+    <div class="toast-icon">
+        <i class="fa-solid fa-circle-check"></i>
+    </div>
+    <div class="toast-content">
+        <strong id="toastTitle">Added to Cart!</strong>
+        <p id="toastMessage">Item added successfully.</p>
+    </div>
+    <a href="cart.html" class="toast-view-cart">View Cart</a>
+</div>
+
+<!-- FOOTER SECTION -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <ul>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html" id="footerAccountLink">Account</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <p class="footer-map">
+                <a href="aboutus.html#maps" class="map-link">
+                    <i class="fa-solid fa-location-dot"></i> 2nd Floor Veraville Homes, Marcos Alvarez, Las Piñas City
+                </a>
+            </p>
+            <p><i class="fa-solid fa-phone"></i> 0926-344-8046</p>
+            <p><i class="fa-solid fa-envelope"></i> gimikcafe@email.com</p>
+        </div>
+        <div class="footer-section">
+            <div class="social-icons">
+                <a href="https://www.facebook.com/GimikCafe"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/gimikcafe"><i class="fa-brands fa-tiktok"></i></a>
+                <a href="https://www.tiktok.com/@gimikcafe"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="footer-bottom">
+        <p>© 2026 Gimik Cafe. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/cart.js"></script>
+<script type="module" src="js/firebase-config.js"></script>
+<script type="module" src="js/menu.js"></script>
+<script type="module" src="js/notification.js"></script>
+<script type="module" src="js/admin-preview.js"></script>
+
+</body>
+</html>

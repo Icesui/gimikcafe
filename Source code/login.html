@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Gimik Cafe</title>
+    <link rel="icon" type="image" href="Asset/Square Logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<!-- HEADER / NAVIGATION -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <ul class="nav-links">
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="customer-dashboard.html" id="accountLink"><i class="fa-regular fa-user"></i></a>
+        </ul>
+    </nav>
+</header>
+
+<!-- LOGIN SECTION -->
+<section class="login-section">
+    <div class="login-container">
+        <h1>Login</h1>
+        <form id="loginForm">
+            <div class="input-box">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" autocomplete="username" required>
+            </div>
+            <div class="input-box">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" minlength="8" autocomplete="current-password" required>
+            </div>
+            <p id="loginMessage" class="login-message"></p>
+            <button type="submit" class="login-btn" id="loginSubmit">Login</button>
+        </form>
+        <div class="register-link">
+            <div class="auth-actions">
+                <a href="register.html" class="register-btn">Register</a>
+                <a href="forgetpassword.html" class="forgot-btn">Forgot Password</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER SECTION -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <ul>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html" id="footerAccountLink">Account</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <p class="footer-map">
+                <a href="aboutus.html#maps" class="map-link">
+                    <i class="fa-solid fa-location-dot"></i> 2nd Floor Veraville Homes, Marcos Alvarez, Las Piñas City
+                </a>
+            </p>
+            <p><i class="fa-solid fa-phone"></i> 0926-344-8046</p>
+            <p><i class="fa-solid fa-envelope"></i> gimikcafe@email.com</p>
+        </div>
+        <div class="footer-section">
+            <div class="social-icons">
+                <a href="https://www.facebook.com/GimikCafe"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/gimikcafe"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@gimikcafe"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="footer-bottom">
+        <p>© 2026 Gimik Cafe. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script type="module" src="js/cart.js"></script>
+<script type="module" src="js/firebase-config.js"></script>
+<script type="module" src="js/login.js"></script>
+
+</body>
+</html>

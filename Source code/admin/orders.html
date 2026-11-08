@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders | Gimik Cafe</title>
+    <link rel="icon" type="image" href="../Asset/Square Logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-orders.css">
+    <link rel="stylesheet" href="../css/admin-notifications.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="../Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <div class="nav-links">
+            <button type="button" class="admin-profile-button" id="adminProfileButton" title="Admin Profile">
+                <i class="fa-regular fa-user"></i>
+            </button>
+            <button type="button" class="admin-sidebar-button logout-button" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- MAIN PAGE -->
+<main class="admin-page">
+    <aside class="admin-sidebar">
+        <nav class="admin-navigation">
+
+            <div class="sidebar-header-action">
+                <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
+                </button>
+            </div>
+
+            <a href="index.html" class="admin-nav-link">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="attendance.html" class="admin-nav-link">
+                <i class="fa-solid fa-user-clock"></i>
+                <span>Staff Attendance</span>
+            </a>
+            <a href="pos.html" class="admin-nav-link">
+                <i class="fa-solid fa-cash-register"></i>
+                <span>POS</span>
+            </a>
+            <a href="orders.html" class="admin-nav-link active">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Orders</span>
+            </a>
+            <a href="inventory.html" class="admin-nav-link">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="menu.html" class="admin-nav-link">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>Menu</span>
+            </a>
+            <a href="order-history.html" class="admin-nav-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Order History</span>
+            </a>
+            <a href="customers.html" class="admin-nav-link">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="../index.html" class="admin-nav-link">
+                <i class="fa-solid fa-globe"></i> View Website
+            </a>
+        </nav>
+    </aside>
+
+    <section class="admin-content orders-content">
+        <div class="orders-management">
+            <div class="pos-header">
+                <div>
+                    <h1>Orders</h1>
+                </div>
+                <div class="pos-date">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span id="ordersDateDisplay"></span>
+                </div>
+            </div>
+
+            <div class="orders-statistics">
+                <div class="order-stat-card">
+                    <div class="order-stat-icon">
+                        <i class="fa-solid fa-receipt"></i>
+                    </div>
+                    <div>
+                        <span>TOTAL ORDERS</span>
+                        <h2 id="statTotalOrders">0</h2>
+                    </div>
+                </div>
+                <div class="order-stat-card">
+                    <div class="order-stat-icon pending-icon">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                    <div>
+                        <span>ACTIVE IN QUEUE</span>
+                        <h2 id="statPendingOrders">0</h2>
+                    </div>
+                </div>
+                <div class="order-stat-card">
+                    <div class="order-stat-icon completed-icon">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <span>COMPLETED</span>
+                        <h2 id="statCompletedOrders">0</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="orders-controls">
+                <div class="orders-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="orderSearchInput" placeholder="Search order #, customer name, items...">
+                </div>
+                <div class="orders-filter">
+                    <select id="orderStatusFilter">
+                        <option value="Pending">Active Queue</option>
+                        <option value="All">All Orders</option>
+                        <option value="Completed">Completed / Ready</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+                <button type="button" class="clear-all-orders-btn" id="openClearOrdersModalBtn">
+                    <i class="fa-solid fa-trash-can"></i> Clear All Orders
+                </button>
+            </div>
+
+            <div class="orders-table-panel">
+                <div class="orders-table-header">
+                    <div>
+                        <h2>Current Orders</h2>
+                        <p id="ordersCountSubtitle">0 orders recorded.</p>
+                    </div>
+                </div>
+                <div class="orders-table-wrapper">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>ORDER #</th>
+                                <th>CUSTOMER</th>
+                                <th>ITEMS</th>
+                                <th>TOTAL</th>
+                                <th>STATUS</th>
+                                <th>DATE</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr>
+                                <td colspan="6" class="table-loading-cell">
+                                    <i class="fa-solid fa-spinner fa-spin"></i> Loading orders...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ORDER DETAILS MODAL -->
+<div class="order-modal" id="orderDetailsModal" style="display: none;">
+    <div class="order-modal-overlay"></div>
+    <div class="order-modal-box">
+        <div class="order-modal-header">
+            <div>
+                <span id="modalOrderSource" class="order-tag">ORDER DETAILS</span>
+                <h2 id="modalOrderNumber">Order #00000</h2>
+            </div>
+            <button type="button" class="order-modal-close" id="closeDetailsModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="order-modal-body">
+            <div class="modal-info-grid">
+                <div>
+                    <label>Customer Name</label>
+                    <strong id="modalCustomerName">-</strong>
+                </div>
+                <div>
+                    <label>Date &amp; Time</label>
+                    <strong id="modalOrderDate">-</strong>
+                </div>
+                <div>
+                    <label>Payment Method</label>
+                    <strong id="modalPaymentMethod">-</strong>
+                </div>
+                <div>
+                    <label>Order Status</label>
+                    <span id="modalStatusBadge" class="order-status pending">Verifying Payment</span>
+                </div>
+            </div>
+
+            <div class="modal-items-section">
+                <label>Order Items</label>
+                <div class="modal-items-list" id="modalItemsList"></div>
+            </div>
+
+            <div class="modal-total-bar">
+                <span>Total Amount Paid</span>
+                <strong id="modalTotalAmount">₱0.00</strong>
+            </div>
+
+            <div class="modal-order-actions-footer" id="modalOrderActionsFooter"></div>
+        </div>
+    </div>
+</div>
+
+<!-- CANCEL ORDER MODAL -->
+<div class="order-modal" id="cancelOrderModal" style="display: none;">
+    <div class="order-modal-overlay"></div>
+    <div class="order-modal-box modal-box-sm">
+        <div class="order-cancel-content">
+            <div class="cancel-warning-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3>Cancel Order</h3>
+            <p id="cancelModalPrompt">Please select a reason for cancelling this order:</p>
+            <div class="cancel-reasons-list">
+                <button type="button" class="cancel-reason-btn" data-reason="Order has been cancelled. 5 minute payment period has passed.">
+                    <i class="fa-regular fa-clock"></i>
+                    <span>5 minute payment period has passed</span>
+                </button>
+                <button type="button" class="cancel-reason-btn" data-reason="Order has been canceled. Reference number not found.">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Reference number not found</span>
+                </button>
+            </div>
+            <div class="cancel-modal-actions" style="margin-top: 15px;">
+                <button type="button" class="modal-btn cancel" id="dismissCancelModalBtn">
+                    Keep Order
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CLEAR ALL ORDERS MODAL -->
+<div class="order-modal" id="clearAllOrdersModal" style="display: none;">
+    <div class="order-modal-overlay"></div>
+    <div class="order-modal-box modal-box-sm">
+        <div class="order-cancel-content">
+            <div class="cancel-warning-icon">
+                <i class="fa-solid fa-trash-can"></i>
+            </div>
+            <h3>Clear All Orders?</h3>
+            <p>Are you sure you want to clear all active orders from the queue?</p>
+            <div class="cancel-modal-actions">
+                <button type="button" class="modal-btn cancel" id="dismissClearAllOrdersBtn">
+                    Keep Orders
+                </button>
+                <button type="button" class="modal-btn danger-confirm" id="confirmClearAllOrdersBtn">
+                    <i class="fa-solid fa-trash-can"></i> Yes, Clear All
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/admin.js"></script>
+<script type="module" src="../js/admin-orders.js"></script>
+<script type="module" src="../js/admin-notifications.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+/* Disable Add to Cart / Buy Now buttons while keeping them visible */
+body.admin-preview-mode .cart-btn,
+body.admin-preview-mode #addToCartBtn,
+body.admin-preview-mode .add-to-cart-btn,
+body.admin-preview-mode .add-cart,
+body.admin-preview-mode .order-btn,
+body.admin-preview-mode .btn-order,
+body.admin-preview-mode button[onclick*="addToCart"],
+body.admin-preview-mode button[onclick*="addCart"],
+body.admin-preview-mode button:has(.fa-cart-shopping) {
+    display: inline-flex !important;
+    opacity: 0.6 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    user-select: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+/* Disable navbar cart icon and link without hiding or washing it out */
+body.admin-preview-mode a[href*="cart.html"],
+body.admin-preview-mode .nav-links a[href*="cart.html"],
+body.admin-preview-mode .navbar a:has(.fa-cart-shopping) {
+    display: inline-block !important;
+    opacity: 0.75 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    user-select: none !important;
+}

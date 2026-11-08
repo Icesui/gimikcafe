@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POS | Gimik Cafe</title>
+    <link rel="icon" type="image" href="../Asset/Square Logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-pos.css">
+    <link rel="stylesheet" href="../css/admin-notifications.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="../Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <div class="nav-links">
+            <button type="button" class="admin-profile-button" id="adminProfileButton" title="Admin Profile">
+                <i class="fa-regular fa-user"></i>
+            </button>
+            <button type="button" class="admin-sidebar-button logout-button" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- MAIN PAGE -->
+<main class="admin-page">
+    <aside class="admin-sidebar">
+        <nav class="admin-navigation">
+
+            <div class="sidebar-header-action">
+                <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
+                </button>
+            </div>
+
+            <a href="index.html" class="admin-nav-link">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="attendance.html" class="admin-nav-link">
+                <i class="fa-solid fa-user-clock"></i>
+                <span>Staff Attendance</span>
+            </a>
+            <a href="pos.html" class="admin-nav-link active">
+                <i class="fa-solid fa-cash-register"></i>
+                <span>POS</span>
+            </a>
+            <a href="orders.html" class="admin-nav-link">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Orders</span>
+            </a>
+            <a href="inventory.html" class="admin-nav-link">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="menu.html" class="admin-nav-link">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>Menu</span>
+            </a>
+            <a href="order-history.html" class="admin-nav-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Order History</span>
+            </a>
+            <a href="customers.html" class="admin-nav-link">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="../index.html" class="admin-nav-link">
+                <i class="fa-solid fa-globe"></i> View Website
+            </a>
+        </nav>
+    </aside>
+
+    <section class="admin-content pos-content">
+        <div class="pos-header">
+            <div>
+                <h1>POS</h1>
+            </div>
+            <div class="pos-date">
+                <i class="fa-regular fa-calendar"></i>
+            </div>
+        </div>
+
+        <div class="pos-workspace">
+            <section class="pos-products">
+                <div class="pos-alerts-container">
+                    <div id="posOutOfStockAlert" class="pos-inventory-alert out-of-stock-alert" style="display: none;">
+                        <div class="alert-icon">
+                            <i class="fa-solid fa-circle-xmark"></i>
+                        </div>
+                        <div class="alert-text">
+                            <strong>Out of Stock Alert:</strong>
+                            <span id="outOfStockSummary">0 items depleted.</span>
+                        </div>
+                        <a href="inventory.html" class="alert-link">View Inventory</a>
+                    </div>
+                    <div id="posLowStockAlert" class="pos-inventory-alert low-stock-alert" style="display: none;">
+                        <div class="alert-icon">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                        <div class="alert-text">
+                            <strong>Low Stock Alert:</strong>
+                            <span id="lowStockSummary">0 items running low.</span>
+                        </div>
+                        <a href="inventory.html" class="alert-link">View Inventory</a>
+                    </div>
+                </div>
+
+                <div class="pos-category-bar">
+                    <button type="button" class="pos-category active">All</button>
+                    <button type="button" class="pos-category">Milk Tea</button>
+                    <button type="button" class="pos-category">Ice Blended</button>
+                    <button type="button" class="pos-category">Coffee</button>
+                    <button type="button" class="pos-category">Non Coffee</button>
+                    <button type="button" class="pos-category">Fruit Soda</button>
+                    <button type="button" class="pos-category">Snacks</button>
+                </div>
+
+                <div class="pos-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search products..." aria-label="Search products">
+                </div>
+
+                <div class="pos-product-grid"></div>
+            </section>
+
+            <aside class="pos-order">
+                <div class="pos-order-header">
+                    <div>
+                        <div class="pos-order-number-wrap">
+                            <h2 id="posOrderTitle">Order #00001</h2>
+                            <button type="button" id="resetOrderCounterBtn" title="Reset Order Counter to #00001" class="pos-counter-reset-btn">
+                                <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="clear-order-btn" title="Clear current cart items">
+                        <i class="fa-solid fa-trash-can"></i> Clear
+                    </button>
+                </div>
+
+                <div class="pos-customer">
+                    <label for="posCustomer">Customer</label>
+                    <input type="text" id="posCustomer" placeholder="Walk-in Customer">
+                </div>
+
+                <div class="pos-order-items"></div>
+
+                <div class="pos-summary">
+                    <div>
+                        <span>Subtotal</span>
+                        <strong>₱0.00</strong>
+                    </div>
+                    <div>
+                        <span>Discount</span>
+                        <strong>₱0.00</strong>
+                    </div>
+                    <div class="pos-total">
+                        <span>TOTAL</span>
+                        <strong>₱0.00</strong>
+                    </div>
+                </div>
+
+                <div class="pos-payment">
+                    <label>Payment Method</label>
+                    <div class="payment-methods">
+                        <button type="button" class="payment-method active">
+                            <i class="fa-solid fa-money-bill"></i> Cash
+                        </button>
+                        <button type="button" class="payment-method">
+                            <i class="fa-solid fa-qrcode"></i> GCash
+                        </button>
+                    </div>
+                </div>
+
+                <button type="button" class="complete-sale-btn">
+                    <i class="fa-solid fa-check"></i> Complete Sale
+                </button>
+            </aside>
+        </div>
+    </section>
+</main>
+
+<!-- VARIANT SELECTION MODAL -->
+<div class="pos-variant-modal" id="posVariantModal">
+    <div class="pos-variant-overlay"></div>
+    <div class="pos-variant-box">
+        <div class="pos-variant-header">
+            <div>
+                <h3 id="variantModalTitle">Select Variant</h3>
+            </div>
+            <button type="button" class="pos-variant-close" id="closeVariantModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="pos-variant-body">
+            <p class="variant-helper">Select Size:</p>
+            <div class="pos-variant-options" id="variantOptionsContainer"></div>
+        </div>
+    </div>
+</div>
+
+<!-- RESET ORDER COUNTER MODAL -->
+<div class="pos-variant-modal" id="posResetCounterModal">
+    <div class="pos-variant-overlay" id="resetCounterOverlay"></div>
+    <div class="pos-variant-box pos-confirm-box">
+        <div class="pos-variant-header">
+            <div>
+                <h3>Reset Order Counter</h3>
+            </div>
+            <button type="button" class="pos-variant-close" id="closeResetCounterModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="pos-variant-body">
+            <div class="confirm-modal-content">
+                <div class="confirm-icon-wrap warning">
+                    <i class="fa-solid fa-arrow-rotate-left"></i>
+                </div>
+                <p>Are you sure you want to reset the order counter back to <strong>Order #00001</strong>?</p>
+            </div>
+            <div class="confirm-modal-actions">
+                <button type="button" class="confirm-cancel-btn" id="cancelResetCounterBtn">Cancel</button>
+                <button type="button" class="confirm-accept-btn" id="confirmResetCounterBtn">
+                    <i class="fa-solid fa-check"></i> Reset to #00001
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CUSTOMER NICKNAME MODAL -->
+<div class="pos-variant-modal" id="posNicknameModal">
+    <div class="pos-variant-overlay" id="nicknameModalOverlay"></div>
+    <div class="pos-variant-box pos-compact-modal">
+        <div class="pos-variant-header">
+            <div>
+                <h3>Customer Nickname</h3>
+            </div>
+            <button type="button" class="pos-variant-close" id="closeNicknameModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="pos-variant-body">
+            <div class="pos-input-group">
+                <input type="text" id="posModalCustomerName" placeholder="Name or Nickname" class="pos-modal-text-input">
+                <div class="confirm-modal-actions">
+                    <button type="button" id="skipNicknameBtn" class="confirm-cancel-btn">Walk-in</button>
+                    <button type="button" id="confirmNicknameBtn" class="confirm-accept-btn">
+                        Continue Sale <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- EMPTY CART MODAL -->
+<div class="pos-variant-modal" id="posEmptyCartModal">
+    <div class="pos-variant-overlay" id="emptyCartOverlay"></div>
+    <div class="pos-variant-box pos-confirm-box">
+        <div class="pos-variant-header">
+            <div>
+                <h3>Empty Order</h3>
+            </div>
+            <button type="button" class="pos-variant-close" id="closeEmptyCartModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="pos-variant-body">
+            <div class="confirm-modal-content">
+                <div class="confirm-icon-wrap warning">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <p>Please add at least one product to the order before checking out.</p>
+            </div>
+            <div class="confirm-modal-actions">
+                <button type="button" class="confirm-accept-btn full-width" id="ackEmptyCartBtn">Got it</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SALE SUCCESS MODAL -->
+<div class="pos-success-modal" id="posSuccessModal">
+    <div class="pos-success-overlay"></div>
+    <div class="pos-success-box">
+        <div class="success-icon-wrap">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <h2>Sale Completed!</h2>
+        <p class="success-subtitle">Order has been saved to the database.</p>
+        <div class="receipt-card">
+            <div class="receipt-row">
+                <span>Order No.</span>
+                <strong id="receiptOrderNum">Order #00001</strong>
+            </div>
+            <div class="receipt-row">
+                <span>Customer</span>
+                <strong id="receiptCustomer">Walk-in Customer</strong>
+            </div>
+            <div class="receipt-row">
+                <span>Payment</span>
+                <strong id="receiptPayment">Cash</strong>
+            </div>
+            <div class="receipt-divider"></div>
+            <div class="receipt-row total-row">
+                <span>Total Amount</span>
+                <strong id="receiptTotal">₱0.00</strong>
+            </div>
+        </div>
+        <button type="button" class="close-success-btn" id="closeSuccessModalBtn">
+            <i class="fa-solid fa-arrow-right"></i> Done / New Order
+        </button>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/admin.js"></script>
+<script type="module" src="../js/admin-pos.js"></script>
+<script type="module" src="../js/admin-attendance.js"></script>
+<script type="module" src="../js/admin-notifications.js"></script>
+
+</body>
+</html>

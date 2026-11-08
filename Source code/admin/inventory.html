@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory | Gimik Cafe</title>
+    <link rel="icon" type="image" href="../Asset/Square Logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-inventory.css">
+    <link rel="stylesheet" href="../css/admin-notifications.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="../Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <div class="nav-links">
+            <button type="button" class="admin-profile-button" id="adminProfileButton" title="Staff Attendance & Profile">
+                <i class="fa-regular fa-user"></i>
+            </button>
+            <button type="button" class="admin-sidebar-button logout-button" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- MAIN PAGE -->
+<main class="admin-page">
+    <aside class="admin-sidebar">
+        <nav class="admin-navigation">
+
+            <div class="sidebar-header-action">
+                <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+                <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
+                </button>
+            </div>
+            
+            <a href="index.html" class="admin-nav-link">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="attendance.html" class="admin-nav-link">
+                <i class="fa-solid fa-user-clock"></i>
+                <span>Staff Attendance</span>
+            </a>
+            <a href="pos.html" class="admin-nav-link">
+                <i class="fa-solid fa-cash-register"></i>
+                <span>POS</span>
+            </a>
+            <a href="orders.html" class="admin-nav-link">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Orders</span>
+            </a>
+            <a href="inventory.html" class="admin-nav-link active">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="menu.html" class="admin-nav-link">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>Menu</span>
+            </a>
+            <a href="order-history.html" class="admin-nav-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Order History</span>
+            </a>
+            <a href="customers.html" class="admin-nav-link">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="../index.html" class="admin-nav-link">
+                <i class="fa-solid fa-globe"></i>
+                <span>View Website</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="admin-content inventory-content">
+        <div class="pos-header">
+            <div>
+                <h1>Inventory</h1>
+            </div>
+            <div class="pos-date">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="inventoryDateDisplay"></span>
+            </div>
+        </div>
+
+        <div class="inventory-statistics">
+            <div class="inventory-stat-card">
+                <div class="inventory-stat-icon total-icon">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <div>
+                    <span>TOTAL ITEMS</span>
+                    <h2 id="statTotalItems">0</h2>
+                </div>
+            </div>
+            <div class="inventory-stat-card">
+                <div class="inventory-stat-icon in-stock-icon">
+                    <i class="fa-solid fa-circle-check"></i>
+                </div>
+                <div>
+                    <span>IN STOCK</span>
+                    <h2 id="statInStock">0</h2>
+                </div>
+            </div>
+            <div class="inventory-stat-card">
+                <div class="inventory-stat-icon alert-icon">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div>
+                    <span>LOW / OUT OF STOCK</span>
+                    <h2 id="statLowStock">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="inventory-controls-bar">
+            <div class="inventory-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="inventorySearch" placeholder="Search by item name or category...">
+            </div>
+            <div class="inventory-filter-group">
+                <select id="categoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="coffee-tea">Coffee &amp; Tea Base</option>
+                    <option value="dairy">Dairy &amp; Milks</option>
+                    <option value="powders">Powders &amp; Bases</option>
+                    <option value="syrups">Syrups &amp; Sweeteners</option>
+                    <option value="toppings">Toppings, Sinkers &amp; Mix-ins</option>
+                    <option value="snacks">Food &amp; Snacks</option>
+                    <option value="produce">Fresh Produce &amp; Kitchen Essentials</option>
+                    <option value="packaging">Cups &amp; Packaging</option>
+                    <option value="others">Others</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="in-stock">In Stock</option>
+                    <option value="low-stock">Low Stock (Alert)</option>
+                    <option value="out-of-stock">Out of Stock</option>
+                </select>
+            </div>
+            <div class="inventory-action-group">
+                <button type="button" class="inventory-add-button" id="openInventoryModal">
+                    <i class="fa-solid fa-plus"></i> Add Item
+                </button>
+                <button type="button" class="inventory-remove-button" id="openRemoveModal">
+                    <i class="fa-solid fa-trash-can"></i> Remove Item
+                </button>
+            </div>
+        </div>
+
+        <section class="admin-panel inventory-main-panel">
+            <div class="inventory-panel-header">
+                <div>
+                    <h2>Current Inventory</h2>
+                </div>
+            </div>
+            <div class="inventory-table-wrapper">
+                <table class="inventory-table">
+                    <thead>
+                        <tr>
+                            <th>ITEM NAME</th>
+                            <th>CATEGORY</th>
+                            <th>STOCK LEVEL</th>
+                            <th>BASE RECIPE UNIT</th>
+                            <th>MIN. ALERT LEVEL</th>
+                            <th>STATUS</th>
+                            <th>LAST UPDATED</th>
+                            <th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventoryTableBody">
+                        <tr>
+                            <td colspan="8" class="table-loading-cell">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Loading inventory...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="inventory-empty" id="inventoryEmpty" style="display: none;">
+                <i class="fa-solid fa-box-open"></i>
+                <h3>No inventory items found</h3>
+                <p>Try changing your search or filter options, or add a new item.</p>
+            </div>
+        </section>
+    </section>
+</main>
+
+<!-- ADD / EDIT INVENTORY MODAL -->
+<div class="inventory-modal" id="inventoryModal">
+    <div class="inventory-modal-overlay"></div>
+    <div class="inventory-modal-content">
+        <div class="inventory-modal-header">
+            <div>
+                <span class="inventory-tag"></span>
+                <h2 id="inventoryModalTitle">Add Inventory Item</h2>
+            </div>
+            <button type="button" class="inventory-modal-close" id="closeInventoryModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <form id="inventoryForm" class="inventory-form">
+            <div class="inventory-form-group">
+                <label for="inventoryName">Item Name</label>
+                <input type="text" id="inventoryName" name="inventoryName" required>
+            </div>
+            <div class="inventory-form-row">
+                <div class="inventory-form-group">
+                    <label for="inventoryCategory">Category</label>
+                    <select id="inventoryCategory" name="inventoryCategory" required>
+                        <option value="">Select category</option>
+                        <option value="coffee-tea">Coffee &amp; Tea Base</option>
+                        <option value="dairy">Dairy &amp; Milks</option>
+                        <option value="powders">Powders &amp; Bases</option>
+                        <option value="syrups">Syrups &amp; Sweeteners</option>
+                        <option value="toppings">Toppings, Sinkers &amp; Mix-ins</option>
+                        <option value="snacks">Food &amp; Snacks</option>
+                        <option value="produce">Fresh Produce &amp; Kitchen Essentials</option>
+                        <option value="packaging">Cups &amp; Packaging</option>
+                        <option value="others">Others</option>
+                    </select>
+                </div>
+                <div class="inventory-form-group">
+                    <label for="inventoryUnit">Base Recipe Unit</label>
+                    <select id="inventoryUnit" name="inventoryUnit" required>
+                        <option value="">Select base unit</option>
+                        <option value="ml">ml (Milliliters)</option>
+                        <option value="cc">cc (Cubic Centimeters)</option>
+                        <option value="g">g (Grams)</option>
+                        <option value="shots">shots</option>
+                        <option value="pcs">pcs</option>
+                        <option value="pumps">pumps</option>
+                        <option value="slice">slice</option>
+                        <option value="scoop">scoop</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="packaging-toggle-card">
+                <div class="packaging-checkbox-row">
+                    <input type="checkbox" id="hasPackagingToggle">
+                    <label for="hasPackagingToggle">
+                        <strong>Item comes in bulk packages / cartons</strong>
+                    </label>
+                </div>
+                <div class="packaging-inputs-grid" id="packagingFields" style="display: none;">
+                    <div class="inventory-form-group">
+                        <label for="packageTypeName">Package Name</label>
+                        <select id="packageTypeName">
+                            <option value="carton">Carton</option>
+                            <option value="bottle">Bottle</option>
+                            <option value="bag">Bag</option>
+                            <option value="sleeve">Sleeve</option> 
+                            <option value="pack">Pack / Box</option>
+                        </select>
+                    </div>
+                    <div class="inventory-form-group">
+                        <label for="packageCapacity">Amount Per Package</label>
+                        <div class="input-with-unit">
+                            <input type="number" id="packageCapacity" min="1" step="any" placeholder="0">
+                            <span class="unit-addon" id="capacityUnitLabel">ml</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inventory-form-row">
+                <div class="inventory-form-group">
+                    <label for="inventoryStock" id="stockInputLabel">Current Stock</label>
+                    <input type="number" id="inventoryStock" name="inventoryStock" min="0" step="any" placeholder="0" required>
+                </div>
+                <div class="inventory-form-group">
+                    <label for="inventoryMinimum">Minimum Stock Alert Level</label>
+                    <input type="number" id="inventoryMinimum" name="inventoryMinimum" min="0" step="any" placeholder="0" required>
+                </div>
+            </div>
+
+            <div class="inventory-form-actions">
+                <button type="button" class="inventory-cancel-button" id="cancelInventoryModal">Cancel</button>
+                <button type="submit" class="inventory-save-button">
+                    <i class="fa-solid fa-check"></i> Save Item
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- STOCK ADJUST MODAL -->
+<div class="inventory-modal" id="stockModal">
+    <div class="inventory-modal-overlay" id="stockModalOverlay"></div>
+    <div class="inventory-modal-content stock-modal-content">
+        <div class="inventory-modal-header">
+            <div>
+                <span id="stockModalActionBadge" class="inventory-tag"></span>
+                <h2 id="stockModalTitle">Adjust Stock</h2>
+            </div>
+            <button type="button" class="inventory-modal-close" id="closeStockModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <form id="stockForm" class="inventory-form">
+            <p class="stock-info-text" id="stockModalDescription">Enter quantity:</p>
+            <div class="adjust-unit-selector-wrapper" id="adjustUnitSelectorGroup" style="display: none;">
+                <div class="radio-options-pill">
+                    <label class="unit-pill-option">
+                        <input type="radio" name="adjustUnitType" value="package" checked>
+                        <span id="adjustPackageNameLabel">Packages</span>
+                    </label>
+                    <label class="unit-pill-option">
+                        <input type="radio" name="adjustUnitType" value="base">
+                        <span id="adjustBaseUnitLabel">Base Units</span>
+                    </label>
+                </div>
+            </div>
+            <div class="inventory-form-group">
+                <label for="stockInputQuantity">Quantity to Change</label>
+                <input type="number" id="stockInputQuantity" min="0.01" step="any" placeholder="Enter amount..." required>
+                <small id="stockCurrentBalance"></small>
+            </div>
+            <div class="inventory-form-actions">
+                <button type="button" class="inventory-cancel-button" id="cancelStockModal">Cancel</button>
+                <button type="submit" class="inventory-save-button" id="confirmStockBtn">
+                    <i class="fa-solid fa-check"></i> Confirm Adjustment
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="product-modal" id="deleteModal" style="display: none;">
+    <div class="product-modal-overlay" id="deleteModalOverlay"></div>
+    <div class="product-modal-box modal-box-sm">
+        <div class="product-delete-content">
+            <div class="delete-warning-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3>Delete Item?</h3>
+            <p id="deleteModalPrompt">Are you sure you want to delete <strong id="deleteTargetItemName">"Item"</strong>?</p>
+            <div class="delete-modal-actions">
+                <button type="button" class="modal-btn cancel" id="cancelDeleteModal">Cancel</button>
+                <button type="button" class="modal-btn danger-confirm" id="confirmDeleteBtn">
+                    <i class="fa-solid fa-trash"></i> Yes, Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/admin.js"></script>
+<script type="module" src="../js/admin-inventory.js"></script>
+<script type="module" src="../js/admin-attendance.js"></script>
+<script type="module" src="../js/admin-notifications.js"></script>
+
+</body>
+</html>
