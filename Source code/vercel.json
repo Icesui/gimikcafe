@@ -1,13 +1,3 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/admin", "destination": "/admin/index.html" },
-    { "source": "/attendance", "destination": "/admin/attendance.html" },
-    { "source": "/pos", "destination": "/admin/pos.html" },
-    { "source": "/orders", "destination": "/admin/orders.html" },
-    { "source": "/inventory", "destination": "/admin/inventory.html" },
-    { "source": "/menu-management", "destination": "/admin/menu.html" },
-    { "source": "/order-history", "destination": "/admin/order-history.html" },
-    { "source": "/customers", "destination": "/admin/customers.html" }
-  ]
+  "cleanUrls": true
 }
