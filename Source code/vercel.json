@@ -11,4 +11,3 @@
     { "source": "/dashboard", "destination": "/admin.html" }
   ]
 }
-}
