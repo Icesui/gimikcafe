@@ -1,13 +1,14 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/customers", "destination": "/admin-customers.html" },
-    { "source": "/attendance", "destination": "/admin-attendance.html" },
-    { "source": "/inventory", "destination": "/admin-inventory.html" },
-    { "source": "/menu-management", "destination": "/admin-menu.html" },
-    { "source": "/orders", "destination": "/admin-orders.html" },
-    { "source": "/order-history", "destination": "/admin-order-history.html" },
-    { "source": "/pos", "destination": "/admin-pos.html" },
-    { "source": "/dashboard", "destination": "/admin.html" }
+    { "source": "/attendance", "destination": "/admin/attendance.html" },
+    { "source": "/customers", "destination": "/admin/customers.html" },
+    { "source": "/inventory", "destination": "/admin/inventory.html" },
+    { "source": "/menu-management", "destination": "/admin/menu.html" },
+    { "source": "/orders", "destination": "/admin/orders.html" },
+    { "source": "/order-history", "destination": "/admin/order-history.html" },
+    { "source": "/pos", "destination": "/admin/pos.html" },
+    { "source": "/dashboard", "destination": "/admin/index.html" },
+    { "source": "/admin", "destination": "/admin/index.html" }
   ]
 }
