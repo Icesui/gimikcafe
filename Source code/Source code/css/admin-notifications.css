@@ -1,0 +1,168 @@
+/* =========================================================
+   GIMIK CAFE - POLISHED ADMIN NOTIFICATIONS STYLESHEET
+========================================================= */
+.global-admin-toast {
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 440px; /* Slightly wider to prevent text wrapping */
+    max-width: calc(100vw - 32px);
+    padding: 14px 18px;
+    background: #ffffff;
+    border: 1px solid #dceaea;
+    border-left: 5px solid #0B7074;
+    border-radius: 14px;
+    box-shadow: 0 12px 36px rgba(2, 78, 82, 0.16);
+    transform: translateX(130%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.global-admin-toast.active {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Bell Icon */
+.admin-toast-icon {
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #eaf6f6;
+    color: #0B7074;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    animation: adminBellWiggle 1.5s ease infinite;
+}
+
+/* Middle Content */
+.admin-toast-content {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Top Meta Row (Badge + Order #) */
+.admin-toast-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 3px;
+    flex-wrap: nowrap; /* Prevent breaking into multiple lines */
+}
+
+.admin-toast-tag {
+    font-size: 9.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #087050;
+    background: #eaf6f2;
+    padding: 2px 7px;
+    border-radius: 5px;
+    white-space: nowrap; /* Keeps "NEW ONLINE ORDER" on 1 line */
+    flex-shrink: 0;
+}
+
+.admin-toast-number {
+    font-size: 13px;
+    font-weight: 700;
+    color: #024E52;
+    white-space: nowrap; /* Keeps "ONL #00002" on 1 line */
+}
+
+/* Customer Name */
+.admin-toast-customer {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #263c3d;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25;
+}
+
+/* Item details subtitle */
+.admin-toast-details {
+    margin: 2px 0 0;
+    font-size: 11.5px;
+    color: #7b8e8f;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* Action Buttons */
+.admin-toast-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    margin-left: 6px;
+}
+
+.admin-toast-btn {
+    width: 34px;
+    height: 34px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 13px;
+    transition: 0.2s ease;
+}
+
+.admin-toast-btn.view {
+    background: #0B7074;
+    color: #ffffff;
+}
+
+.admin-toast-btn.view:hover {
+    background: #04696D;
+    transform: scale(1.04);
+}
+
+.admin-toast-btn.dismiss {
+    background: #f1f6f6;
+    color: #708687;
+}
+
+.admin-toast-btn.dismiss:hover {
+    background: #e2eeee;
+    color: #263c3d;
+}
+
+@keyframes adminBellWiggle {
+    0%, 100% { transform: rotate(0deg); }
+    15% { transform: rotate(12deg); }
+    30% { transform: rotate(-10deg); }
+    45% { transform: rotate(8deg); }
+    60% { transform: rotate(-5deg); }
+    75% { transform: rotate(0deg); }
+}
+
+@media (max-width: 480px) {
+    .global-admin-toast {
+        top: 15px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+        padding: 12px 14px;
+    }
+}

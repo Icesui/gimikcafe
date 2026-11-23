@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | Gimik Cafe</title>
+    <link rel="icon" type="image" href="Asset/Square Logo.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body>
+
+<!-- HEADER / NAVIGATION -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <ul class="nav-links">
+            <li><a href="aboutus.html">About Us</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <a href="cart.html"><i class="fa-solid fa-cart-shopping"></i></a>
+            <a href="customer-dashboard.html" id="accountLink"><i class="fa-regular fa-user"></i></a>
+        </ul>
+    </nav>
+</header>
+
+<!-- TERMS & CONDITIONS POPUP -->
+<div id="termsModal" class="terms-modal">
+    <div class="terms-modal-content">
+        <div class="terms-header">
+            <h2>Terms & Conditions</h2>
+            <p>Please read the Terms & Conditions before creating your Gimik Cafe account.</p>
+        </div>
+        <div id="termsContent" class="terms-content">
+            <h3>TERMS & CONDITIONS: GIMIK CAFE</h3>
+            <h4>1. General Overview</h4>
+            <p>Welcome to Gimik Cafe. By entering the premises, purchasing our products, or using our on-site amenities (including guest Wi-Fi, arcade units, board games, library items, and power outlets), you agree to comply with and be bound by the following terms.</p>
+            <h4>2. Ordering and Payments</h4>
+            <ul>
+                <li>All prices displayed are subject to applicable local taxes. Gimik Cafe reserves the right to modify prices and availability without notice.</li>
+                <li>Payment must be settled upon ordering via cash or recognized digital payment channels.</li>
+            </ul>
+            <h4>3. Replacements and Refunds</h4>
+            <ul>
+                <li>We take pride in our craft. If your beverage or food item does not meet quality standards or does not match your order, notify our staff immediately so we can remake it.</li>
+                <li>Refunds are handled at management discretion and generally require returning the item substantially untouched.</li>
+            </ul>
+            <h4>4. House Conduct & Seating Policy</h4>
+            <ul>
+                <li>Gimik Cafe is a community space designed for relaxation, work, and connection. We reserve the right to refuse service or ask patrons to leave for disruptive, abusive, or inappropriate behavior.</li>
+                <li>During peak operating hours, table seating may be subject to reasonable time limits (e.g., 2 hours per order) to accommodate all guests.</li>
+                <li>Outside food and drinks (other than baby food or medical necessities) are strictly prohibited.</li>
+            </ul>
+            <h4>5. Use of Store Amenities, Entertainment & Reading Materials</h4>
+            <ul>
+                <li><strong>Care and Courtesy:</strong> All on-site entertainment amenities—including arcade boxes/machines, board games, card games, books, comics, and manga—are provided complimentary for the shared enjoyment of all paying patrons. Please handle all items with utmost care and clean hands.</li>
+                <li><strong>Proper Return Policy:</strong> Patrons must return every borrowed item (including board game pieces, cards, dice, books, and manga volumes) back to their designated storage shelves, racks, or original containers immediately after use. Do not leave games or reading materials scattered on dining tables or lounge seats.</li>
+                <li><strong>No Removal from Premises:</strong> All store items, games, reading materials, and arcade peripherals remain the exclusive property of Gimik Cafe and must not be removed from the store premises under any circumstances.</li>
+                <li><strong>Loss and Damage:</strong> In the event of deliberate mishandling, defacement, tearing, missing game components, or liquid spills resulting from negligence, Gimik Cafe reserves the right to charge the responsible party the full replacement or repair cost of the item.</li>
+                <li><strong>Arcade Courtesy:</strong> Please be mindful of other patrons waiting to play arcade machines during peak hours. Avoid hitting, shaking, or aggressively forcing buttons, joysticks, or coin/control mechanisms.</li>
+            </ul>
+            <h4>6. Guest Wi-Fi and Outlet Use</h4>
+            <ul>
+                <li>Access to guest Wi-Fi is provided complimentary with a purchase. It must not be used for unlawful activities, commercial hosting, or excessive bandwidth consumption.</li>
+                <li>Gimik Cafe is not responsible for data security, device safety, or electrical fluctuations while connected to our network or wall sockets.</li>
+            </ul>
+            <h4>7. Allergen Notice</h4>
+            <ul>
+                <li>Our beverages and food items are prepared in a kitchen that handles nuts, soy, dairy, gluten, and eggs. While we take cross-contamination seriously, we cannot guarantee an entirely allergen-free environment.</li>
+            </ul>
+            <h4>8. Personal Belongings</h4>
+            <ul>
+                <li>Guests are solely responsible for their personal belongings. Gimik Cafe accepts no liability for items left unattended, lost, damaged, or stolen on the premises.</li>
+            </ul>
+            <h4>9. Photography and Filming</h4>
+            <ul>
+                <li>Casual photos and social media content are warmly welcomed. However, professional setups involving tripods, external lighting, commercial shoots, or blocking pathways require prior written clearance from management.</li>
+            </ul>
+            <h4>10. User Accounts and Authentication</h4>
+            <ul>
+                <li><strong>Account Responsibility:</strong> Users are responsible for maintaining the confidentiality of their login credentials (username and password). Any activity conducted through your authenticated account is presumed to be authorized by you.</li>
+                <li><strong>Notification of Compromise:</strong> You must immediately notify Gimik Cafe management if you suspect unauthorized access or any breach of security regarding your account.</li>
+                <li><strong>Account Termination:</strong> Gimik Cafe reserves the unilateral right to suspend, terminate, or restrict user accounts without notice if malicious activity, credential sharing, or abusive behavior is detected.</li>
+            </ul>
+            <h4>11. Data Privacy Policy (Republic Act No. 10173)</h4>
+            <p>Gimik Cafe is committed to protecting your personal information in strict compliance with the <strong>Data Privacy Act of 2012 (Republic Act No. 10173)</strong>, its Implementing Rules and Regulations (IRR), and relevant issuances of the National Privacy Commission (NPC).</p>
+            <ul>
+                <li><strong>Collection of Personal Data:</strong> Upon account registration and order placement, we collect necessary personal information including your full name, username, email address, contact telephone number, and order/transaction history.</li>
+                <li><strong>Purpose and Processing:</strong> Your personal data is collected and processed solely for legitimate business purposes, specifically: processing orders, managing customer accounts, providing customer service notifications, maintaining platform security, and complying with statutory tax and commercial requirements.</li>
+                <li><strong>Protection & Security:</strong> We employ administrative, physical, and technical safeguards (including encrypted credentials and restricted database access) to protect your personal data against unauthorized access, disclosure, alteration, loss, or unlawful processing.</li>
+                <li><strong>Non-Disclosure:</strong> Gimik Cafe does not sell, trade, or rent personal customer information to third parties or marketing brokers. Data is only shared with service providers strictly necessary to fulfill transactions or when legally compelled by law enforcement authorities.</li>
+                <li><strong>Data Subject Rights:</strong> In accordance with RA 10173, you retain statutory rights as a data subject, including the <em>Right to be Informed</em>, the <em>Right to Access</em> your stored records, the <em>Right to Rectification</em> of inaccurate data, and the <em>Right to Erasure or Blocking</em> upon account termination. Requests may be directed to our management at <strong>gimikcafe@email.com</strong>.</li>
+            </ul>
+            <h4>12. Administrative Access and Confidentiality</h4>
+            <ul>
+                <li><strong>Restricted Admin Privileges:</strong> Access to the Gimik Cafe administrative backend, control panel, or database is strictly restricted to designated, authorized personnel.</li>
+                <li><strong>Confidential Information:</strong> All internal systems, source code, customer records, inventory data, transaction logs, and analytical metrics constitute proprietary and confidential information of Gimik Cafe.</li>
+                <li><strong>Unauthorized Disclosure:</strong> Any unauthorized extraction, modification, copying, or public disclosure of customer or system data is strictly prohibited and constitutes a direct violation of both the <strong>Data Privacy Act of 2012 (RA 10173)</strong> and applicable civil laws.</li>
+            </ul>
+            <h4>13. System Integrity and Anti-Hacking Policy</h4>
+            <p>You agree <strong>not</strong> to attempt, facilitate, or engage in:</p>
+            <ul>
+                <li>Accessing or attempting to access server partitions, restricted directories, admin consoles, or databases without authorization.</li>
+                <li>Probing, scanning, or testing the vulnerability of the website, API, or hosting infrastructure without prior written authorization from Gimik Cafe.</li>
+                <li>Circumventing, tampering with, or bypassing authentication, access controls, or security mechanisms.</li>
+                <li>Injecting malicious code, viruses, malware, trojans, or automated scraping scripts.</li>
+                <li>Performing denial-of-service (DoS/DDoS) attacks, brute-force login attempts, or artificial traffic flooding designed to impair service availability.</li>
+            </ul>
+            <h4>14. Legal Action and Statutory Liabilities</h4>
+            <ul>
+                <li><strong>Criminal Prosecution:</strong> Gimik Cafe strictly enforces security and privacy protocols. Any unauthorized access, system interference, interception, data tampering, or attempt to compromise our web applications constitutes a criminal offense under the <strong>Cybercrime Prevention Act of 2012 (Republic Act No. 10175)</strong> and the <strong>Data Privacy Act of 2012 (Republic Act No. 10173)</strong>.</li>
+                <li><strong>Referral to Authorities:</strong> Violators will be immediately reported to competent law enforcement agencies (such as the PNP Anti-Cybercrime Group and the NBI Cybercrime Division) for criminal investigation and prosecution.</li>
+                <li><strong>Civil Damages:</strong> In addition to criminal charges, Gimik Cafe reserves all rights to initiate civil actions to recover full monetary damages, forensic inspection expenses, system remediation costs, and attorney's fees resulting from security breaches, property damage, or unlawful access.</li>
+            </ul>
+        </div>
+        <div class="terms-acceptance">
+            <label class="terms-checkbox">
+                <input type="checkbox" id="termsCheckbox" disabled>
+                <span>I have read and agree to the Terms & Conditions.</span>
+            </label>
+            <p id="termsScrollMessage" class="terms-scroll-message">Please scroll to the bottom of the Terms & Conditions to continue.</p>
+            <button type="button" id="acceptTermsButton" class="accept-terms-btn" disabled>Accept & Continue</button>
+        </div>
+    </div>
+</div>
+
+<!-- REGISTER SECTION -->
+<section class="register-section">
+    <div class="register-container">
+        <h1>Create Account</h1>
+        <p>Join Gimik Cafe and start ordering.</p>
+        <form id="registerForm">
+            <div class="input-box">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" autocomplete="username" minlength="3" required>
+            </div>
+            <div class="input-box">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" placeholder="Enter your full name" autocomplete="name" required>
+            </div>
+            <div class="input-box">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" placeholder="Enter your email" autocomplete="email" required>
+            </div>
+            <div class="input-box">
+                <label for="contactNumber">Contact Number</label>
+                <input type="tel" id="contactNumber" name="contactNumber" placeholder="09XXXXXXXXX" pattern="09[0-9]{9}" maxlength="11" autocomplete="tel" required>
+            </div>
+            <div class="input-box">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password (min. 8 characters)" minlength="8" autocomplete="new-password" required>
+            </div>
+            <div class="input-box">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter your password" minlength="8" autocomplete="new-password" required>
+            </div>
+            <p id="registerMessage" class="register-message"></p>
+            <button type="submit" class="register-btn" id="registerSubmit">Create Account</button>
+        </form>
+        <div class="login-link">
+            <p>Already have an account?</p>
+            <a href="login.html" class="login-btn">Login</a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER SECTION -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-section">
+            <ul>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="aboutus.html">About Us</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="login.html" id="footerAccountLink">Account</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </div>
+        <div class="footer-section">
+            <p class="footer-map">
+                <a href="aboutus.html#maps" class="map-link">
+                    <i class="fa-solid fa-location-dot"></i> 2nd Floor Veraville Homes, Marcos Alvarez, Las Piñas City
+                </a>
+            </p>
+            <p><i class="fa-solid fa-phone"></i> 0926-344-8046</p>
+            <p><i class="fa-solid fa-envelope"></i> gimikcafe@email.com</p>
+        </div>
+        <div class="footer-section">
+            <div class="social-icons">
+                <a href="https://www.facebook.com/GimikCafe"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/gimikcafe"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@gimikcafe"><i class="fa-brands fa-tiktok"></i></a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="footer-bottom">
+        <p>© 2026 Gimik Cafe. All Rights Reserved.</p>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script type="module" src="js/auth.js"></script>
+<script type="module" src="js/cart.js"></script>
+<script type="module" src="js/firebase-config.js"></script>
+<script type="module" src="js/register.js"></script>
+<script type="module" src="js/admin-preview.js"></script>
+
+</body>
+</html>

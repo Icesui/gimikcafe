@@ -1,0 +1,401 @@
+/* ==========================================
+   GOOGLE FONTS IMPORT
+========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* ==========================================
+   CUSTOMER DASHBOARD MAIN LAYOUT
+========================================== */
+.customer-dashboard {
+    max-width: 1200px;
+    margin: auto;
+    padding: 170px 20px 80px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================
+   DASHBOARD HEADER TYPOGRAPHY
+========================================== */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.dashboard-header h1 {
+    margin: 0;
+    font-family: 'Noto Serif', serif;
+    font-size: 55px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.dashboard-header p {
+    margin-top: 15px;
+    color: #e5ffff;
+    font-size: 18px;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+}
+
+/* ==========================================
+   DASHBOARD CARDS GRID
+========================================== */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+.dashboard-card {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.08);
+    font-family: 'Poppins', sans-serif;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.card-icon {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
+    background: #04696D;
+    color: #ffffff;
+    font-size: 22px;
+}
+
+.card-header h2 {
+    margin: 0;
+    color: #04696D;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'Noto Serif', serif;
+}
+
+.card-header p {
+    margin: 4px 0 0;
+    color: #777;
+    font-size: 14px;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+}
+
+/* ==========================================
+   PROFILE DETAILS
+========================================== */
+.profile-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.profile-row:last-child {
+    border-bottom: none;
+}
+
+.profile-row span {
+    color: #777;
+    font-size: 15px;
+    font-family: 'Noto Serif', serif;
+}
+
+.profile-row strong {
+    color: #04696D;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-word;
+    font-family: 'Noto Serif', serif;
+}
+
+/* ==========================================
+   ORDER EMPTY PLACEHOLDER
+========================================== */
+.order-placeholder {
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-family: 'Noto Serif', serif;
+}
+
+.order-placeholder > i {
+    font-size: 45px;
+    color: #04696D;
+    margin-bottom: 15px;
+}
+
+.order-placeholder h3 {
+    margin: 0 0 8px;
+    color: #04696D;
+    font-size: 22px;
+    font-weight: 700;
+    font-family: 'Noto Serif', serif;
+}
+
+.order-placeholder p {
+    margin: 0 0 20px;
+    color: #777;
+    font-size: 15px;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+}
+
+.dashboard-btn {
+    display: inline-block;
+    padding: 12px 25px;
+    background: #FFD27A;
+    color: #04696D;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    font-family: 'Noto Serif', serif;
+}
+
+/* ==========================================
+   ORDER CARD LIVE ENTRIES & SCROLL BARS
+========================================== */
+.orders-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* FIX: Limit Order History to show 2 cards and scroll the rest */
+#historyOrdersList {
+    max-height: 295px;
+    overflow-y: auto;
+    padding-right: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #04696D #edf5f5;
+}
+
+/* WebKit Scrollbar Styling for Order History */
+#historyOrdersList::-webkit-scrollbar {
+    width: 6px;
+}
+
+#historyOrdersList::-webkit-scrollbar-track {
+    background: #edf5f5;
+    border-radius: 8px;
+}
+
+#historyOrdersList::-webkit-scrollbar-thumb {
+    background: #04696D;
+    border-radius: 8px;
+}
+
+#historyOrdersList::-webkit-scrollbar-thumb:hover {
+    background: #024E52;
+}
+
+.order-entry {
+    background: #f7fafb;
+    border: 1px solid #e1eaea;
+    border-radius: 14px;
+    padding: 16px 18px;
+    flex-shrink: 0;
+}
+
+.order-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #e9efef;
+    padding-bottom: 8px;
+}
+
+.order-id {
+    font-size: 15px;
+    font-weight: 700;
+    color: #04696D;
+    font-family: 'Noto Serif', serif;
+}
+
+.order-status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: capitalize;
+    font-family: 'Poppins', sans-serif;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-preparing,
+.status-processing {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.status-completed,
+.status-delivered {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-cancelled {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.order-entry-body {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    font-family: 'Noto Serif', serif;
+}
+
+.order-entry-items {
+    max-width: 70%;
+    line-height: 1.5;
+}
+
+.order-entry-total {
+    font-size: 16px;
+    font-weight: 700;
+    color: #04696D;
+    font-family: 'Noto Serif', serif;
+}
+
+/* ==========================================
+   ORDER HISTORY CARD
+========================================== */
+.history-card {
+    margin-top: 30px;
+}
+
+.history-card .order-placeholder {
+    min-height: 200px;
+}
+
+/* ==========================================
+   ACCOUNT ACTIONS: LOGOUT BUTTON
+========================================== */
+.account-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 35px;
+}
+
+.logout-btn {
+    border: none;
+    padding: 14px 40px;
+    border-radius: 12px;
+    background: #d9534f;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Noto Serif', serif;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.logout-btn:hover {
+    background: #c9302c;
+}
+
+/* ==========================================
+   CANCELLED ORDER EXPLANATION NOTE
+========================================== */
+.order-cancel-note {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #fdf2f0;
+    border: 1px solid #f5c4bd;
+    border-radius: 9px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    color: #a03b2c;
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+.order-cancel-note i {
+    font-size: 14px;
+    color: #cf3d28;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.order-cancel-note strong {
+    font-weight: 700;
+    color: #8b2518;
+}
+
+/* ==========================================
+   RESPONSIVE MEDIA QUERIES
+========================================== */
+@media(max-width: 900px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media(max-width: 600px) {
+    .customer-dashboard {
+        padding: 140px 20px 60px;
+    }
+
+    .dashboard-header h1 {
+        font-size: 38px;
+    }
+
+    .dashboard-header p {
+        font-size: 15px;
+    }
+
+    .dashboard-card {
+        padding: 22px 18px;
+    }
+
+    .profile-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .profile-row strong {
+        text-align: left;
+    }
+
+    .order-entry-body {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .order-entry-items {
+        max-width: 100%;
+    }
+}

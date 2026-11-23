@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Gimik Cafe</title>
+    <link rel="icon" type="image" href="../Asset/Square Logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-notifications.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="../Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <div class="nav-links">
+            <button type="button" class="admin-profile-button" id="adminProfileButton" title="Staff Attendance & Profile">
+                <i class="fa-regular fa-user"></i>
+            </button>
+            <button type="button" class="admin-sidebar-button logout-button" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- MAIN PAGE -->
+<main class="admin-page">
+    
+    <aside class="admin-sidebar">
+        
+        <div class="sidebar-header-action">
+            <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
+            </button>
+        </div>
+
+        <nav class="admin-navigation">
+            <a href="index.html" class="admin-nav-link active">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="attendance.html" class="admin-nav-link">
+                <i class="fa-solid fa-user-clock"></i>
+                <span>Staff Attendance</span>
+            </a>
+            <a href="pos.html" class="admin-nav-link">
+                <i class="fa-solid fa-cash-register"></i>
+                <span>POS</span>
+            </a>
+            <a href="orders.html" class="admin-nav-link">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Orders</span>
+            </a>
+            <a href="inventory.html" class="admin-nav-link">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="menu.html" class="admin-nav-link">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>Menu</span>
+            </a>
+            <a href="order-history.html" class="admin-nav-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Order History</span>
+            </a>
+            <a href="customers.html" class="admin-nav-link">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="../index.html" class="admin-nav-link">
+                <i class="fa-solid fa-globe"></i>
+                <span>View Website</span>
+            </a>
+        </nav>
+    </aside>
+
+    <section class="admin-content">
+        <div class="pos-header">
+            <div>
+                <h1>Dashboard</h1>
+            </div>
+            <div class="pos-date">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="dashboardDate"></span>
+            </div>
+        </div>
+
+        <div class="admin-statistics">
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon">
+                    <i class="fa-solid fa-peso-sign"></i>
+                </div>
+                <div class="admin-stat-details">
+                    <span>TODAY'S REVENUE</span>
+                    <h2 id="todaySales">₱0.00</h2>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon orders-icon">
+                    <i class="fa-solid fa-receipt"></i>
+                </div>
+                <div class="admin-stat-details">
+                    <span>TODAY'S ORDERS</span>
+                    <h2 id="todayOrders">0</h2>
+                </div>
+            </div>
+            <div class="admin-stat-card">
+                <div class="admin-stat-icon staff-icon">
+                    <i class="fa-solid fa-user-clock"></i>
+                </div>
+                <div class="admin-stat-details">
+                    <span>ON-DUTY STAFF</span>
+                    <h2 id="todayStaffOnDuty">0 Active</h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-dual-grid">
+            <section class="admin-panel inventory-panel">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2>Inventory Alerts</h2>
+                        <p id="inventoryAlertSubtitle">All stock levels are optimal</p>
+                    </div>
+                    <a href="inventory.html" class="panel-header-link">
+                        View Inventory <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="inventory-alerts" id="inventoryAlertsContainer">
+                    <div class="inventory-alert-placeholder">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Loading current stock levels...</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="admin-panel live-orders-panel">
+                <div class="admin-panel-header">
+                    <div>
+                        <h2>Recent Orders</h2>
+                    </div>
+                    <a href="orders.html" class="panel-header-link">
+                        Manage Orders <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+                <div class="live-orders-list" id="liveOrdersContainer">
+                    <div class="live-order-placeholder">
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>No recent orders recorded yet today.</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+
+<!-- ATTENDANCE CLOCK MODAL -->
+<div class="profile-modal" id="attendanceModal">
+    <div class="profile-modal-overlay"></div>
+    <div class="profile-modal-card">
+        <button type="button" class="profile-modal-close" id="closeAttendanceModal">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div class="attendance-avatar-wrap">
+            <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <h2 id="staffGreeting">Welcome, Admin</h2>
+        <p class="staff-subtext">Shift &amp; Attendance Management</p>
+
+        <div class="attendance-clock-card">
+            <span class="clock-label" id="attendanceCurrentDate">Thursday, October 1, 2026</span>
+            <div class="clock-time" id="attendanceLiveClock">00:00:00 AM</div>
+            <div class="shift-status-pill on-duty" id="currentShiftStatus">
+                <i class="fa-solid fa-circle"></i>
+                <span>Status: Clocked Out</span>
+            </div>
+        </div>
+
+        <div class="attendance-info-rows">
+            <div class="info-row-box">
+                <div class="info-icon"><i class="fa-solid fa-user"></i></div>
+                <div>
+                    <label>NAME</label>
+                    <strong id="attendanceStaffName">Gimik Cafe Admin</strong>
+                </div>
+            </div>
+            <div class="info-row-box">
+                <div class="info-icon"><i class="fa-solid fa-id-badge"></i></div>
+                <div>
+                    <label>ROLE</label>
+                    <strong id="attendanceStaffRole">Barista / Admin</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="attendance-punch-grid">
+            <button type="button" class="punch-btn btn-time-in" id="btnTimeIn">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                <div>
+                    <strong>Time In</strong>
+                    <small id="timeInDisplay">--:--</small>
+                </div>
+            </button>
+            <button type="button" class="punch-btn btn-break-out" id="btnBreakOut" disabled>
+                <i class="fa-solid fa-mug-hot"></i>
+                <div>
+                    <strong>Break Out</strong>
+                    <small id="breakOutDisplay">--:--</small>
+                </div>
+            </button>
+            <button type="button" class="punch-btn btn-break-in" id="btnBreakIn" disabled>
+                <i class="fa-solid fa-rotate-left"></i>
+                <div>
+                    <strong>Break In</strong>
+                    <small id="breakInDisplay">--:--</small>
+                </div>
+            </button>
+            <button type="button" class="punch-btn btn-time-out" id="btnTimeOut" disabled>
+                <i class="fa-solid fa-right-from-bracket"></i>
+                <div>
+                    <strong>Time Out</strong>
+                    <small id="timeOutDisplay">--:--</small>
+                </div>
+            </button>
+        </div>
+
+        <button type="button" class="attendance-continue-btn" id="attendanceContinueBtn">
+            Continue to POS <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/admin.js"></script>
+<script type="module" src="../js/admin-dashboard.js"></script>
+<script type="module" src="../js/admin-attendance.js"></script>
+<script type="module" src="../js/admin-notifications.js"></script>
+
+</body>
+</html>

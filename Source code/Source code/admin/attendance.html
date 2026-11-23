@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Attendance | Gimik Cafe</title>
+    <link rel="icon" type="image" href="../Asset/Square Logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-attendance.css">
+    <link rel="stylesheet" href="../css/admin-notifications.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+    <nav class="navbar">
+
+        <a href="index.html" class="logo">
+            <img src="../Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <div class="nav-links">
+            <button type="button" class="admin-profile-button" id="adminProfileButton" title="Staff Clock-In / Profile">
+                <i class="fa-regular fa-user"></i>
+            </button>
+            <button type="button" class="admin-sidebar-button logout-button" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- MAIN PAGE -->
+<main class="admin-page">
+
+
+    <aside class="admin-sidebar">
+
+        <div class="sidebar-header-action">
+            <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
+            </button>
+        </div>
+
+        <nav class="admin-navigation">
+            <a href="index.html" class="admin-nav-link">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="attendance.html" class="admin-nav-link active">
+                <i class="fa-solid fa-user-clock"></i>
+                <span>Staff Attendance</span>
+            </a>
+            <a href="pos.html" class="admin-nav-link">
+                <i class="fa-solid fa-cash-register"></i>
+                <span>POS</span>
+            </a>
+            <a href="orders.html" class="admin-nav-link">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Orders</span>
+            </a>
+            <a href="inventory.html" class="admin-nav-link">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="menu.html" class="admin-nav-link">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>Menu</span>
+            </a>
+            <a href="order-history.html" class="admin-nav-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Order History</span>
+            </a>
+            <a href="customers.html" class="admin-nav-link">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="../index.html" class="admin-nav-link">
+                <i class="fa-solid fa-globe"></i> View Website
+            </a>
+        </nav>
+    </aside>
+
+    <section class="admin-content attendance-page-content">
+        <div class="pos-header">
+            <div>
+                <h1>Staff Attendance</h1>
+            </div>
+            <div class="pos-date">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="attendanceDateDisplay"></span>
+            </div>
+        </div>
+
+        <div class="attendance-stats-grid">
+            <div class="attendance-stat-box">
+                <div class="stat-icon on-duty-icon"><i class="fa-solid fa-user-check"></i></div>
+                <div>
+                    <span>ON DUTY NOW</span>
+                    <h2 id="countOnDuty">0</h2>
+                </div>
+            </div>
+            <div class="attendance-stat-box">
+                <div class="stat-icon break-icon"><i class="fa-solid fa-mug-hot"></i></div>
+                <div>
+                    <span>ON BREAK</span>
+                    <h2 id="countOnBreak">0</h2>
+                </div>
+            </div>
+            <div class="attendance-stat-box">
+                <div class="stat-icon logged-in-icon"><i class="fa-solid fa-id-badge"></i></div>
+                <div class="logged-in-details">
+                    <span>CURRENTLY LOGGED IN</span>
+                    <h2 id="loggedInStaffName">Admin</h2>
+                    <small id="loggedInStaffRole">Barista / Admin</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="attendance-filters-bar">
+            <div class="filters-row-left">
+                <div class="filter-group">
+                    <label for="attendanceRangeFilter">Timeline Range:</label>
+                    <select id="attendanceRangeFilter">
+                        <option value="today" selected>Today</option>
+                        <option value="week">Past 7 Days</option>
+                        <option value="all">All Recorded Dates</option>
+                        <option value="custom">Custom Date Range</option>
+                    </select>
+                </div>
+                <div class="filter-group staff-filter-group" id="staffFilterGroup">
+                    <label for="staffMemberFilter">Staff Member:</label>
+                    <select id="staffMemberFilter">
+                        <option value="all" selected>All Employees</option>
+                    </select>
+                </div>
+            </div>
+            <div class="custom-range-inputs" id="customRangeWrap">
+                <input type="date" id="attendanceStartDate" aria-label="Start Date">
+                <span>to</span>
+                <input type="date" id="attendanceEndDate" aria-label="End Date">
+            </div>
+        </div>
+
+        <section class="attendance-table-panel">
+            <div class="attendance-panel-header">
+                <div>
+                    <h2>Shift History &amp; Logs</h2>
+                    <p id="attendanceTableSubtitle">Loading attendance records...</p>
+                </div>
+                <div class="panel-action-buttons">
+                    <button type="button" class="export-history-btn manage-staff-trigger-btn" id="openManageStaffModalBtn">
+                        <i class="fa-solid fa-users-gear"></i> Manage Staff
+                    </button>
+                    <button type="button" class="export-history-btn add-staff-trigger-btn" id="openAddStaffModalBtn">
+                        <i class="fa-solid fa-user-plus"></i> Add Employee
+                    </button>
+                    <button type="button" class="export-history-btn" id="exportAttendanceBtn">
+                        <i class="fa-solid fa-download"></i> Export CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="attendance-table-wrapper">
+                <table class="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>DATE</th>
+                            <th>STAFF MEMBER</th>
+                            <th>ROLE</th>
+                            <th>STATUS</th>
+                            <th>TIME IN</th>
+                            <th>MEAL BREAK</th>
+                            <th>TIME OUT</th>
+                            <th>TOTAL WORKED</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody">
+                        <tr>
+                            <td colspan="8" class="table-loading-cell">
+                                Loading attendance records...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</main>
+
+<!-- ADD EMPLOYEE MODAL -->
+<div class="profile-modal" id="addStaffModal">
+    <div class="profile-modal-overlay" id="addStaffModalOverlay"></div>
+    <div class="profile-modal-card staff-modal-card">
+        <button type="button" class="profile-modal-close" id="closeAddStaffModal">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h2 class="staff-modal-title">Register Employee</h2>
+        <p class="staff-modal-subtitle">Create an employee account for attendance tracking and POS access.</p>
+        <form id="addStaffForm">
+            <div class="form-group-field">
+                <label for="staffFullName">FULL NAME</label>
+                <input type="text" id="staffFullName" placeholder="e.g. Maria Santos" required>
+            </div>
+            <div class="form-group-field">
+                <label for="staffUsername">USERNAME</label>
+                <input type="text" id="staffUsername" placeholder="e.g. maria_barista" required>
+            </div>
+            <div class="form-group-field">
+                <label for="staffEmail">EMAIL</label>
+                <input type="email" id="staffEmail" placeholder="e.g. maria@gimikcafe.com" required>
+            </div>
+            <div class="form-group-field">
+                <label for="staffPassword">TEMPORARY PASSWORD</label>
+                <input type="password" id="staffPassword" placeholder="Min. 8 characters" minlength="8" required>
+            </div>
+            <div class="form-group-field">
+                <label for="staffContact">CONTACT NUMBER</label>
+                <input type="text" id="staffContact" placeholder="e.g. 09123456789">
+            </div>
+            <div class="form-group-field last-field">
+                <label for="staffRole">ROLE</label>
+                <select id="staffRole">
+                    <option value="admin" selected>Barista</option>
+                    <option value="superadmin">Owner</option>
+                </select>
+            </div>
+            <p id="addStaffMessage" class="staff-form-message"></p>
+            <button type="submit" id="submitAddStaffBtn" class="attendance-continue-btn staff-submit-btn">
+                <i class="fa-solid fa-user-plus"></i> Create Account
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- MANAGE STAFF ACCOUNTS MODAL -->
+<div class="profile-modal" id="manageStaffModal">
+    <div class="profile-modal-overlay" id="manageStaffModalOverlay"></div>
+    <div class="profile-modal-card staff-modal-card manage-staff-modal-card">
+        <button type="button" class="profile-modal-close" id="closeManageStaffModal">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+        <h2 class="staff-modal-title">Manage Staff Accounts</h2>
+        <p class="staff-modal-subtitle">View and delete employee access accounts.</p>
+        <div id="manageStaffMessage" class="staff-form-message"></div>
+        <div class="manage-staff-list" id="manageStaffList">
+            <div class="table-loading-cell">
+                <i class="fa-solid fa-spinner fa-spin"></i> Loading staff members...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script type="module" src="../js/admin.js"></script>
+<script type="module" src="../js/admin-attendance-viewer.js"></script>
+<script type="module" src="../js/admin-attendance.js"></script>
+<script type="module" src="../js/admin-notifications.js"></script>
+
+</body>
+</html>
