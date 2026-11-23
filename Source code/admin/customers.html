@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | Gimik Cafe</title>
+    <link rel="icon" type="image" href="../Asset/Square Logo.jpg">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <!-- Main and admin styles -->
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/admin-customers.css">
+    <link rel="stylesheet" href="../css/admin-notifications.css">
+</head>
+
+<body>
+
+<!-- Header -->
+<header>
+    <nav class="navbar">
+        <a href="index.html" class="logo">
+            <img src="../Asset/Logo clear.png" alt="Gimik Cafe Logo">
+        </a>
+        <div class="nav-links">
+            <button type="button" class="admin-profile-button" id="adminProfileButton" title="Staff Attendance & Profile">
+                <i class="fa-regular fa-user"></i>
+            </button>
+            <button type="button" class="admin-sidebar-button logout-button" id="logoutBtn">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- Main Page Layout -->
+<main class="admin-page">
+
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+
+        <div class="sidebar-header-action">
+            <button type="button" id="sidebarToggleBtn" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">
+            <i class="fa-solid fa-chevron-left" id="sidebarToggleIcon"></i>
+            </button>
+        </div>
+
+        <nav class="admin-navigation">
+            
+            <a href="index.html" class="admin-nav-link">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="attendance.html" class="admin-nav-link">
+                <i class="fa-solid fa-user-clock"></i>
+                <span>Staff Attendance</span>
+            </a>
+            <a href="pos.html" class="admin-nav-link">
+                <i class="fa-solid fa-cash-register"></i>
+                <span>POS</span>
+            </a>
+            <a href="orders.html" class="admin-nav-link">
+                <i class="fa-solid fa-receipt"></i>
+                <span>Orders</span>
+            </a>
+            <a href="inventory.html" class="admin-nav-link">
+                <i class="fa-solid fa-boxes-stacked"></i>
+                <span>Inventory</span>
+            </a>
+            <a href="menu.html" class="admin-nav-link">
+                <i class="fa-solid fa-mug-hot"></i>
+                <span>Menu</span>
+            </a>
+            <a href="order-history.html" class="admin-nav-link">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Order History</span>
+            </a>
+            <a href="customers.html" class="admin-nav-link active">
+                <i class="fa-solid fa-users"></i>
+                <span>Customers</span>
+            </a>
+            <a href="../index.html" class="admin-nav-link">
+                <i class="fa-solid fa-globe"></i>
+                <span>View Website</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Customer Content -->
+    <section class="admin-content customer-content">
+
+        <!-- Top Header & Date Badge -->
+        <div class="pos-header">
+            <div>
+                <h1>Customers</h1>
+            </div>
+            <div class="pos-date">
+                <i class="fa-regular fa-calendar"></i>
+                <span id="customersDate"></span>
+            </div>
+        </div>
+
+        <!-- STATS CARDS -->
+        <div class="customer-statistics">
+            <div class="customer-stat-card">
+                <div class="customer-stat-icon">
+                    <i class="fa-solid fa-users"></i>
+                </div>
+                <div class="customer-stat-details">
+                    <span>TOTAL CUSTOMERS</span>
+                    <h2 id="totalCustomers">0</h2>
+                </div>
+            </div>
+
+            <div class="customer-stat-card">
+                <div class="customer-stat-icon new-cust-icon">
+                    <i class="fa-solid fa-user-check"></i>
+                </div>
+                <div class="customer-stat-details">
+                    <span>REGISTERED ONLINE</span>
+                    <h2 id="registeredOnline">0</h2>
+                </div>
+            </div>
+
+            <div class="customer-stat-card">
+                <div class="customer-stat-icon sales-icon">
+                    <i class="fa-solid fa-peso-sign"></i>
+                </div>
+                <div class="customer-stat-details">
+                    <span>MONTHLY TOTAL</span>
+                    <h2 id="monthlyTotalSpend">₱0.00</h2>
+                </div>
+            </div>
+
+            <div class="customer-stat-card">
+                <div class="customer-stat-icon today-cust-icon">
+                    <i class="fa-solid fa-calendar-day"></i>
+                </div>
+                <div class="customer-stat-details">
+                    <span>TODAY'S TOTAL</span>
+                    <h2 id="todayTotalSpend">₱0.00</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customer Directory Panel -->
+        <section class="admin-panel customer-main-panel">
+            <div class="customer-panel-header">
+                <div>
+                    <h2>Customer Directory</h2>
+                    <p id="customerCountSubtitle">0 registered contacts &amp; POS buyers</p>
+                </div>
+            </div>
+
+            <!-- Controls Toolbar -->
+            <div class="customer-controls">
+                <div class="customer-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input
+                        type="text"
+                        id="customerSearch"
+                        placeholder="Search by customer name, nickname, email, or contact...">
+                </div>
+            </div>
+
+            <!-- Directory Table (5 Columns) -->
+            <div class="customer-table-wrapper">
+                <table class="customer-table">
+                    <thead>
+                        <tr>
+                            <th>CUSTOMER</th>
+                            <th>TYPE</th>
+                            <th>EMAIL</th>
+                            <th>CONTACT</th>
+                            <th>TOTAL ORDERS</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTableBody">
+                        <tr>
+                            <td colspan="5" class="table-loading-cell">
+                                <i class="fa-solid fa-spinner fa-spin"></i> Loading customer directory...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Empty Search State -->
+            <div class="customer-empty" id="customerEmpty" style="display: none;">
+                <i class="fa-solid fa-user-slash"></i>
+                <h3>No customers found</h3>
+                <p>Try searching with another name or clear your search term.</p>
+            </div>
+        </section>
+
+    </section>
+
+</main>
+
+<!-- Customer View Modal -->
+<div class="customer-modal" id="customerViewModal" style="display: none;">
+    <div class="customer-modal-overlay"></div>
+    <div class="customer-modal-content">
+        <div class="customer-modal-header">
+            <div>
+                <span class="customer-tag"></span>
+                <h2>Customer Details</h2>
+            </div>
+            <button type="button" class="customer-modal-close" id="closeCustomerModal" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="customer-profile">
+            <div class="customer-profile-avatar">
+                <span id="modalCustomerInitials">--</span>
+            </div>
+            <div class="customer-profile-info">
+                <h3 id="modalCustomerName">--</h3>
+                <p id="modalCustomerUsername">--</p>
+                <span class="customer-type-badge online" id="modalCustomerType">Online Account</span>
+            </div>
+        </div>
+
+        <div class="customer-details-grid">
+            <div class="customer-detail">
+                <span>EMAIL</span>
+                <strong id="modalCustomerEmail">—</strong>
+            </div>
+            <div class="customer-detail">
+                <span>CONTACT NUMBER</span>
+                <strong id="modalCustomerContact">—</strong>
+            </div>
+            <div class="customer-detail">
+                <span>COMPLETED ORDERS</span>
+                <strong id="modalCustomerOrders">0</strong>
+            </div>
+            <div class="customer-detail">
+                <span>DATE REGISTERED</span>
+                <strong id="modalCustomerJoined">—</strong>
+            </div>
+            <div class="customer-detail">
+                <span>CUSTOMER ID</span>
+                <strong id="modalCustomerId">—</strong>
+            </div>
+        </div>
+
+        <div class="customer-modal-footer">
+            <button type="button" class="customer-modal-button" id="closeCustomerDetails">
+                Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="../js/admin.js"></script>
+<script type="module" src="../js/admin-customers.js"></script>
+<script type="module" src="../js/admin-attendance.js"></script>
+<script type="module" src="../js/admin-notifications.js"></script>
+
+</body>
+</html>

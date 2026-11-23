@@ -1,0 +1,204 @@
+/* ==========================================
+   GOOGLE FONTS IMPORT
+========================================== */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* ==========================================
+   LOGIN SECTION & WRAPPER
+========================================== */
+.login-section {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 170px 20px 100px;
+    background: #04696D;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================
+   LOGIN CARD CONTAINER
+========================================== */
+.login-container {
+    width: 100%;
+    max-width: 450px;
+    background: #ffffff;
+    padding: 45px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================
+   LOGIN HEADINGS & TYPOGRAPHY
+========================================== */
+.login-container h1 {
+    font-family: 'Noto Serif', serif;
+    font-weight: 700;
+    font-size: 38px;
+    color: #04696D;
+    margin: 0 0 10px;
+}
+
+.login-container > p {
+    color: #666;
+    margin: 0 0 35px;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+    font-size: 15px;
+}
+
+/* ==========================================
+   INPUT FIELDS & LABELS
+========================================== */
+.input-box {
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.input-box label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #04696D;
+    font-family: 'Noto Serif', serif;
+    font-size: 14.5px;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #d9d9d9;
+    border-radius: 12px;
+    outline: none;
+    font-size: 15px;
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+}
+
+.input-box input:focus {
+    border-color: #04696D;
+}
+
+/* ==========================================
+   LOGIN FEEDBACK MESSAGE
+========================================== */
+.login-message {
+    display: none;
+    margin: 0 0 15px;
+    padding: 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* ==========================================
+   LOGIN SUBMIT BUTTON
+========================================== */
+.login-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: #04696D;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    font-family: 'Noto Serif', serif;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.25s ease;
+}
+
+.login-btn:hover {
+    background: #024E52;
+}
+
+.login-btn:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+/* ==========================================
+   REGISTER & AUTH OPTIONS
+========================================== */
+.register-link {
+    margin-top: 30px;
+}
+
+.register-link p {
+    margin: 0 0 15px;
+    color: #666;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.auth-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.register-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #FFD27A;
+    color: #04696D;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-family: 'Noto Serif', serif;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    transition: 0.25s ease;
+}
+
+.register-btn:hover {
+    background: #f7c35f;
+}
+
+.forgot-btn {
+    display: inline-block;
+    text-decoration: none;
+    background: #f0f4f4;
+    color: #04696D;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-family: 'Noto Serif', serif;
+    font-size: 14px;
+    letter-spacing: 0.2px;
+    transition: 0.25s ease;
+}
+
+.forgot-btn:hover {
+    background: #e2ecec;
+}
+
+/* ==========================================
+   RESPONSIVE MEDIA QUERIES
+========================================== */
+@media(max-width: 768px) {
+    .login-container {
+        padding: 30px 25px;
+    }
+
+    .login-container h1 {
+        font-size: 32px;
+    }
+
+    .auth-actions {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .register-btn,
+    .forgot-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
