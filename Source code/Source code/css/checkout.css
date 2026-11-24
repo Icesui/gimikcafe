@@ -1,0 +1,832 @@
+/* =========================================================
+   GOOGLE FONTS IMPORT
+========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* =========================================================
+   CHECKOUT MAIN WRAPPER
+========================================================= */
+.checkout {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 150px 0 100px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* =========================================================
+   CHECKOUT HEADER TYPOGRAPHY
+========================================================= */
+.checkout > h1 {
+    text-align: center;
+    font-size: 60px;
+    font-family: 'Noto Serif', serif;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.checkout-subtitle {
+    text-align: center;
+    color: #e5ffff;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+    font-size: 18px;
+    margin-bottom: 50px;
+}
+
+/* =========================================================
+   CHECKOUT GRID LAYOUT
+========================================================= */
+.checkout-container {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+/* =========================================================
+   YOUR ORDER SECTION
+========================================================= */
+.order-section {
+    background: #04696D;
+    border-radius: 25px;
+    padding: 35px;
+    box-shadow: 2px 5px 25px rgba(0, 0, 0, 0.18);
+}
+
+.order-section h2 {
+    font-size: 28px;
+    font-family: 'Noto Serif', serif;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.order-section hr {
+    border: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+    margin-bottom: 25px;
+}
+
+/* =========================================================
+   CHECKOUT ITEMS LIST
+========================================================= */
+.checkout-items {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* =========================================================
+   INDIVIDUAL PRODUCT ITEM CARD
+========================================================= */
+.checkout-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #0B7074;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.checkout-item img {
+    width: 75px;
+    height: 75px;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.checkout-item-details {
+    flex: 1;
+}
+
+.checkout-item-details h3 {
+    font-size: 17px;
+    font-family: 'Noto Serif', serif;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #ffffff;
+}
+
+.checkout-item-details p {
+    font-size: 13.5px;
+    color: #e5ffff;
+    font-family: 'Noto Serif', serif;
+}
+
+.checkout-item-price {
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    color: #ffffff;
+    font-family: 'Noto Serif', serif;
+}
+
+/* =========================================================
+   EMPTY ORDER STATE
+========================================================= */
+.empty-checkout {
+    text-align: center;
+    padding: 50px 20px;
+    color: #e5ffff;
+    font-size: 16px;
+    font-family: 'Noto Serif', serif;
+    font-style: italic;
+}
+
+/* =========================================================
+   ORDER DETAILS SIDEBAR CARD
+========================================================= */
+.order-details {
+    background: #04696D;
+    border-radius: 25px;
+    padding: 35px;
+    box-shadow: 2px 5px 25px rgba(0, 0, 0, 0.18);
+    position: sticky;
+    top: 120px;
+}
+
+.order-details h2 {
+    font-size: 28px;
+    font-family: 'Noto Serif', serif;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.order-details hr {
+    border: none;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.25);
+    margin-bottom: 25px;
+}
+
+/* =========================================================
+   SUMMARY ROWS
+========================================================= */
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 15px;
+    font-family: 'Noto Serif', serif;
+    color: #ffffff;
+}
+
+.summary-row span:last-child {
+    font-weight: 600;
+}
+
+/* TOTAL ROW */
+.summary-row.total {
+    padding-top: 20px;
+    margin-top: 5px;
+    margin-bottom: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    font-size: 20px;
+}
+
+.summary-row.total span:last-child {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+/* =========================================================
+   CHECKOUT OPTIONS & LABELS
+========================================================= */
+.checkout-option {
+    margin-bottom: 20px;
+}
+
+.checkout-option label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14.5px;
+    font-weight: 600;
+    font-family: 'Noto Serif', serif;
+    color: #ffffff;
+}
+
+.checkout-option select {
+    width: 100%;
+    padding: 13px 15px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: white;
+    color: #024E52;
+    font-family: 'Noto Serif', serif;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.checkout-option select:focus {
+    border-color: #4fa8ab;
+    box-shadow: 0 0 12px rgba(79, 168, 171, 0.45);
+}
+
+/* =========================================================
+   PLACE ORDER BUTTON
+========================================================= */
+.place-order-btn {
+    width: 100%;
+    border: none;
+    background: white;
+    color: #04696D;
+    padding: 15px 25px;
+    margin-top: 10px;
+    border-radius: 50px;
+    font-family: 'Noto Serif', serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: .3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.place-order-btn:hover {
+    background: #4fa8ab;
+    color: white;
+    box-shadow: 0 0 18px rgba(79, 168, 171, 0.5);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   BACK TO CART LINK
+========================================================= */
+.back-cart {
+    display: block;
+    text-align: center;
+    margin-top: 20px;
+    color: white;
+    text-decoration: none;
+    font-family: 'Noto Serif', serif;
+    font-size: 14px;
+    transition: .3s;
+}
+
+.back-cart i {
+    margin-right: 6px;
+}
+
+.back-cart:hover {
+    color: #4fa8ab;
+}
+
+/* =========================================================
+   CHECKOUT MODALS (CONFIRMATION, QR, SUCCESS)
+========================================================= */
+.checkout-modal-overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(2, 38, 40, 0.78);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+    padding: 16px;
+    box-sizing: border-box;
+}
+
+.checkout-modal-overlay.active {
+    display: flex;
+}
+
+.checkout-modal {
+    position: relative;
+    width: 100%;
+    max-width: 440px;
+    max-height: 92vh;
+    overflow-y: auto;
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 30px 24px 24px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+    animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-sizing: border-box;
+}
+
+.checkout-modal::-webkit-scrollbar {
+    width: 6px;
+}
+
+.checkout-modal::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.checkout-modal::-webkit-scrollbar-thumb {
+    background: #04696D;
+    border-radius: 10px;
+}
+
+@keyframes modalPop {
+    from {
+        opacity: 0;
+        transform: scale(0.92) translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.modal-icon-header {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #e6f4f5;
+    color: #04696D;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
+}
+
+.modal-icon-header.gcash-badge {
+    background: #e5f1fc;
+    color: #007dfe;
+}
+
+.modal-icon-header.success {
+    background: #e3f8ec;
+    color: #1b874c;
+}
+
+.checkout-modal h2 {
+    font-family: 'Noto Serif', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #024E52;
+    margin: 0 0 6px;
+}
+
+.modal-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #6a7f80;
+    line-height: 1.45;
+    margin: 0 0 16px;
+}
+
+.modal-summary-box {
+    background: #f7fafb;
+    border: 1px solid #e3eded;
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    text-align: left;
+}
+
+.modal-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #4a6365;
+}
+
+.modal-summary-row strong {
+    color: #024E52;
+    font-weight: 700;
+}
+
+.modal-summary-row.total-row {
+    padding-top: 10px;
+    border-top: 1px dashed #cfe2e2;
+    font-size: 14px;
+}
+
+.modal-summary-row.total-row strong {
+    font-family: 'Noto Serif', serif;
+    font-size: 19px;
+    color: #04696D;
+}
+
+.modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 10px;
+}
+
+.modal-btn-cancel,
+.modal-btn-confirm {
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-family: 'Noto Serif', serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+}
+
+.modal-btn-cancel {
+    background: #f0f4f4;
+    color: #4a6365;
+}
+
+.modal-btn-cancel:hover {
+    background: #e2ecec;
+    color: #1d3334;
+}
+
+.modal-btn-confirm {
+    width: 100%;
+    background: #04696D;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(4, 105, 109, 0.25);
+}
+
+.modal-btn-confirm:hover {
+    background: #024E52;
+    box-shadow: 0 6px 18px rgba(4, 105, 109, 0.35);
+}
+
+/* =========================================================
+   QR PAYMENT MODAL SPECIFICS
+========================================================= */
+.qr-modal-card {
+    max-width: 385px;
+    padding: 24px 20px 20px;
+}
+
+.qr-notice {
+    font-size: 12px;
+    margin-bottom: 12px;
+    padding: 0 4px;
+    line-height: 1.4;
+}
+
+.qr-code-frame {
+    background: #ffffff;
+    border: 2px solid #dceaea;
+    border-radius: 14px;
+    padding: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.qr-code-frame img {
+    width: 170px;
+    height: 170px;
+    max-width: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+    display: block;
+}
+
+.qr-amount-pill {
+    background: #eaf6f6;
+    border-radius: 10px;
+    padding: 9px 14px;
+    margin-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.qr-amount-pill span {
+    font-size: 12.5px;
+    color: #3f6062;
+    font-weight: 500;
+}
+
+.qr-amount-pill strong {
+    font-family: 'Noto Serif', serif;
+    font-size: 17px;
+    color: #024E52;
+}
+
+/* Reference Number Input Styling */
+.qr-ref-wrapper {
+    margin-bottom: 14px;
+    text-align: left;
+}
+
+.qr-ref-wrapper label {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #024E52;
+    margin-bottom: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.qr-ref-input-box {
+    position: relative;
+    width: 100%;
+}
+
+.qr-ref-input-box input {
+    width: 100%;
+    height: 44px;
+    background: #f7fafb;
+    border: 2px solid #dceaea;
+    border-radius: 12px;
+    padding: 0 10px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #04696D;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.qr-ref-input-box input:focus {
+    border-color: #04696D;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(4, 105, 109, 0.1);
+}
+
+.qr-ref-input-box input.valid {
+    border-color: #1b874c;
+    background: #f3faf6;
+    color: #1b874c;
+}
+
+.qr-ref-hint {
+    display: block;
+    font-size: 10.5px;
+    color: #7b8e8f;
+    margin-top: 5px;
+    line-height: 1.35;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Disabled State for "I Have Paid" Button */
+.modal-btn-confirm:disabled {
+    background: #cfdcdb !important;
+    color: #7a8e8e !important;
+    cursor: not-allowed !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.order-id-badge {
+    background: #f4f8f8;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.order-id-badge span {
+    font-family: 'Poppins', sans-serif;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #6a7f80;
+    font-weight: 600;
+}
+
+.order-id-badge strong {
+    font-family: 'Noto Serif', serif;
+    font-size: 20px;
+    color: #04696D;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   RESPONSIVE MEDIA QUERIES
+========================================================= */
+@media (max-width: 1000px) {
+    .checkout-container {
+        grid-template-columns: 1fr;
+    }
+
+    .order-details {
+        position: static;
+    }
+}
+
+@media (max-width: 768px) {
+    .checkout {
+        width: 90%;
+        padding: 130px 0 70px;
+    }
+
+    .checkout > h1 {
+        font-size: 42px;
+    }
+
+    .checkout-subtitle {
+        font-size: 15px;
+        margin-bottom: 35px;
+    }
+
+    .order-section,
+    .order-details {
+        padding: 25px 20px;
+        border-radius: 20px;
+    }
+
+    .order-section h2,
+    .order-details h2 {
+        font-size: 23px;
+    }
+
+    .checkout-item {
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .checkout-item img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .checkout-item-details h3 {
+        font-size: 15px;
+    }
+
+    .checkout-item-details p {
+        font-size: 12px;
+    }
+
+    .checkout-item-price {
+        font-size: 13px;
+    }
+
+    .checkout-modal {
+        padding: 24px 18px 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .checkout > h1 {
+        font-size: 34px;
+    }
+
+    .checkout-subtitle {
+        font-size: 14px;
+    }
+
+    .order-section,
+    .order-details {
+        padding: 22px 16px;
+    }
+
+    .summary-row {
+        font-size: 14px;
+    }
+
+    .summary-row.total {
+        font-size: 18px;
+    }
+
+    .summary-row.total span:last-child {
+        font-size: 20px;
+    }
+
+    .checkout-item img {
+        width: 55px;
+        height: 55px;
+    }
+
+    /* Target smaller phones for the QR modal */
+    .qr-modal-card {
+        max-width: 100%;
+        padding: 20px 16px 16px;
+        border-radius: 20px;
+    }
+
+    .modal-icon-header {
+        width: 46px;
+        height: 46px;
+        font-size: 19px;
+        margin-bottom: 10px;
+    }
+
+    .checkout-modal h2 {
+        font-size: 19px;
+    }
+
+    .qr-notice {
+        font-size: 11.5px;
+        margin-bottom: 10px;
+    }
+
+    .qr-code-frame {
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    .qr-code-frame img {
+        width: 145px;
+        height: 145px;
+    }
+
+    .qr-amount-pill {
+        padding: 8px 12px;
+        margin-bottom: 10px;
+    }
+
+    .qr-amount-pill strong {
+        font-size: 16px;
+    }
+
+    .qr-ref-wrapper {
+        margin-bottom: 12px;
+    }
+
+    .qr-ref-wrapper label {
+        font-size: 11px;
+    }
+
+    .qr-ref-input-box input {
+        height: 40px;
+        font-size: 13.5px;
+        letter-spacing: 1px;
+        padding: 0 8px;
+    }
+
+    .qr-ref-hint {
+        font-size: 10px;
+    }
+
+    .modal-btn-cancel,
+    .modal-btn-confirm {
+        height: 42px;
+        font-size: 12.5px;
+        padding: 10px 14px;
+    }
+}
+
+/* Extra breakpoint for compact heights */
+@media (max-height: 670px) {
+    .checkout-modal {
+        padding: 16px 16px 14px;
+    }
+
+    .modal-icon-header {
+        width: 40px;
+        height: 40px;
+        font-size: 17px;
+        margin-bottom: 6px;
+    }
+
+    .checkout-modal h2 {
+        font-size: 18px;
+    }
+
+    .qr-notice {
+        font-size: 11px;
+        margin-bottom: 8px;
+    }
+
+    .qr-code-frame {
+        padding: 6px;
+        margin-bottom: 8px;
+    }
+
+    .qr-code-frame img {
+        width: 125px;
+        height: 125px;
+    }
+
+    .qr-amount-pill {
+        padding: 6px 10px;
+        margin-bottom: 8px;
+    }
+
+    .qr-ref-wrapper {
+        margin-bottom: 10px;
+    }
+
+    .qr-ref-input-box input {
+        height: 38px;
+        font-size: 13px;
+        letter-spacing: 0.8px;
+    }
+}
