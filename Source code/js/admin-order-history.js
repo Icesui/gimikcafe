@@ -204,11 +204,17 @@ function getBestSellers(orders, limit = 5) {
         if (!Array.isArray(order.items)) return;
 
         order.items.forEach((item) => {
-            const name = (item.name || "").trim();
-            if (!name) return;
+            const rawName = (item.name || "").trim();
+            if (!rawName) return;
 
-            const size = (item.size || "").trim();
-            const key = size ? `${name} (${size})` : name;
+            const cleanSize = (item.size || "")
+                .trim()
+                .replace(/^\(+|\)+$/g, "")
+                .replace(/\s*\(\s*/g, " ")
+                .replace(/\s*\)\s*/g, "")
+                .trim();
+
+            const key = cleanSize ? `${rawName} (${cleanSize})` : rawName;
             const qty = Number(item.quantity) || 1;
             const revenue = Number(item.total) || ((Number(item.price) || 0) * qty);
 
