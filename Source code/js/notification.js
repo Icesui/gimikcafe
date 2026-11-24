@@ -293,5 +293,9 @@ document.addEventListener("DOMContentLoaded", () => {
         clearAccountReadyBadge();
     });
 
+    document.getElementById("navUserLink")?.addEventListener("click", () => {
+        clearAccountReadyBadge();
+    });
+
     startOrderTracking();
 });
