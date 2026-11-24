@@ -291,15 +291,14 @@
     gap: 12px;
     padding: 14px 16px;
     background: #f8fbfb;
-    border: 1px solid #e0ebeb;
+    border: none;
     border-radius: 10px;
 }
 
 .best-seller-card.is-top {
     background: #edf7f7;
-    border-color: #0B7074;
+    border: none;
 }
-
 .best-seller-rank {
     width: 28px;
     height: 28px;
