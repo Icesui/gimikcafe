@@ -1,32 +1,31 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* Base typography standard */
 * {
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
 }
 
-/* Sidebar matching POS */
 .admin-sidebar {
-    width: 260px !important;
-    min-width: 260px !important;
+    width: 260px;
+    min-width: 260px;
+    flex-shrink: 0;
 }
 
 .admin-nav-link {
-    padding: 14px 18px !important;
-    font-size: 13px !important;
-    gap: 14px !important;
-    border-radius: 9px !important;
+    padding: 14px 18px;
+    font-size: 13px;
+    gap: 14px;
+    border-radius: 9px;
 }
 
 .admin-nav-link i {
-    font-size: 16px !important;
-    width: 20px !important;
+    font-size: 16px;
+    width: 20px;
     text-align: center;
 }
 
-/* Content wrapper */
 .orders-content {
+    flex: 1;
     min-width: 0;
     padding-top: 30px;
     padding-bottom: 70px;
@@ -37,7 +36,6 @@
     width: 100%;
 }
 
-/* Standardized POS-style header */
 .pos-header {
     display: flex;
     align-items: flex-end;
@@ -73,10 +71,9 @@
     font-size: 13px;
 }
 
-/* Standardized 3-card summary metric grid matching inventory */
 .orders-statistics {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 18px;
     margin-bottom: 24px;
     width: 100%;
@@ -91,7 +88,7 @@
     border: 1px solid #dceaea;
     border-radius: 14px;
     box-shadow: 0 4px 16px rgba(4, 105, 109, 0.04);
-    box-sizing: border-box;
+    min-width: 0;
 }
 
 .order-stat-icon {
@@ -106,7 +103,6 @@
     background: #edf7f7;
     color: #0B7074;
     border: 1px solid #d0e4e4;
-    margin-bottom: 0 !important;
 }
 
 .order-stat-icon.pending-icon {
@@ -138,7 +134,6 @@
     line-height: 1.1;
 }
 
-/* Integrated controls bar matching inventory format */
 .orders-controls {
     display: flex;
     align-items: center;
@@ -150,6 +145,7 @@
 .orders-search {
     position: relative;
     flex: 1;
+    min-width: 0;
 }
 
 .orders-search i {
@@ -172,7 +168,6 @@
     background: #ffffff;
     color: #263c3d;
     font-size: 13px;
-    box-sizing: border-box;
     transition: all 0.2s ease;
 }
 
@@ -199,7 +194,6 @@
     font-size: 12.5px;
     font-weight: 500;
     cursor: pointer;
-    box-sizing: border-box;
     transition: border-color 0.2s ease;
 }
 
@@ -208,7 +202,6 @@
     box-shadow: 0 0 0 3px rgba(11, 112, 116, 0.08);
 }
 
-/* Clear all orders action button */
 .clear-all-orders-btn {
     height: 44px;
     display: inline-flex;
@@ -233,7 +226,6 @@
     color: #cf3d28;
 }
 
-/* Standardized table panel container */
 .orders-table-panel {
     width: 100%;
     background: #ffffff;
@@ -263,7 +255,6 @@
     font-size: 12px;
 }
 
-/* Orders table */
 .orders-table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -315,13 +306,13 @@
 }
 
 .orders-table tbody tr.clickable-order-row.selected {
-    background-color: #e4f3f3 !important;
+    background-color: #e4f3f3;
     outline: 2px solid #0B7074;
 }
 
 .table-loading-cell {
     text-align: center;
-    padding: 40px !important;
+    padding: 40px;
     color: #8fa0a1;
     font-size: 12px;
 }
@@ -378,7 +369,6 @@
     font-weight: 700;
 }
 
-/* Status badges */
 .order-status {
     display: inline-flex;
     align-items: center;
@@ -427,7 +417,6 @@
     font-size: 10px;
 }
 
-/* Modals */
 .order-modal {
     position: fixed;
     inset: 0;
@@ -602,7 +591,6 @@
     color: #0B7074;
 }
 
-/* Modal order action footer */
 .modal-order-actions-footer {
     display: flex;
     align-items: center;
@@ -686,7 +674,6 @@
     border: 1px solid #f5c4bd;
 }
 
-/* Cancel confirmation modal content */
 .order-cancel-content {
     padding: 32px 26px 28px;
     text-align: center;
@@ -724,9 +711,6 @@
     color: #263c3d;
 }
 
-/* =========================================================
-   CANCEL ORDER REASONS SELECTOR MODAL
-========================================================= */
 .cancel-reasons-list {
     display: flex;
     flex-direction: column;
@@ -823,7 +807,6 @@
     }
 }
 
-/* Responsive queries */
 @media (max-width: 1100px) {
     .orders-controls {
         flex-wrap: wrap;

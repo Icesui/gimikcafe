@@ -1,39 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* Base typography standard */
 * {
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
 }
 
-/* Sidebar matching POS */
 .admin-sidebar {
-    width: 260px !important;
-    min-width: 260px !important;
+    width: 260px;
+    min-width: 260px;
+    flex-shrink: 0;
 }
 
 .admin-nav-link {
-    padding: 14px 18px !important;
-    font-size: 13px !important;
-    gap: 14px !important;
-    border-radius: 9px !important;
+    padding: 14px 18px;
+    font-size: 13px;
+    gap: 14px;
+    border-radius: 9px;
 }
 
 .admin-nav-link i {
-    font-size: 16px !important;
-    width: 20px !important;
+    font-size: 16px;
+    width: 20px;
     text-align: center;
 }
 
-/* Page content wrapper */
 .menu-management {
+    flex: 1;
     min-width: 0;
     padding-top: 30px;
     padding-bottom: 70px;
     width: 100%;
 }
 
-/* Standardized POS-style header */
 .pos-header {
     display: flex;
     align-items: flex-end;
@@ -69,7 +67,6 @@
     font-size: 13px;
 }
 
-/* Header buttons matching inventory actions */
 .menu-header-actions {
     display: flex;
     align-items: center;
@@ -100,10 +97,6 @@
     color: #cf3d28;
 }
 
-.menu-delete-btn:active {
-    transform: scale(0.97);
-}
-
 .add-product-btn {
     height: 44px;
     display: inline-flex;
@@ -127,11 +120,6 @@
     border-color: #04696D;
 }
 
-.add-product-btn:active {
-    transform: scale(0.97);
-}
-
-/* Integrated controls toolbar */
 .menu-controls {
     display: flex;
     align-items: center;
@@ -143,6 +131,7 @@
 .menu-search {
     position: relative;
     flex: 1;
+    min-width: 0;
 }
 
 .menu-search i {
@@ -165,7 +154,6 @@
     background: #ffffff;
     color: #263c3d;
     font-size: 13px;
-    box-sizing: border-box;
     transition: all 0.2s ease;
 }
 
@@ -186,7 +174,6 @@
     font-size: 12.5px;
     font-weight: 500;
     cursor: pointer;
-    box-sizing: border-box;
     transition: border-color 0.2s ease;
 }
 
@@ -195,7 +182,6 @@
     box-shadow: 0 0 0 3px rgba(11, 112, 116, 0.08);
 }
 
-/* Product table panel */
 .menu-table-panel {
     width: 100%;
     background: #ffffff;
@@ -225,7 +211,6 @@
     font-size: 12px;
 }
 
-/* Product table */
 .menu-table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -277,7 +262,7 @@
 }
 
 .menu-table tbody tr.selected {
-    background-color: #e4f3f3 !important;
+    background-color: #e4f3f3;
     outline: 2px solid #0B7074;
 }
 
@@ -289,7 +274,7 @@
 
 .table-loading-cell {
     text-align: center;
-    padding: 40px !important;
+    padding: 40px;
     color: #8fa0a1;
     font-size: 12px;
 }
@@ -357,7 +342,6 @@
     font-weight: 700;
 }
 
-/* Status badges */
 .product-status-btn {
     display: inline-flex;
     align-items: center;
@@ -391,7 +375,6 @@
     background: #fae0dc;
 }
 
-/* Product modal styles */
 .product-modal {
     position: fixed;
     inset: 0;
@@ -540,7 +523,6 @@ body.modal-open {
     line-height: 1.5;
 }
 
-/* Modal form controls */
 .product-form {
     display: flex;
     flex-direction: column;
@@ -570,7 +552,6 @@ body.modal-open {
     background: white;
     color: #263c3d;
     font-size: 13px;
-    box-sizing: border-box;
 }
 
 .form-group input,
@@ -712,7 +693,6 @@ body.modal-open {
     background: white;
     color: #263c3d;
     font-size: 13px;
-    box-sizing: border-box;
     outline: none;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
@@ -755,7 +735,6 @@ body.modal-open {
     z-index: 5000;
     display: none;
     padding: 6px;
-    box-sizing: border-box;
 }
 
 .custom-ingredient-select.is-open .ingredient-dropdown-menu {
@@ -815,7 +794,6 @@ body.modal-open {
     font-size: 13px;
     font-weight: 600;
     outline: none;
-    box-sizing: border-box;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -920,7 +898,6 @@ body.modal-open {
     color: #263c3d;
     font-size: 13px;
     font-weight: 500;
-    box-sizing: border-box;
 }
 
 .price-row select.variant-size:focus {
@@ -956,7 +933,6 @@ body.modal-open {
     font-size: 13px;
     font-weight: 600;
     color: #0B7074;
-    box-sizing: border-box;
 }
 
 .price-input input:focus {
@@ -983,7 +959,6 @@ body.modal-open {
     background: #fae0dc;
 }
 
-/* Modal pinned footer */
 .product-modal-footer {
     display: flex;
     align-items: center;
@@ -1033,7 +1008,6 @@ body.modal-open {
     background: #04696D;
 }
 
-/* Responsive queries */
 @media (max-width: 1100px) {
     .menu-controls {
         flex-wrap: wrap;
@@ -1092,7 +1066,6 @@ body.modal-open {
     }
 }
 
-/* Delete confirmation modal */
 .product-modal-box.modal-box-sm {
     position: relative;
     z-index: 2;

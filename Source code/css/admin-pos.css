@@ -1,39 +1,37 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* Base typography standard */
 * {
     font-family: 'Poppins', sans-serif;
     box-sizing: border-box;
 }
 
-/* Sidebar matching admin */
 .admin-sidebar {
-    width: 260px !important;
-    min-width: 260px !important;
+    width: 260px;
+    min-width: 260px;
+    flex-shrink: 0;
 }
 
 .admin-nav-link {
-    padding: 14px 18px !important;
-    font-size: 13px !important;
-    gap: 14px !important;
-    border-radius: 9px !important;
+    padding: 14px 18px;
+    font-size: 13px;
+    gap: 14px;
+    border-radius: 9px;
 }
 
 .admin-nav-link i {
-    font-size: 16px !important;
-    width: 20px !important;
+    font-size: 16px;
+    width: 20px;
     text-align: center;
 }
 
-/* POS content wrapper */
 .pos-content {
+    flex: 1;
     min-width: 0;
     padding-top: 30px;
     padding-bottom: 70px;
     width: 100%;
 }
 
-/* Standardized POS-style header */
 .pos-header {
     display: flex;
     align-items: flex-end;
@@ -69,7 +67,6 @@
     font-size: 13px;
 }
 
-/* POS workspace grid */
 .pos-workspace {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 460px;
@@ -82,7 +79,6 @@
     min-width: 0;
 }
 
-/* Compact dual inventory alerts */
 .pos-alerts-container {
     display: flex;
     flex-direction: column;
@@ -99,7 +95,6 @@
     border-radius: 9px;
     font-size: 11.5px;
     line-height: 1.35;
-    box-sizing: border-box;
     width: 100%;
     transition: 0.2s ease;
 }
@@ -132,36 +127,35 @@
 }
 
 .pos-inventory-alert.out-of-stock-alert {
-    background: #fdf2f0 !important;
-    border: 1px solid #f5c4bd !important;
-    color: #a03b2c !important;
+    background: #fdf2f0;
+    border: 1px solid #f5c4bd;
+    color: #a03b2c;
 }
 
 .pos-inventory-alert.out-of-stock-alert .alert-icon {
-    color: #cf3d28 !important;
+    color: #cf3d28;
 }
 
 .pos-inventory-alert.out-of-stock-alert .alert-link {
-    background: #cf3d28 !important;
-    color: #ffffff !important;
+    background: #cf3d28;
+    color: #ffffff;
 }
 
 .pos-inventory-alert.low-stock-alert {
-    background: #fff8eb !important;
-    border: 1px solid #fde2b4 !important;
-    color: #8c5b0d !important;
+    background: #fff8eb;
+    border: 1px solid #fde2b4;
+    color: #8c5b0d;
 }
 
 .pos-inventory-alert.low-stock-alert .alert-icon {
-    color: #d98216 !important;
+    color: #d98216;
 }
 
 .pos-inventory-alert.low-stock-alert .alert-link {
-    background: #d98216 !important;
-    color: #ffffff !important;
+    background: #d98216;
+    color: #ffffff;
 }
 
-/* Category selection bar */
 .pos-category-bar {
     display: flex;
     align-items: center;
@@ -199,7 +193,6 @@
     font-weight: 600;
 }
 
-/* Search bar matching inventory toolbar */
 .pos-search {
     position: relative;
     display: flex;
@@ -226,7 +219,6 @@
     background: white;
     color: #263c3d;
     font-size: 13px;
-    box-sizing: border-box;
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -235,7 +227,6 @@
     box-shadow: 0 0 0 3px rgba(11, 112, 116, 0.08);
 }
 
-/* Product cards grid */
 .pos-product-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -275,7 +266,6 @@
     transition: 0.3s;
 }
 
-/* Stock capacity badge */
 .pos-stock-capacity-badge {
     position: absolute;
     top: 10px;
@@ -416,7 +406,6 @@
     border: 1px solid #f6cfcb;
 }
 
-/* Unavailable product card state */
 .pos-product-card.is-unavailable {
     opacity: 0.55;
     filter: grayscale(100%);
@@ -424,7 +413,6 @@
     background: #f4f7f7;
 }
 
-/* Order sidebar panel */
 .pos-order {
     position: sticky;
     top: 120px;
@@ -479,7 +467,6 @@
     color: #cf3d28;
 }
 
-/* Clear order button */
 .clear-order-btn {
     height: 34px;
     display: inline-flex;
@@ -502,10 +489,6 @@
     border-color: #cf3d28;
     color: #cf3d28;
     box-shadow: 0 2px 8px rgba(207, 61, 40, 0.12);
-}
-
-.clear-order-btn:active {
-    transform: scale(0.97);
 }
 
 .pos-customer {
@@ -531,7 +514,6 @@
     background: #ffffff;
     color: #263c3d;
     font-size: 13px;
-    box-sizing: border-box;
     transition: border-color 0.2s ease;
 }
 
@@ -589,7 +571,6 @@
     margin-bottom: 8px;
 }
 
-/* Quantity controls */
 .quantity-controls {
     display: flex;
     align-items: center;
@@ -628,7 +609,6 @@
     font-weight: 700;
     text-align: center;
     outline: none;
-    box-sizing: border-box;
     transition: border-color 0.2s ease;
     appearance: textfield;
     -moz-appearance: textfield;
@@ -760,7 +740,6 @@
     background: #04696D;
 }
 
-/* Modals */
 .pos-variant-modal {
     position: fixed;
     inset: 0;
@@ -902,7 +881,6 @@
     border-radius: 9px;
     font-size: 13px;
     outline: none;
-    box-sizing: border-box;
 }
 
 .confirm-modal-content {
@@ -990,7 +968,6 @@
     flex: 1;
 }
 
-/* Sale success receipt modal */
 .pos-success-modal {
     position: fixed;
     inset: 0;
@@ -1121,9 +1098,6 @@
     background: #04696D;
 }
 
-/* =========================================================
-   FLOATING TOAST POPUP (NON-BLOCKING)
-========================================================= */
 .pos-order-toast {
     position: fixed;
     top: 30px;
@@ -1272,7 +1246,6 @@
     }
 }
 
-/* Responsive queries */
 @media (max-width: 1280px) {
     .pos-workspace {
         grid-template-columns: minmax(0, 1fr) 410px;

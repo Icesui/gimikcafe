@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    width: 440px; /* Slightly wider to prevent text wrapping */
+    width: 440px;
     max-width: calc(100vw - 32px);
     padding: 14px 18px;
     background: #ffffff;
@@ -61,7 +61,7 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 3px;
-    flex-wrap: nowrap; /* Prevent breaking into multiple lines */
+    flex-wrap: nowrap;
 }
 
 .admin-toast-tag {
@@ -73,7 +73,7 @@
     background: #eaf6f2;
     padding: 2px 7px;
     border-radius: 5px;
-    white-space: nowrap; /* Keeps "NEW ONLINE ORDER" on 1 line */
+    white-space: nowrap;
     flex-shrink: 0;
 }
 
@@ -81,7 +81,7 @@
     font-size: 13px;
     font-weight: 700;
     color: #024E52;
-    white-space: nowrap; /* Keeps "ONL #00002" on 1 line */
+    white-space: nowrap;
 }
 
 /* Customer Name */
