@@ -169,6 +169,7 @@
                             <th>ITEM NAME</th>
                             <th>CATEGORY</th>
                             <th>STOCK LEVEL</th>
+                            <th>PRICE</th>
                             <th>BASE RECIPE UNIT</th>
                             <th>MIN. ALERT LEVEL</th>
                             <th>STATUS</th>
@@ -178,7 +179,7 @@
                     </thead>
                     <tbody id="inventoryTableBody">
                         <tr>
-                            <td colspan="8" class="table-loading-cell">
+                            <td colspan="9" class="table-loading-cell">
                                 <i class="fa-solid fa-spinner fa-spin"></i> Loading inventory...
                             </td>
                         </tr>
@@ -271,6 +272,15 @@
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="inventory-form-group">
+                <label for="inventoryPrice" id="priceInputLabel">Price per Unit (₱)</label>
+                <div class="input-with-unit">
+                    <span class="peso-prefix">₱</span>
+                    <input type="number" id="inventoryPrice" name="inventoryPrice" min="0" step="0.01" placeholder="0.00" required>
+                </div>
+                <small id="priceInputHint">Example: 25.00 for 1 bottle or 1 unit</small>
             </div>
 
             <div class="inventory-form-row">

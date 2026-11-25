@@ -752,7 +752,7 @@ function initPaymentMethodToggle() {
     });
 }
 
-async function deductInventoryForOrder(orderItems) {
+async function deductInventoryAndLogExpense(orderId, orderNumber, orderItems, createdAt) {
     const deductionsMap = {};
 
     for (const item of orderItems) {
@@ -787,19 +787,44 @@ async function deductInventoryForOrder(orderItems) {
         });
     }
 
+    const expensesRef = ref(db, "inventoryExpenses");
+
     const updatePromises = Object.entries(deductionsMap).map(async ([invId, amountToDeduct]) => {
         try {
             const invRef = ref(db, `inventory/${invId}`);
             const snapshot = await get(invRef);
             if (!snapshot.exists()) return;
 
-            const currentStock = Number(snapshot.val().stock ?? snapshot.val().quantity ?? 0);
+            const invData = snapshot.val();
+            const currentStock = Number(invData.stock ?? invData.quantity ?? 0);
             const newStock = Math.max(0, currentStock - amountToDeduct);
 
             await update(invRef, {
                 stock: Math.round(newStock * 100) / 100,
                 updatedAt: Date.now()
             });
+
+            const rawPrice = Number(invData.price ?? invData.unitPrice ?? invData.cost ?? 0);
+            const isPackaged = Boolean(invData.isPackaged && Number(invData.capacityPerPackage) > 0);
+            const unitCost = isPackaged
+                ? rawPrice / Number(invData.capacityPerPackage)
+                : rawPrice;
+            const expenseAmount = Math.round(amountToDeduct * unitCost * 100) / 100;
+
+            if (expenseAmount > 0) {
+                await set(push(expensesRef), {
+                    orderId,
+                    orderNumber,
+                    inventoryId: invId,
+                    itemName: invData.name || "Inventory Item",
+                    category: invData.category || "others",
+                    quantity: Math.round(amountToDeduct * 100) / 100,
+                    unit: invData.unit || "unit",
+                    amount: expenseAmount,
+                    actionType: "order-usage",
+                    createdAt: createdAt || Date.now()
+                });
+            }
         } catch (err) {
             console.error(`Failed to deduct inventory for ${invId}:`, err);
         }
@@ -835,6 +860,7 @@ async function processFinalCheckout(customerName) {
     const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
     const total = subtotal;
     const cartItemsSnapshot = [...cart];
+    const createdAt = Date.now();
 
     const orderData = {
         orderNumber: currentOrderNumber,
@@ -853,8 +879,8 @@ async function processFinalCheckout(customerName) {
         paymentMethod: selectedPaymentMethod,
         status: "Pending",
         source: "POS",
-        createdAt: Date.now(),
-        dateString: new Date().toLocaleDateString("en-US", { 
+        createdAt,
+        dateString: new Date(createdAt).toLocaleDateString("en-US", { 
             year: "numeric", 
             month: "short", 
             day: "numeric", 
@@ -868,7 +894,8 @@ async function processFinalCheckout(customerName) {
         completeSaleBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Processing...`;
 
         const ordersRef = ref(db, "orders");
-        await set(push(ordersRef), orderData);
+        const newOrderRef = push(ordersRef);
+        await set(newOrderRef, orderData);
 
         try {
             await set(ref(db, "system/posOrderCounter"), currentOrderCount + 1);
@@ -876,7 +903,7 @@ async function processFinalCheckout(customerName) {
             console.warn("Could not increment POS order counter:", counterErr);
         }
 
-        await deductInventoryForOrder(cartItemsSnapshot);
+        await deductInventoryAndLogExpense(newOrderRef.key, currentOrderNumber, cartItemsSnapshot, createdAt);
 
         if (receiptOrderNum) receiptOrderNum.textContent = currentOrderNumber;
         if (receiptCustomer) receiptCustomer.textContent = customerName;

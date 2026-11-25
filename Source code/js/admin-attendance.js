@@ -1,7 +1,3 @@
-// =========================================================
-//         GIMIK CAFE - ATTENDANCE & SHIFT TRACKER
-// =========================================================
-
 import { 
     ref, 
     update, 
@@ -10,19 +6,14 @@ import {
 
 import { db, adminReady, authenticatedAdmin } from "./admin.js";
 
-// Dynamic staff profile (populated from logged-in admin)
 let currentStaff = {
     id: null,
     name: "Staff Member",
     role: "Barista"
 };
 
-// Current cached shift record
 let currentShiftRecord = null;
 
-// =========================================================
-// 1. AUTO-INJECT MODAL HTML (IF NOT ALREADY IN THE PAGE)
-// =========================================================
 function ensureAttendanceModalHTML() {
     if (document.getElementById("attendanceModal")) return;
 
@@ -102,9 +93,6 @@ function ensureAttendanceModalHTML() {
     document.body.insertAdjacentHTML("beforeend", modalHTML);
 }
 
-// =========================================================
-// 2. MODAL CONTROLS
-// =========================================================
 function openAttendanceModal() {
     const modal = document.getElementById("attendanceModal");
     if (modal) {
@@ -121,9 +109,6 @@ function closeAttendanceModal() {
     }
 }
 
-// =========================================================
-// 3. INITIALIZATION
-// =========================================================
 function syncStaffProfile(admin) {
     if (!admin) return;
     currentStaff.id = admin.uid;
@@ -155,9 +140,6 @@ if (adminReady && typeof adminReady.then === "function") {
     document.addEventListener("DOMContentLoaded", () => initAttendance(null));
 }
 
-// =========================================================
-// 4. DIGITAL CLOCK
-// =========================================================
 function startClock() {
     function tick() {
         const now = new Date();
@@ -185,9 +167,6 @@ function getTodayDateKey() {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-// =========================================================
-// 5. FIREBASE LISTENER & UI SYNC
-// =========================================================
 function listenToTodayAttendance() {
     if (!currentStaff.id) return;
     const todayKey = getTodayDateKey();
@@ -297,9 +276,6 @@ function setStatusBadge(text, className) {
     if (span) span.textContent = `Status: ${text}`;
 }
 
-// =========================================================
-// 6. EVENT ATTACHMENTS
-// =========================================================
 function attachModalTriggers() {
     const adminProfileButton = document.getElementById("adminProfileButton");
     const closeBtn = document.getElementById("closeAttendanceModal");
@@ -344,9 +320,6 @@ async function toggleMealBreak() {
     }
 }
 
-// =========================================================
-// 7. FIREBASE WRITE
-// =========================================================
 async function punchAction(actionType) {
     if (!currentStaff.id) {
         alert("User identity not verified. Please refresh.");

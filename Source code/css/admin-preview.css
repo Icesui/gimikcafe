@@ -1,4 +1,3 @@
-/* Disable Add to Cart / Buy Now buttons while keeping them visible */
 body.admin-preview-mode .cart-btn,
 body.admin-preview-mode #addToCartBtn,
 body.admin-preview-mode .add-to-cart-btn,
@@ -17,7 +16,6 @@ body.admin-preview-mode button:has(.fa-cart-shopping) {
     transform: none !important;
 }
 
-/* Disable navbar cart icon and link without hiding or washing it out */
 body.admin-preview-mode a[href*="cart.html"],
 body.admin-preview-mode .nav-links a[href*="cart.html"],
 body.admin-preview-mode .navbar a:has(.fa-cart-shopping) {

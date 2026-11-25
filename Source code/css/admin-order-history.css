@@ -232,6 +232,196 @@
     font-size: 11.5px;
 }
 
+/* Sales & Drinks Analytics Graph Panel */
+.sales-analytics-panel {
+    background: #ffffff;
+    border: 1px solid #dceaea;
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 6px 20px rgba(4, 105, 109, 0.05);
+}
+
+.sales-analytics-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.sales-analytics-header h2 {
+    margin: 0;
+    color: #024E52;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.sales-analytics-header p {
+    margin: 2px 0 0;
+    color: #7d9394;
+    font-size: 12px;
+}
+
+.analytics-timeframe-tabs {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px;
+    background: #f2f7f7;
+    border: 1px solid #dceaea;
+    border-radius: 10px;
+}
+
+.analytics-tab {
+    height: 34px;
+    padding: 0 14px;
+    border: none;
+    border-radius: 7px;
+    background: transparent;
+    color: #5c7576;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.analytics-tab:hover {
+    color: #024E52;
+    background: #e5f1f1;
+}
+
+.analytics-tab.active {
+    background: #0B7074;
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(11, 112, 116, 0.2);
+}
+
+.analytics-highlights {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.analytics-highlight-item {
+    padding: 14px 16px;
+    background: #f8fbfb;
+    border: 1px solid #e0ebeb;
+    border-radius: 10px;
+}
+
+.analytics-highlight-item span {
+    display: block;
+    color: #7d9394;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+}
+
+.analytics-highlight-item strong {
+    display: block;
+    margin-top: 4px;
+    color: #024E52;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.sales-chart-wrapper {
+    position: relative;
+    width: 100%;
+    height: 310px;
+}
+
+/* Custom Export Modal Controls */
+.export-option-group {
+    margin-bottom: 18px;
+}
+
+.export-option-group > label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #024E52;
+    margin-bottom: 8px;
+}
+
+.export-select {
+    width: 100%;
+    height: 42px;
+    padding: 0 12px;
+    border: 1.5px solid #dceaea;
+    border-radius: 9px;
+    background: #ffffff;
+    color: #263c3d;
+    font-size: 13px;
+    font-weight: 500;
+    outline: none;
+}
+
+.export-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.export-check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #f8fbfb;
+    border: 1px solid #e0ebeb;
+    border-radius: 9px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #405455;
+}
+
+.export-check-item input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: #0B7074;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.export-check-item strong {
+    color: #024E52;
+    font-weight: 600;
+}
+
+.export-modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+.export-confirm-csv-btn {
+    flex: 1;
+    height: 44px;
+    padding: 0 16px;
+    border-radius: 9px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    background: #0B7074;
+    color: #ffffff;
+    border: none;
+}
+
+.export-confirm-csv-btn:hover {
+    background: #04696D;
+}
+
 .best-sellers-panel {
     background: #ffffff;
     border: 1px solid #dceaea;
@@ -1003,8 +1193,12 @@ body.modal-open {
 
 @media (max-width: 900px) {
     .history-summary,
-    .earnings-summary-grid {
+    .earnings-summary-grid,
+    .analytics-highlights {
         grid-template-columns: 1fr;
+    }
+    .sales-chart-wrapper {
+        height: 260px;
     }
     .history-filters {
         flex-direction: column;

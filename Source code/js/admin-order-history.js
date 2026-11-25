@@ -1,4 +1,3 @@
-// Firebase Realtime Database imports
 import { 
     ref, 
     onValue,
@@ -8,7 +7,6 @@ import {
 
 import { db, adminReady } from "./admin.js";
 
-// DOM references
 const historyDateDisplay = document.getElementById("historyDate");
 const statHistoryTotal = document.getElementById("statHistoryTotal");
 const statHistoryCompleted = document.getElementById("statHistoryCompleted");
@@ -19,6 +17,12 @@ const statYearlyEarnings = document.getElementById("statYearlyEarnings");
 const countWeeklyOrders = document.getElementById("countWeeklyOrders");
 const countMonthlyOrders = document.getElementById("countMonthlyOrders");
 const countYearlyOrders = document.getElementById("countYearlyOrders");
+const analyticsSubtitle = document.getElementById("analyticsSubtitle");
+const analyticsTimeframeTabs = document.getElementById("analyticsTimeframeTabs");
+const analyticsPeakSlot = document.getElementById("analyticsPeakSlot");
+const analyticsTotalDrinks = document.getElementById("analyticsTotalDrinks");
+const analyticsTotalRevenue = document.getElementById("analyticsTotalRevenue");
+const salesTimeChartCanvas = document.getElementById("salesTimeChart");
 const bestSellersList = document.getElementById("bestSellersList");
 const topBestSellerLabel = document.getElementById("topBestSellerLabel");
 
@@ -28,11 +32,21 @@ const historyDateFilter = document.getElementById("historyDateFilter");
 const exportHistoryBtn = document.getElementById("exportHistoryBtn");
 const openClearHistoryModalBtn = document.getElementById("openClearHistoryModalBtn");
 
+const exportReportModal = document.getElementById("exportReportModal");
+const exportReportOverlay = document.getElementById("exportReportOverlay");
+const closeExportModalBtn = document.getElementById("closeExportModalBtn");
+const exportRangeSelect = document.getElementById("exportRangeSelect");
+const includeGraphDataCheck = document.getElementById("includeGraphDataCheck");
+const includeEarningsCheck = document.getElementById("includeEarningsCheck");
+const includeInventoryExpensesCheck = document.getElementById("includeInventoryExpensesCheck");
+const includeBestSellersCheck = document.getElementById("includeBestSellersCheck");
+const includeOrdersListCheck = document.getElementById("includeOrdersListCheck");
+const confirmExportPdfBtn = document.getElementById("confirmExportPdfBtn");
+
 const historyTableBody = document.getElementById("historyTableBody");
 const historyPaginationInfo = document.getElementById("historyPaginationInfo");
 const historyPaginationControls = document.getElementById("historyPaginationControls");
 
-// Order details modal references
 const historyDetailsModal = document.getElementById("historyDetailsModal");
 const closeDetailsModalBtn = document.getElementById("closeDetailsModal");
 const modalOrderNumber = document.getElementById("modalOrderNumber");
@@ -43,24 +57,28 @@ const modalStatusBadge = document.getElementById("modalStatusBadge");
 const modalItemsList = document.getElementById("modalItemsList");
 const modalTotalAmount = document.getElementById("modalTotalAmount");
 
-// Clear history confirmation modal references
 const clearHistoryModal = document.getElementById("clearHistoryModal");
 const clearHistoryOverlay = document.getElementById("clearHistoryOverlay");
 const cancelClearHistoryBtn = document.getElementById("cancelClearHistoryBtn");
 const confirmClearHistoryBtn = document.getElementById("confirmClearHistoryBtn");
 
-// State cache
 let allHistoryOrders = [];
+let allInventoryItems = [];
+let allInventoryExpenses = [];
 let currentPage = 1;
 const ITEMS_PER_PAGE = 20;
+let activeAnalyticsRange = "Today";
+let salesChartInstance = null;
 
-// System initialization
 const initHistory = () => {
     updateDateDisplay();
     initModalEvents();
     initClearHistoryModal();
     initFilterEvents();
+    initAnalyticsEvents();
+    initExportModalEvents();
     listenToOrderHistory();
+    listenToInventoryData();
 };
 
 if (adminReady && typeof adminReady.then === "function") {
@@ -82,7 +100,6 @@ function updateDateDisplay() {
     });
 }
 
-// Real-time Firebase listener
 function listenToOrderHistory() {
     const ordersRef = ref(db, "orders");
 
@@ -102,6 +119,7 @@ function listenToOrderHistory() {
 
         updateSummaryCards();
         renderEarningsSummary();
+        renderSalesAnalytics();
         renderBestSellers();
         currentPage = 1;
         renderHistoryTable();
@@ -119,7 +137,24 @@ function listenToOrderHistory() {
     });
 }
 
-// Summary cards update
+function listenToInventoryData() {
+    onValue(ref(db, "inventory"), (snapshot) => {
+        allInventoryItems = snapshot.exists()
+            ? Object.entries(snapshot.val()).map(([id, item]) => ({ id, ...item }))
+            : [];
+    }, (err) => {
+        console.warn("Inventory listener warning:", err);
+    });
+
+    onValue(ref(db, "inventoryExpenses"), (snapshot) => {
+        allInventoryExpenses = snapshot.exists()
+            ? Object.entries(snapshot.val()).map(([id, item]) => ({ id, ...item }))
+            : [];
+    }, (err) => {
+        console.warn("Inventory expenses listener warning:", err);
+    });
+}
+
 function updateSummaryCards() {
     let total = allHistoryOrders.length;
     let completed = 0;
@@ -136,7 +171,6 @@ function updateSummaryCards() {
     if (statHistoryCancelled) statHistoryCancelled.textContent = cancelled;
 }
 
-// Weekly, monthly, and yearly earnings summary
 function renderEarningsSummary() {
     if (
         !statWeeklyEarnings &&
@@ -195,7 +229,241 @@ function renderEarningsSummary() {
     }
 }
 
-// Best sellers calculation & rendering
+function initAnalyticsEvents() {
+    if (!analyticsTimeframeTabs) return;
+
+    analyticsTimeframeTabs.querySelectorAll(".analytics-tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            analyticsTimeframeTabs.querySelectorAll(".analytics-tab").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            activeAnalyticsRange = btn.dataset.range || "Today";
+            renderSalesAnalytics();
+        });
+    });
+}
+
+function getOrderDrinkCount(order) {
+    if (!Array.isArray(order.items)) return 0;
+    return order.items.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+}
+
+function isWithinRange(timestamp, range) {
+    if (range === "All") return true;
+    const t = Number(timestamp) || 0;
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const endOfToday = startOfToday + 86400000;
+    const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).getTime();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+    const startOfYear = new Date(now.getFullYear(), 0, 1).getTime();
+
+    if (range === "Today") return t >= startOfToday && t < endOfToday;
+    if (range === "Weekly") return t >= startOfWeek;
+    if (range === "Monthly") return t >= startOfMonth;
+    if (range === "Yearly") return t >= startOfYear;
+    return true;
+}
+
+function buildAnalyticsBuckets(range) {
+    const now = new Date();
+    const completedOrders = allHistoryOrders.filter(o => (o.status || "").toLowerCase() === "completed");
+
+    if (range === "Today") {
+        const hours = Array.from({ length: 12 }, (_, idx) => idx + 12);
+        const labels = hours.map(h => (h === 12 ? "12 PM" : `${h - 12} PM`));
+        const drinks = new Array(12).fill(0);
+        const revenue = new Array(12).fill(0);
+
+        const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+        const endOfToday = startOfToday + 86400000;
+
+        completedOrders.forEach((order) => {
+            const t = Number(order.createdAt) || 0;
+            if (t < startOfToday || t >= endOfToday) return;
+
+            const hour = new Date(t).getHours();
+            if (hour >= 12 && hour <= 23) {
+                const slotIdx = hour - 12;
+                drinks[slotIdx] += getOrderDrinkCount(order);
+                revenue[slotIdx] += Number(order.total) || 0;
+            }
+        });
+
+        return {
+            subtitle: "Hourly drinks sold & revenue (12:00 PM – 11:00 PM)",
+            labels,
+            drinks,
+            revenue
+        };
+    }
+
+    if (range === "Weekly") {
+        const labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        const drinks = new Array(7).fill(0);
+        const revenue = new Array(7).fill(0);
+
+        const startOfWeek = new Date(now.getFullYear(), now.getMonth(), now.getDate() - now.getDay()).getTime();
+        const endOfWeek = startOfWeek + 7 * 86400000;
+
+        completedOrders.forEach((order) => {
+            const t = Number(order.createdAt) || 0;
+            if (t < startOfWeek || t >= endOfWeek) return;
+
+            const dayIdx = new Date(t).getDay();
+            drinks[dayIdx] += getOrderDrinkCount(order);
+            revenue[dayIdx] += Number(order.total) || 0;
+        });
+
+        return {
+            subtitle: "Daily drinks sold & revenue for this week",
+            labels,
+            drinks,
+            revenue
+        };
+    }
+
+    if (range === "Monthly") {
+        const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+        const labels = Array.from({ length: daysInMonth }, (_, i) => `${i + 1}`);
+        const drinks = new Array(daysInMonth).fill(0);
+        const revenue = new Array(daysInMonth).fill(0);
+
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+        const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1).getTime();
+
+        completedOrders.forEach((order) => {
+            const t = Number(order.createdAt) || 0;
+            if (t < startOfMonth || t >= startOfNextMonth) return;
+
+            const dateIdx = new Date(t).getDate() - 1;
+            if (dateIdx >= 0 && dateIdx < daysInMonth) {
+                drinks[dateIdx] += getOrderDrinkCount(order);
+                revenue[dateIdx] += Number(order.total) || 0;
+            }
+        });
+
+        return {
+            subtitle: `Daily drinks sold & revenue for ${now.toLocaleDateString("en-US", { month: "long", year: "numeric" })}`,
+            labels,
+            drinks,
+            revenue
+        };
+    }
+
+    const labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const drinks = new Array(12).fill(0);
+    const revenue = new Array(12).fill(0);
+
+    const startOfYear = new Date(now.getFullYear(), 0, 1).getTime();
+    const startOfNextYear = new Date(now.getFullYear() + 1, 0, 1).getTime();
+
+    completedOrders.forEach((order) => {
+        const t = Number(order.createdAt) || 0;
+        if (t < startOfYear || t >= startOfNextYear) return;
+
+        const monthIdx = new Date(t).getMonth();
+        drinks[monthIdx] += getOrderDrinkCount(order);
+        revenue[monthIdx] += Number(order.total) || 0;
+    });
+
+    return {
+        subtitle: `Monthly drinks sold & revenue for ${now.getFullYear()}`,
+        labels,
+        drinks,
+        revenue
+    };
+}
+
+function renderSalesAnalytics() {
+    if (!salesTimeChartCanvas) return;
+
+    const { subtitle, labels, drinks, revenue } = buildAnalyticsBuckets(activeAnalyticsRange);
+
+    if (analyticsSubtitle) analyticsSubtitle.textContent = subtitle;
+
+    const totalDrinksSold = drinks.reduce((a, b) => a + b, 0);
+    const totalPeriodRevenue = revenue.reduce((a, b) => a + b, 0);
+
+    let maxDrinks = 0;
+    let peakLabel = "-";
+    drinks.forEach((count, i) => {
+        if (count > maxDrinks) {
+            maxDrinks = count;
+            peakLabel = `${labels[i]} (${count} ${count === 1 ? "drink" : "drinks"})`;
+        }
+    });
+
+    if (analyticsPeakSlot) analyticsPeakSlot.textContent = maxDrinks > 0 ? peakLabel : "-";
+    if (analyticsTotalDrinks) analyticsTotalDrinks.textContent = totalDrinksSold;
+    if (analyticsTotalRevenue) analyticsTotalRevenue.textContent = formatPeso(totalPeriodRevenue);
+
+    if (typeof Chart === "undefined") return;
+
+    if (salesChartInstance) {
+        salesChartInstance.destroy();
+    }
+
+    salesChartInstance = new Chart(salesTimeChartCanvas, {
+        type: "bar",
+        data: {
+            labels,
+            datasets: [
+                {
+                    label: "Drinks / Items Sold",
+                    data: drinks,
+                    backgroundColor: "rgba(11, 112, 116, 0.85)",
+                    hoverBackgroundColor: "#024E52",
+                    borderRadius: 7,
+                    maxBarThickness: 38
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: "#024E52",
+                    padding: 12,
+                    cornerRadius: 8,
+                    callbacks: {
+                        label: (ctx) => {
+                            const idx = ctx.dataIndex;
+                            const count = drinks[idx] || 0;
+                            const rev = formatPeso(revenue[idx] || 0);
+                            return [
+                                `Sold: ${count} ${count === 1 ? "drink" : "drinks"}`,
+                                `Sales: ${rev}`
+                            ];
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        color: "#5c7576",
+                        font: { family: "Poppins", size: 11, weight: "600" }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                        color: "#7d9394",
+                        font: { family: "Poppins", size: 11 }
+                    },
+                    grid: {
+                        color: "#edf3f3"
+                    }
+                }
+            }
+        }
+    });
+}
+
 function getBestSellers(orders, limit = 5) {
     const productCounts = new Map();
 
@@ -258,7 +526,6 @@ function renderBestSellers() {
         .join("");
 }
 
-// Order filtering
 function getFilteredOrders() {
     const searchTerm = historySearchInput ? historySearchInput.value.trim().toLowerCase() : "";
     const filterStatus = historyStatusFilter ? historyStatusFilter.value : "All";
@@ -298,7 +565,6 @@ function getFilteredOrders() {
     });
 }
 
-// Table rendering
 function renderHistoryTable() {
     if (!historyTableBody) return;
     historyTableBody.innerHTML = "";
@@ -390,7 +656,6 @@ function renderHistoryTable() {
     renderPagination(startIndex + 1, endIndex, totalItems, totalPages);
 }
 
-// Pagination controls
 function renderPagination(start, end, total, totalPages) {
     if (historyPaginationInfo) {
         historyPaginationInfo.textContent = total > 0 
@@ -403,7 +668,6 @@ function renderPagination(start, end, total, totalPages) {
 
     if (total === 0) return;
 
-    // Previous page button
     const prevBtn = document.createElement("button");
     prevBtn.type = "button";
     prevBtn.innerHTML = `<i class="fa-solid fa-chevron-left"></i>`;
@@ -416,7 +680,6 @@ function renderPagination(start, end, total, totalPages) {
     });
     historyPaginationControls.appendChild(prevBtn);
 
-    // Numbered page buttons
     for (let i = 1; i <= totalPages; i++) {
         if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
             const pageBtn = document.createElement("button");
@@ -439,7 +702,6 @@ function renderPagination(start, end, total, totalPages) {
         }
     }
 
-    // Next page button
     const nextBtn = document.createElement("button");
     nextBtn.type = "button";
     nextBtn.innerHTML = `<i class="fa-solid fa-chevron-right"></i>`;
@@ -453,7 +715,6 @@ function renderPagination(start, end, total, totalPages) {
     historyPaginationControls.appendChild(nextBtn);
 }
 
-// Order details modal dialog
 function openOrderDetails(order) {
     if (!historyDetailsModal) return;
 
@@ -519,7 +780,6 @@ function initModalEvents() {
     if (overlay) overlay.addEventListener("click", closeDetailsModal);
 }
 
-// Clear order history modal handlers
 function openClearHistoryModal() {
     if (!clearHistoryModal) return;
     clearHistoryModal.style.display = "flex";
@@ -539,7 +799,7 @@ function initClearHistoryModal() {
     if (cancelClearHistoryBtn) cancelClearHistoryBtn.addEventListener("click", closeClearHistoryModal);
     if (clearHistoryOverlay) clearHistoryOverlay.addEventListener("click", closeClearHistoryModal);
 
-if (confirmClearHistoryBtn) {
+    if (confirmClearHistoryBtn) {
         confirmClearHistoryBtn.addEventListener("click", async () => {
             try {
                 confirmClearHistoryBtn.disabled = true;
@@ -571,11 +831,11 @@ if (confirmClearHistoryBtn) {
         if (e.key === "Escape") {
             closeDetailsModal();
             closeClearHistoryModal();
+            closeExportModal();
         }
     });
 }
 
-// Filter events and CSV export
 function initFilterEvents() {
     if (historySearchInput) {
         historySearchInput.addEventListener("input", () => {
@@ -599,59 +859,306 @@ function initFilterEvents() {
     }
 
     if (exportHistoryBtn) {
-        exportHistoryBtn.addEventListener("click", exportToCSV);
+        exportHistoryBtn.addEventListener("click", openExportModal);
     }
 }
 
-function exportToCSV() {
-    const dataToExport = getFilteredOrders();
-    if (dataToExport.length === 0) {
-        alert("No order records found to export.");
+function openExportModal() {
+    if (!exportReportModal) return;
+    if (exportRangeSelect) {
+        exportRangeSelect.value = activeAnalyticsRange || "Today";
+    }
+    exportReportModal.style.display = "flex";
+    document.body.classList.add("modal-open");
+}
+
+function closeExportModal() {
+    if (!exportReportModal) return;
+    exportReportModal.style.display = "none";
+    document.body.classList.remove("modal-open");
+}
+
+function initExportModalEvents() {
+    closeExportModalBtn?.addEventListener("click", closeExportModal);
+    exportReportOverlay?.addEventListener("click", closeExportModal);
+
+    exportRangeSelect?.addEventListener("change", () => {
+        const val = exportRangeSelect.value;
+        if (["Today", "Weekly", "Monthly", "Yearly"].includes(val)) {
+            activeAnalyticsRange = val;
+            analyticsTimeframeTabs?.querySelectorAll(".analytics-tab").forEach((b) => {
+                b.classList.toggle("active", b.dataset.range === val);
+            });
+            renderSalesAnalytics();
+        }
+    });
+
+    confirmExportPdfBtn?.addEventListener("click", () => {
+        exportCustomReportPDF();
+        closeExportModal();
+    });
+}
+
+function getInventoryExpensesForRange(range) {
+    const entries = [];
+    let totalExpenses = 0;
+
+    allInventoryExpenses.forEach((exp) => {
+        const ts = Number(exp.createdAt || exp.updatedAt || exp.timestamp) || 0;
+        if (!isWithinRange(ts, range)) return;
+        const cost = Number(exp.amount ?? exp.cost ?? exp.total) || 0;
+        totalExpenses += cost;
+        const orderRefText = exp.orderNumber ? ` (${exp.orderNumber})` : "";
+        entries.push({
+            name: `${exp.itemName || exp.name || "Inventory Expense"}${orderRefText}`,
+            category: exp.category || "Inventory",
+            stockInfo: exp.quantity ? `${formatNumber(exp.quantity)} ${exp.unit || ""}`.trim() : "-",
+            cost
+        });
+    });
+
+    if (entries.length === 0) {
+        allInventoryItems.forEach((item) => {
+            const ts = Number(item.updatedAt || item.createdAt) || 0;
+            const rawCost = item.expense ?? item.totalCost ?? item.cost ?? item.unitCost ?? item.price;
+            if (rawCost === undefined || rawCost === null || rawCost === "") return;
+            if (!isWithinRange(ts, range)) return;
+
+            const numCost = Number(rawCost) || 0;
+            const qty = Number(item.stock) || 1;
+            const lineTotal = item.totalCost !== undefined || item.expense !== undefined ? numCost : numCost * qty;
+            totalExpenses += lineTotal;
+
+            entries.push({
+                name: item.name || "Inventory Item",
+                category: item.category || "Inventory",
+                stockInfo: `${formatNumber(qty)} ${item.unit || "unit"}`,
+                cost: lineTotal
+            });
+        });
+    }
+
+    return { entries, totalExpenses };
+}
+
+function formatPdfPeso(amount) {
+    return "PHP " + Number(amount || 0).toLocaleString("en-PH", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+function exportCustomReportPDF() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+        alert("PDF library is still loading. Please try again in a moment.");
         return;
     }
 
-    const headers = ["Order No.", "Customer", "Date", "Items Count", "Payment Method", "Total", "Status"];
-    const rows = dataToExport.map(o => {
-        const orderNum = (o.orderNumber || `#${o.id.slice(-5).toUpperCase()}`).replace(/"/g, '""');
-        const customer = (o.customerName || "Walk-in Customer").replace(/"/g, '""');
-        const date = o.createdAt ? new Date(o.createdAt).toLocaleString("en-US").replace(/"/g, '""') : "N/A";
-        const count = Array.isArray(o.items) ? o.items.reduce((s, i) => s + (i.quantity || 1), 0) : 0;
-        const method = (o.paymentMethod || "Cash").replace(/"/g, '""');
-        const total = Number(o.total) || 0;
-        const status = (o.status || "Completed").replace(/"/g, '""');
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
 
-        return [
-            `"${orderNum}"`,
-            `"${customer}"`,
-            `"${date}"`,
-            count,
-            `"${method}"`,
-            total.toFixed(2),
-            `"${status}"`
-        ].join(",");
-    });
+    const range = exportRangeSelect ? exportRangeSelect.value : "Today";
+    const includeGraph = includeGraphDataCheck ? includeGraphDataCheck.checked : true;
+    const includeEarnings = includeEarningsCheck ? includeEarningsCheck.checked : true;
+    const includeExpenses = includeInventoryExpensesCheck ? includeInventoryExpensesCheck.checked : true;
+    const includeBest = includeBestSellersCheck ? includeBestSellersCheck.checked : false;
+    const includeOrders = includeOrdersListCheck ? includeOrdersListCheck.checked : false;
 
-    const csvContent = "\uFEFF" + [headers.join(","), ...rows].join("\r\n");
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const margin = 40;
+    let cursorY = 44;
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", `GimikCafe_Order_History_${new Date().toISOString().slice(0, 10)}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    
-    document.body.removeChild(link);
-    URL.revokeObjectURL(url);
+    const ensureSpace = (neededHeight) => {
+        if (cursorY + neededHeight > pageHeight - 40) {
+            doc.addPage();
+            cursorY = 44;
+        }
+    };
+
+    const addSectionHeading = (title) => {
+        ensureSpace(34);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.setTextColor(2, 78, 82);
+        doc.text(title, margin, cursorY);
+        cursorY += 8;
+        doc.setDrawColor(220, 234, 234);
+        doc.setLineWidth(1);
+        doc.line(margin, cursorY, pageWidth - margin, cursorY);
+        cursorY += 14;
+    };
+
+    doc.setFillColor(2, 78, 82);
+    doc.roundedRect(margin, cursorY, pageWidth - margin * 2, 58, 8, 8, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(17);
+    doc.setTextColor(255, 255, 255);
+    doc.text("Gimik Cafe — Sales & Operations Report", margin + 16, cursorY + 24);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(214, 240, 240);
+    doc.text(
+        `Timeframe: ${range}   |   Generated: ${new Date().toLocaleString("en-US")}`,
+        margin + 16,
+        cursorY + 42
+    );
+    cursorY += 78;
+
+    const completedInRange = allHistoryOrders.filter(
+        (o) => (o.status || "").toLowerCase() === "completed" && isWithinRange(o.createdAt, range)
+    );
+    const totalEarned = completedInRange.reduce((sum, o) => sum + (Number(o.total) || 0), 0);
+    const { entries: expenseEntries, totalExpenses } = getInventoryExpensesForRange(range);
+
+    if (includeEarnings) {
+        addSectionHeading("Earnings Summary");
+        const summaryRows = [
+            ["Timeframe", range],
+            ["Completed Orders", String(completedInRange.length)],
+            ["Total Earnings", formatPdfPeso(totalEarned)]
+        ];
+        if (includeExpenses) {
+            summaryRows.push(["Inventory Expenses", formatPdfPeso(totalExpenses)]);
+            summaryRows.push(["Net Earnings (After Inventory Expenses)", formatPdfPeso(totalEarned - totalExpenses)]);
+        }
+
+        doc.autoTable({
+            startY: cursorY,
+            margin: { left: margin, right: margin },
+            head: [["Metric", "Value"]],
+            body: summaryRows,
+            theme: "grid",
+            headStyles: { fillColor: [11, 112, 116], textColor: 255, fontStyle: "bold", fontSize: 10 },
+            bodyStyles: { fontSize: 10, textColor: [38, 60, 61] },
+            alternateRowStyles: { fillColor: [248, 251, 251] }
+        });
+        cursorY = doc.lastAutoTable.finalY + 22;
+    }
+
+    if (includeGraph) {
+        const chartRange = range === "All" ? "Today" : range;
+        if (activeAnalyticsRange !== chartRange) {
+            activeAnalyticsRange = chartRange;
+            renderSalesAnalytics();
+        }
+
+        addSectionHeading(`Sales & Drinks Graph (${chartRange})`);
+
+        if (salesTimeChartCanvas) {
+            ensureSpace(210);
+            const chartImg = salesTimeChartCanvas.toDataURL("image/png", 1.0);
+            const chartWidth = pageWidth - margin * 2;
+            const chartHeight = 185;
+            doc.addImage(chartImg, "PNG", margin, cursorY, chartWidth, chartHeight);
+            cursorY += chartHeight + 14;
+        }
+
+        const { labels, drinks, revenue } = buildAnalyticsBuckets(chartRange);
+        const timeRows = labels.map((lbl, idx) => [
+            lbl,
+            String(drinks[idx] || 0),
+            formatPdfPeso(revenue[idx] || 0)
+        ]);
+
+        doc.autoTable({
+            startY: cursorY,
+            margin: { left: margin, right: margin },
+            head: [["Time / Period", "Drinks / Items Sold", "Sales Revenue"]],
+            body: timeRows,
+            theme: "grid",
+            headStyles: { fillColor: [11, 112, 116], textColor: 255, fontStyle: "bold", fontSize: 9.5 },
+            bodyStyles: { fontSize: 9.5, textColor: [38, 60, 61] },
+            alternateRowStyles: { fillColor: [248, 251, 251] }
+        });
+        cursorY = doc.lastAutoTable.finalY + 22;
+    }
+
+    if (includeExpenses) {
+        addSectionHeading("Inventory Expenses");
+        const expenseBody = expenseEntries.length === 0
+            ? [["No inventory expenses recorded for this period", "-", "-", formatPdfPeso(0)]]
+            : expenseEntries.map((e) => [e.name, e.category, e.stockInfo, formatPdfPeso(e.cost)]);
+
+        expenseBody.push(["Total Inventory Expenses", "", "", formatPdfPeso(totalExpenses)]);
+
+        doc.autoTable({
+            startY: cursorY,
+            margin: { left: margin, right: margin },
+            head: [["Item", "Category", "Stock / Qty", "Expense"]],
+            body: expenseBody,
+            theme: "grid",
+            headStyles: { fillColor: [11, 112, 116], textColor: 255, fontStyle: "bold", fontSize: 9.5 },
+            bodyStyles: { fontSize: 9.5, textColor: [38, 60, 61] },
+            alternateRowStyles: { fillColor: [248, 251, 251] }
+        });
+        cursorY = doc.lastAutoTable.finalY + 22;
+    }
+
+    if (includeBest) {
+        addSectionHeading("Best Sellers");
+        const rangeOrders = allHistoryOrders.filter((o) => isWithinRange(o.createdAt, range));
+        const top = getBestSellers(rangeOrders, 10);
+        const bestRows = top.length === 0
+            ? [["-", "No completed items in this period", "0", formatPdfPeso(0)]]
+            : top.map((item, idx) => [`#${idx + 1}`, item.label, String(item.unitsSold), formatPdfPeso(item.revenue)]);
+
+        doc.autoTable({
+            startY: cursorY,
+            margin: { left: margin, right: margin },
+            head: [["Rank", "Product", "Units Sold", "Revenue"]],
+            body: bestRows,
+            theme: "grid",
+            headStyles: { fillColor: [11, 112, 116], textColor: 255, fontStyle: "bold", fontSize: 9.5 },
+            bodyStyles: { fontSize: 9.5, textColor: [38, 60, 61] },
+            alternateRowStyles: { fillColor: [248, 251, 251] }
+        });
+        cursorY = doc.lastAutoTable.finalY + 22;
+    }
+
+    if (includeOrders) {
+        addSectionHeading("Previous Orders");
+        const ordersForExport = allHistoryOrders.filter((o) => isWithinRange(o.createdAt, range));
+        const orderRows = ordersForExport.length === 0
+            ? [["-", "No orders in this period", "-", "0", "-", formatPdfPeso(0), "-"]]
+            : ordersForExport.map((o) => {
+                const orderNum = o.orderNumber || `#${o.id.slice(-5).toUpperCase()}`;
+                const customer = o.customerName || "Walk-in Customer";
+                const date = o.createdAt ? new Date(o.createdAt).toLocaleString("en-US") : "N/A";
+                const count = Array.isArray(o.items) ? o.items.reduce((s, i) => s + (i.quantity || 1), 0) : 0;
+                const method = o.paymentMethod || "Cash";
+                const total = Number(o.total) || 0;
+                const status = o.status || "Completed";
+                return [orderNum, customer, date, String(count), method, formatPdfPeso(total), status];
+            });
+
+        doc.autoTable({
+            startY: cursorY,
+            margin: { left: margin, right: margin },
+            head: [["Order #", "Customer", "Date & Time", "Items", "Payment", "Total", "Status"]],
+            body: orderRows,
+            theme: "grid",
+            headStyles: { fillColor: [11, 112, 116], textColor: 255, fontStyle: "bold", fontSize: 8.5 },
+            bodyStyles: { fontSize: 8.5, textColor: [38, 60, 61] },
+            alternateRowStyles: { fillColor: [248, 251, 251] }
+        });
+    }
+
+    doc.save(`GimikCafe_Report_${range}_${new Date().toISOString().slice(0, 10)}.pdf`);
 }
 
-// Formatting helpers
 function formatPeso(amount) {
     return new Intl.NumberFormat("en-PH", {
         style: "currency",
         currency: "PHP",
         minimumFractionDigits: 2
     }).format(amount);
+}
+
+function formatNumber(number) {
+    const value = Number(number);
+    if (isNaN(value)) return "0";
+    return value.toLocaleString("en-PH", { maximumFractionDigits: 2 });
 }
 
 function escapeHTML(str) {

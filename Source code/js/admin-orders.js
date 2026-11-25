@@ -15,6 +15,7 @@ const ordersCountSubtitle = document.getElementById("ordersCountSubtitle");
 // Details modal references
 const orderDetailsModal = document.getElementById("orderDetailsModal");
 const closeDetailsModalBtn = document.getElementById("closeDetailsModal");
+const printOrderReceiptBtn = document.getElementById("printOrderReceiptBtn");
 const modalOrderNumber = document.getElementById("modalOrderNumber");
 const modalCustomerName = document.getElementById("modalCustomerName");
 const modalOrderDate = document.getElementById("modalOrderDate");
@@ -23,6 +24,15 @@ const modalStatusBadge = document.getElementById("modalStatusBadge");
 const modalItemsList = document.getElementById("modalItemsList");
 const modalTotalAmount = document.getElementById("modalTotalAmount");
 const modalOrderActionsFooter = document.getElementById("modalOrderActionsFooter");
+
+// Printable receipt sheet references
+const receiptSheetOrderNum = document.getElementById("receiptSheetOrderNum");
+const receiptSheetCustomer = document.getElementById("receiptSheetCustomer");
+const receiptSheetDate = document.getElementById("receiptSheetDate");
+const receiptSheetPayment = document.getElementById("receiptSheetPayment");
+const receiptSheetStatus = document.getElementById("receiptSheetStatus");
+const receiptSheetItems = document.getElementById("receiptSheetItems");
+const receiptSheetTotal = document.getElementById("receiptSheetTotal");
 
 // Cancel order modal references
 const cancelOrderModal = document.getElementById("cancelOrderModal");
@@ -287,7 +297,6 @@ function openOrderDetails(order) {
     if (modalOrderNumber) modalOrderNumber.textContent = order.orderNumber || order.orderId || `#${order.id.slice(-5).toUpperCase()}`;
     if (modalCustomerName) modalCustomerName.textContent = order.customerName || order.nickname || "Walk-in Customer";
     
-    // Display GCash along with 4-digit reference number if present
     if (modalPaymentMethod) {
         if (order.referenceNumber) {
             modalPaymentMethod.textContent = `${order.paymentMethod || "GCash"} (Ref: ...${order.referenceNumber})`;
@@ -339,10 +348,55 @@ function openOrderDetails(order) {
         modalTotalAmount.textContent = formatPeso(fullTotal);
     }
 
+    populateReceiptSheet(order);
     renderModalFooterActions(rawStatus);
 
     orderDetailsModal.style.display = "flex";
     document.body.classList.add("modal-open");
+}
+
+function populateReceiptSheet(order) {
+    if (!order) return;
+    const orderNum = order.orderNumber || order.orderId || `#${order.id.slice(-5).toUpperCase()}`;
+    const customer = order.customerName || order.nickname || "Walk-in Customer";
+    const payment = order.referenceNumber
+        ? `${order.paymentMethod || "GCash"} (${order.referenceNumber})`
+        : (order.paymentMethod || "Cash");
+    const dateObj = order.createdAt ? new Date(order.createdAt) : new Date();
+    const dateText = isNaN(dateObj.getTime())
+        ? "-"
+        : dateObj.toLocaleString("en-US", { month: "short", day: "numeric", year: "numeric", hour: "numeric", minute: "2-digit" });
+    const statusText = formatStatusDisplay(order.status);
+    const fullTotal = parsePrice(order.grandTotal || order.finalTotal || order.totalAmount || order.total);
+
+    if (receiptSheetOrderNum) receiptSheetOrderNum.textContent = orderNum;
+    if (receiptSheetCustomer) receiptSheetCustomer.textContent = customer;
+    if (receiptSheetDate) receiptSheetDate.textContent = dateText;
+    if (receiptSheetPayment) receiptSheetPayment.textContent = payment;
+    if (receiptSheetStatus) receiptSheetStatus.textContent = statusText;
+    if (receiptSheetTotal) receiptSheetTotal.textContent = formatPeso(fullTotal);
+
+    if (receiptSheetItems) {
+        if (Array.isArray(order.items) && order.items.length > 0) {
+            receiptSheetItems.innerHTML = order.items.map((item) => {
+                const sizeLabel = item?.size ? ` (${item.size})` : "";
+                const qty = Number(item?.quantity) || 1;
+                const singlePrice = parsePrice(item?.price);
+                const itemTotal = parsePrice(item?.total) || singlePrice * qty;
+                return `
+                    <div class="receipt-item-line">
+                        <div>
+                            <strong>${escapeHTML(item?.name || "Item")}${escapeHTML(sizeLabel)}</strong>
+                            <small>${qty} × ${formatPeso(singlePrice)}</small>
+                        </div>
+                        <span>${formatPeso(itemTotal)}</span>
+                    </div>
+                `;
+            }).join("");
+        } else {
+            receiptSheetItems.innerHTML = `<div class="receipt-item-line"><span>No items recorded</span><span>₱0.00</span></div>`;
+        }
+    }
 }
 
 function renderModalFooterActions(status) {
@@ -351,7 +405,6 @@ function renderModalFooterActions(status) {
 
     const s = status.toLowerCase().trim();
 
-    // Stage 1: Verifying Payment
     if (s.includes("verifying") || s.includes("pending")) {
         modalOrderActionsFooter.innerHTML = `
             <button type="button" class="modal-btn-action modal-cancel-order" id="actionCancelOrderBtn">
@@ -378,7 +431,6 @@ function renderModalFooterActions(status) {
         return;
     }
 
-    // Stage 2: Processing -> Complete order
     if (s.includes("process")) {
         modalOrderActionsFooter.innerHTML = `
             <button type="button" class="modal-btn-action modal-cancel-order" id="actionCancelOrderBtn">
@@ -405,7 +457,6 @@ function renderModalFooterActions(status) {
         return;
     }
 
-    // Stage 3: Completed
     if (s.includes("complete") || s.includes("ready") || s.includes("pickup")) {
         modalOrderActionsFooter.innerHTML = `
             <span class="order-finalized-badge success">
@@ -415,7 +466,6 @@ function renderModalFooterActions(status) {
         return;
     }
 
-    // Stage 4: Cancelled
     if (s.includes("cancel")) {
         modalOrderActionsFooter.innerHTML = `
             <span class="order-finalized-badge cancelled">
@@ -431,10 +481,27 @@ function closeDetailsModal() {
     currentOpenedOrder = null;
 }
 
-async function refundOrderInventory(order) {
-    if (!order || !Array.isArray(order.items) || order.items.length === 0) return;
+async function refundOrderInventoryAndExpenses(orderId, order) {
+    if (!order) return;
 
     try {
+        const expensesSnap = await get(ref(db, "inventoryExpenses"));
+        if (expensesSnap.exists()) {
+            const expUpdates = {};
+            Object.entries(expensesSnap.val()).forEach(([expId, exp]) => {
+                const matchesOrderId = orderId && exp?.orderId === orderId;
+                const matchesOrderNum = order.orderNumber && exp?.orderNumber === order.orderNumber;
+                if (matchesOrderId || matchesOrderNum) {
+                    expUpdates[`inventoryExpenses/${expId}`] = null;
+                }
+            });
+            if (Object.keys(expUpdates).length > 0) {
+                await update(ref(db), expUpdates);
+            }
+        }
+
+        if (!Array.isArray(order.items) || order.items.length === 0) return;
+
         const [productsSnap, inventorySnap] = await Promise.all([
             get(ref(db, "products")),
             get(ref(db, "inventory"))
@@ -499,7 +566,7 @@ async function updateOrderStatus(orderId, status, cancelReason = null) {
             const prevStatus = (currentData.status || "Verifying Payment").toLowerCase().trim();
 
             if (status.toLowerCase().trim() === "cancelled" && prevStatus !== "cancelled") {
-                await refundOrderInventory(currentData);
+                await refundOrderInventoryAndExpenses(orderId, currentData);
             }
         }
 
@@ -551,9 +618,15 @@ function closeClearAllOrdersModal() {
 
 function initModalEvents() {
     if (closeDetailsModalBtn) closeDetailsModalBtn.addEventListener("click", closeDetailsModal);
+    if (printOrderReceiptBtn) {
+        printOrderReceiptBtn.addEventListener("click", () => {
+            if (!currentOpenedOrder) return;
+            populateReceiptSheet(currentOpenedOrder);
+            window.print();
+        });
+    }
     if (dismissCancelModalBtn) dismissCancelModalBtn.addEventListener("click", closeCancelModal);
 
-    // Cancel Reason Button Click Handlers
     document.querySelectorAll(".cancel-reason-btn").forEach((btn) => {
         btn.addEventListener("click", async () => {
             if (!orderIdToCancel) return;
@@ -591,7 +664,7 @@ function initModalEvents() {
                 });
 
                 for (const order of activeOrders) {
-                    await refundOrderInventory(order);
+                    await refundOrderInventoryAndExpenses(order.id, order);
                 }
 
                 const updates = {};
@@ -601,7 +674,6 @@ function initModalEvents() {
                     await update(ref(db), updates);
                 }
 
-                // Reset POS counter AND Online order counters back to 1
                 await Promise.all([
                     set(ref(db, "system/posOrderCounter"), 1),
                     set(ref(db, "system/onlineOrderCounter"), 1),

@@ -1,11 +1,5 @@
-/* =========================================================
-   GOOGLE FONTS IMPORT
-========================================================= */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* =========================================================
-   CHECKOUT MAIN WRAPPER
-========================================================= */
 .checkout {
     width: 90%;
     max-width: 1200px;
@@ -14,9 +8,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* =========================================================
-   CHECKOUT HEADER TYPOGRAPHY
-========================================================= */
 .checkout > h1 {
     text-align: center;
     font-size: 60px;
@@ -36,9 +27,6 @@
     margin-bottom: 50px;
 }
 
-/* =========================================================
-   CHECKOUT GRID LAYOUT
-========================================================= */
 .checkout-container {
     display: grid;
     grid-template-columns: 1.6fr 1fr;
@@ -46,9 +34,6 @@
     align-items: start;
 }
 
-/* =========================================================
-   YOUR ORDER SECTION
-========================================================= */
 .order-section {
     background: #04696D;
     border-radius: 25px;
@@ -71,18 +56,12 @@
     margin-bottom: 25px;
 }
 
-/* =========================================================
-   CHECKOUT ITEMS LIST
-========================================================= */
 .checkout-items {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* =========================================================
-   INDIVIDUAL PRODUCT ITEM CARD
-========================================================= */
 .checkout-item {
     display: flex;
     align-items: center;
@@ -125,9 +104,6 @@
     font-family: 'Noto Serif', serif;
 }
 
-/* =========================================================
-   EMPTY ORDER STATE
-========================================================= */
 .empty-checkout {
     text-align: center;
     padding: 50px 20px;
@@ -137,9 +113,6 @@
     font-style: italic;
 }
 
-/* =========================================================
-   ORDER DETAILS SIDEBAR CARD
-========================================================= */
 .order-details {
     background: #04696D;
     border-radius: 25px;
@@ -164,9 +137,6 @@
     margin-bottom: 25px;
 }
 
-/* =========================================================
-   SUMMARY ROWS
-========================================================= */
 .summary-row {
     display: flex;
     justify-content: space-between;
@@ -181,7 +151,6 @@
     font-weight: 600;
 }
 
-/* TOTAL ROW */
 .summary-row.total {
     padding-top: 20px;
     margin-top: 5px;
@@ -195,9 +164,6 @@
     font-weight: 700;
 }
 
-/* =========================================================
-   CHECKOUT OPTIONS & LABELS
-========================================================= */
 .checkout-option {
     margin-bottom: 20px;
 }
@@ -230,9 +196,6 @@
     box-shadow: 0 0 12px rgba(79, 168, 171, 0.45);
 }
 
-/* =========================================================
-   PLACE ORDER BUTTON
-========================================================= */
 .place-order-btn {
     width: 100%;
     border: none;
@@ -260,9 +223,6 @@
     transform: translateY(-2px);
 }
 
-/* =========================================================
-   BACK TO CART LINK
-========================================================= */
 .back-cart {
     display: block;
     text-align: center;
@@ -282,9 +242,6 @@
     color: #4fa8ab;
 }
 
-/* =========================================================
-   CHECKOUT MODALS (CONFIRMATION, QR, SUCCESS)
-========================================================= */
 .checkout-modal-overlay {
     position: fixed;
     inset: 0;
@@ -465,9 +422,6 @@
     box-shadow: 0 6px 18px rgba(4, 105, 109, 0.35);
 }
 
-/* =========================================================
-   QR PAYMENT MODAL SPECIFICS
-========================================================= */
 .qr-modal-card {
     max-width: 385px;
     padding: 24px 20px 20px;
@@ -523,7 +477,6 @@
     color: #024E52;
 }
 
-/* Reference Number Input Styling */
 .qr-ref-wrapper {
     margin-bottom: 14px;
     text-align: left;
@@ -582,7 +535,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* Disabled State for "I Have Paid" Button */
 .modal-btn-confirm:disabled {
     background: #cfdcdb !important;
     color: #7a8e8e !important;
@@ -617,9 +569,6 @@
     letter-spacing: 0.5px;
 }
 
-/* =========================================================
-   RESPONSIVE MEDIA QUERIES
-========================================================= */
 @media (max-width: 1000px) {
     .checkout-container {
         grid-template-columns: 1fr;
@@ -714,7 +663,6 @@
         height: 55px;
     }
 
-    /* Target smaller phones for the QR modal */
     .qr-modal-card {
         max-width: 100%;
         padding: 20px 16px 16px;
@@ -783,7 +731,6 @@
     }
 }
 
-/* Extra breakpoint for compact heights */
 @media (max-height: 670px) {
     .checkout-modal {
         padding: 16px 16px 14px;

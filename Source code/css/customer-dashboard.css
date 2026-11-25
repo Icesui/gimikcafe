@@ -1,11 +1,5 @@
-/* ==========================================
-   GOOGLE FONTS IMPORT
-========================================== */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* ==========================================
-   CUSTOMER DASHBOARD MAIN LAYOUT
-========================================== */
 .customer-dashboard {
     max-width: 1200px;
     margin: auto;
@@ -13,9 +7,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* ==========================================
-   DASHBOARD HEADER TYPOGRAPHY
-========================================== */
 .dashboard-header {
     text-align: center;
     margin-bottom: 40px;
@@ -37,9 +28,6 @@
     font-style: italic;
 }
 
-/* ==========================================
-   DASHBOARD CARDS GRID
-========================================== */
 .dashboard-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -89,9 +77,6 @@
     font-style: italic;
 }
 
-/* ==========================================
-   PROFILE DETAILS
-========================================== */
 .profile-details {
     display: flex;
     flex-direction: column;
@@ -125,9 +110,6 @@
     font-family: 'Noto Serif', serif;
 }
 
-/* ==========================================
-   ORDER EMPTY PLACEHOLDER
-========================================== */
 .order-placeholder {
     min-height: 220px;
     display: flex;
@@ -173,16 +155,12 @@
     font-family: 'Noto Serif', serif;
 }
 
-/* ==========================================
-   ORDER CARD LIVE ENTRIES & SCROLL BARS
-========================================== */
 .orders-list-wrapper {
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
-/* FIX: Limit Order History to show 2 cards and scroll the rest */
 #historyOrdersList {
     max-height: 295px;
     overflow-y: auto;
@@ -191,7 +169,6 @@
     scrollbar-color: #04696D #edf5f5;
 }
 
-/* WebKit Scrollbar Styling for Order History */
 #historyOrdersList::-webkit-scrollbar {
     width: 6px;
 }
@@ -286,9 +263,6 @@
     font-family: 'Noto Serif', serif;
 }
 
-/* ==========================================
-   ORDER HISTORY CARD
-========================================== */
 .history-card {
     margin-top: 30px;
 }
@@ -297,9 +271,6 @@
     min-height: 200px;
 }
 
-/* ==========================================
-   ACCOUNT ACTIONS: LOGOUT BUTTON
-========================================== */
 .account-actions {
     display: flex;
     justify-content: center;
@@ -324,9 +295,6 @@
     background: #c9302c;
 }
 
-/* ==========================================
-   CANCELLED ORDER EXPLANATION NOTE
-========================================== */
 .order-cancel-note {
     margin-top: 12px;
     padding: 10px 14px;
@@ -353,9 +321,6 @@
     color: #8b2518;
 }
 
-/* ==========================================
-   RESPONSIVE MEDIA QUERIES
-========================================== */
 @media(max-width: 900px) {
     .dashboard-grid {
         grid-template-columns: 1fr;

@@ -1,9 +1,6 @@
-// GIMIK CAFE - ADMIN CUSTOMER DIRECTORY SYSTEM
-
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 import { db, adminReady } from "./admin.js";
 
-// DOM references
 const customersDateDisplay = document.getElementById("customersDate");
 const statTotalCustomers = document.getElementById("totalCustomers");
 const statRegisteredOnline = document.getElementById("registeredOnline");
@@ -15,7 +12,6 @@ const customerSearch = document.getElementById("customerSearch");
 const customerTableBody = document.getElementById("customerTableBody");
 const customerEmpty = document.getElementById("customerEmpty");
 
-// Modal references
 const customerViewModal = document.getElementById("customerViewModal");
 const closeCustomerModalBtn = document.getElementById("closeCustomerModal");
 const closeCustomerDetailsBtn = document.getElementById("closeCustomerDetails");
@@ -29,7 +25,6 @@ const modalCustomerOrders = document.getElementById("modalCustomerOrders");
 const modalCustomerJoined = document.getElementById("modalCustomerJoined");
 const modalCustomerId = document.getElementById("modalCustomerId");
 
-// State caches
 let usersData = {};
 let ordersData = [];
 let customerList = [];
@@ -63,7 +58,6 @@ function listenToCustomerData() {
     const usersRef = ref(db, "Users");
     const ordersRef = ref(db, "orders");
 
-    // Listen to registered users
     onValue(usersRef, (snapshot) => {
         usersData = snapshot.exists() ? snapshot.val() : {};
         rebuildCustomerList();
@@ -71,7 +65,6 @@ function listenToCustomerData() {
         console.error("Users listener error:", error);
     });
 
-    // Listen to orders to count purchases & capture POS walk-ins
     onValue(ordersRef, (snapshot) => {
         ordersData = [];
         if (snapshot.exists()) {
@@ -89,9 +82,8 @@ function listenToCustomerData() {
 function rebuildCustomerList() {
     const customersMap = new Map();
 
-    // 1. Ingest registered users from Firebase /Users
     Object.entries(usersData).forEach(([uid, u]) => {
-        // Skip administrative staff from appearing in customer list
+
         const role = String(u.role || "").toLowerCase().replace(/[\s_]/g, "");
         if (role === "admin" || role === "superadmin" || role === "owner" || role === "barista") {
             return;
@@ -117,7 +109,6 @@ function rebuildCustomerList() {
         });
     });
 
-    // 2. Map orders to registered users or record walk-in customers
     ordersData.forEach((order) => {
         const orderUid = order.userId || order.customerUid || order.uid;
         const total = parseFloat(order.totalAmount || order.total || 0) || 0;
@@ -128,7 +119,6 @@ function rebuildCustomerList() {
             cust.totalOrders++;
             if (!isCancelled) cust.totalSpend += total;
         } else {
-            // Group walk-in or guest orders by phone or customer name
             const guestName = order.customerName || order.nickname || "Walk-in Guest";
             const guestContact = order.contactNumber || order.contact || "-";
             const guestKey = `guest_${guestName}_${guestContact}`;
@@ -163,7 +153,6 @@ function updateStatistics() {
     const total = customerList.length;
     const registered = customerList.filter(c => c.isOnline).length;
 
-    // Calculate revenue totals
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth();

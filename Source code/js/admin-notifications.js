@@ -1,5 +1,3 @@
-// GIMIK CAFE - DEDICATED ADMIN REALTIME NOTIFICATIONS (FOR ALL ADMIN PAGES)
-
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 import { db } from "./admin.js";
 
@@ -24,7 +22,6 @@ function initAdminAudio() {
         document.body.appendChild(audioEl);
     }
 
-    // Truly silent unlock: mute during initial gesture play, then restore
     const unlock = () => {
         if (!isAudioUnlocked && audioEl) {
             audioEl.muted = true;
@@ -166,8 +163,6 @@ function listenToGlobalOrders() {
         Object.entries(data).forEach(([id, item]) => {
             currentIds.add(id);
 
-            // 1. Never ring on page load for historical/existing orders
-            // 2. Only detect genuinely newly created orders (created after this page session started)
             if (!isInitialLoad && !knownOrderIds.has(id)) {
                 const orderTime = Number(item?.createdAt) || 0;
                 const status = (item?.status || "Verifying Payment").toLowerCase().trim();

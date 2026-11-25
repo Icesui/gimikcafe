@@ -1,7 +1,3 @@
-// =========================================================
-//       GIMIK CAFE - ATTENDANCE MONITOR (MULTI-DAY VIEWER)
-// =========================================================
-
 import { 
     ref, 
     onValue,
@@ -25,7 +21,6 @@ import {
     authenticatedAdmin 
 } from "./admin.js";
 
-// DOM References
 const rangeFilter = document.getElementById("attendanceRangeFilter");
 const staffFilterGroup = document.getElementById("staffFilterGroup");
 const staffMemberFilter = document.getElementById("staffMemberFilter");
@@ -43,7 +38,6 @@ const loggedInStaffName = document.getElementById("loggedInStaffName");
 const loggedInStaffRole = document.getElementById("loggedInStaffRole");
 const tableSubtitle = document.getElementById("attendanceTableSubtitle");
 
-// Global attendance raw state
 let allAttendanceData = {};
 let filteredRecords = [];
 let currentUserAdmin = null;
@@ -66,7 +60,6 @@ if (adminReady && typeof adminReady.then === "function") {
     document.addEventListener("DOMContentLoaded", () => initViewer(null));
 }
 
-// Check role: super_admin / superadmin / Owner vs barista / admin
 function checkSuperAdminRole() {
     if (!currentUserAdmin) {
         isSuperAdmin = false;
@@ -75,12 +68,10 @@ function checkSuperAdminRole() {
     const roleClean = (currentUserAdmin.role || "").toLowerCase().replace(/[\s_]/g, "");
     isSuperAdmin = roleClean === "superadmin" || roleClean === "owner";
 
-    // Show employee selector dropdown only for Super Admin (Owner)
     if (staffFilterGroup) {
         staffFilterGroup.style.display = isSuperAdmin ? "flex" : "none";
     }
 
-    // Show Add Employee & Manage Staff buttons only for Super Admin (Owner)
     if (openAddStaffModalBtn) {
         openAddStaffModalBtn.style.display = isSuperAdmin ? "inline-flex" : "none";
     }
@@ -136,7 +127,6 @@ function initFilterEvents() {
     }
 }
 
-// Populate the staff selector for Super Admin based on records
 function populateStaffOptions(flatList) {
     if (!isSuperAdmin || !staffMemberFilter) return;
 
@@ -158,9 +148,6 @@ function populateStaffOptions(flatList) {
     staffMemberFilter.value = staffMap.has(previousSelection) ? previousSelection : "all";
 }
 
-// =========================================================
-// 1. LISTEN TO ENTIRE ATTENDANCE ARCHIVE
-// =========================================================
 function listenToAllAttendance() {
     const attendanceRef = ref(db, "attendance");
 
@@ -184,9 +171,6 @@ function listenToAllAttendance() {
     });
 }
 
-// =========================================================
-// 2. FILTER & PROCESS RECORDS
-// =========================================================
 function applyFiltersAndRender() {
     const range = rangeFilter ? rangeFilter.value : "today";
     const selectedStaff = staffMemberFilter ? staffMemberFilter.value : "all";
@@ -210,17 +194,14 @@ function applyFiltersAndRender() {
         });
     });
 
-    // Populate Super Admin staff filter dropdown options once data arrives
     if (isSuperAdmin && staffMemberFilter) {
         populateStaffOptions(allFlatList);
     }
 
-    // Role-based filtering:
-    // If not Super Admin, strictly filter to current user's UID
     const currentUid = currentUserAdmin?.uid;
 
     const flatList = allFlatList.filter((entry) => {
-        // 1. Role Scope Check
+
         if (!isSuperAdmin) {
             if (!currentUid || entry.staffId !== currentUid) {
                 return false;
@@ -229,7 +210,6 @@ function applyFiltersAndRender() {
             return false;
         }
 
-        // 2. Date Range Filter
         if (range === "today" && entry.dateKey !== todayStr) return false;
         if (range === "week" && (entry.dateKey < weekAgoStr || entry.dateKey > todayStr)) return false;
         if (range === "custom") {
@@ -238,11 +218,9 @@ function applyFiltersAndRender() {
             if (start && entry.dateKey < start) return false;
             if (end && entry.dateKey > end) return false;
         }
-
         return true;
     });
 
-    // Sort chronologically: newest date and shift first
     flatList.sort((a, b) => {
         if (a.dateKey !== b.dateKey) {
             return b.dateKey.localeCompare(a.dateKey);
@@ -260,9 +238,6 @@ function applyFiltersAndRender() {
     renderAttendanceTable(filteredRecords);
 }
 
-// =========================================================
-// 3. TABLE RENDERING & METRICS
-// =========================================================
 function renderAttendanceTable(records) {
     if (!tableBody) return;
     tableBody.innerHTML = "";
@@ -280,7 +255,6 @@ function renderAttendanceTable(records) {
     records.forEach((staff) => {
         const status = determineStatus(staff);
 
-        // Count active statuses for shifts occurring TODAY
         if (staff.dateKey === todayKey) {
             if (status.type === "working") onDuty++;
             else if (status.type === "break") onBreak++;
@@ -421,9 +395,6 @@ function escapeHTML(str) {
     return div.innerHTML;
 }
 
-// =========================================================
-// 4. SECONDARY APP REGISTRATION FOR NEW EMPLOYEES
-// =========================================================
 function setupEmployeeCreator() {
     const addStaffModal = document.getElementById("addStaffModal");
     const openBtn = document.getElementById("openAddStaffModalBtn");
@@ -490,14 +461,11 @@ function setupEmployeeCreator() {
             const secondaryApp = initializeApp(currentAppOptions, `StaffCreator_${Date.now()}`);
             const secondaryAuth = getAuth(secondaryApp);
 
-            // 1. Create auth user credentials in Firebase Auth
             const userCred = await createUserWithEmailAndPassword(secondaryAuth, email, password);
             const newUid = userCred.user.uid;
 
-            // 2. Send verification email to the new employee
             await sendEmailVerification(userCred.user);
 
-            // 3. Save full profile into Realtime Database under Users/{uid}
             await set(ref(db, `Users/${newUid}`), {
                 uid: newUid,
                 fullName: fullName,
@@ -508,14 +476,12 @@ function setupEmployeeCreator() {
                 createdAt: new Date().toISOString()
             });
 
-            // 4. Save index in Usernames/{username}
             await set(ref(db, `Usernames/${username}`), {
                 uid: newUid,
                 email: email,
                 exactUsername: username
             });
 
-            // 5. Immediately log out secondary session
             await secondarySignOut(secondaryAuth);
 
             if (msgEl) {
@@ -545,9 +511,6 @@ function setupEmployeeCreator() {
     });
 }
 
-// =========================================================
-// 5. MANAGE & REMOVE ADMIN / STAFF ACCOUNTS (SUPER ADMIN ONLY)
-// =========================================================
 function setupEmployeeManager() {
     const manageModal = document.getElementById("manageStaffModal");
     const openBtn = document.getElementById("openManageStaffModalBtn");
@@ -595,7 +558,6 @@ function setupEmployeeManager() {
                 if (!u) return;
                 const roleLower = (u.role || "").toLowerCase().replace(/[\s_]/g, "");
                 
-                // Exclude removed accounts and regular customers
                 if (roleLower === "admin" || roleLower === "superadmin" || roleLower === "owner" || roleLower === "barista") {
                     staffList.push({ uid, ...u });
                 }
@@ -649,7 +611,6 @@ function setupEmployeeManager() {
             listContainer.appendChild(item);
         });
 
-        // Attach click listeners
         listContainer.querySelectorAll(".btn-remove-staff:not(:disabled)").forEach((btn) => {
             btn.addEventListener("click", () => {
                 const targetUid = btn.dataset.uid;
@@ -667,7 +628,6 @@ function setupEmployeeManager() {
         btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Removing...`;
 
         try {
-            // 1. Fetch user data to retrieve their username for cleanup
             const userSnap = await get(ref(db, `Users/${uid}`));
             let usernameToRemove = null;
             if (userSnap.exists()) {
@@ -675,15 +635,12 @@ function setupEmployeeManager() {
                 usernameToRemove = (userData.username || "").trim().toLowerCase();
             }
 
-            // 2. Delete user profile record from Realtime Database Users/{uid}
             await remove(ref(db, `Users/${uid}`));
 
-            // 3. Delete lookup entry from Usernames/{username} if it exists
             if (usernameToRemove) {
                 await remove(ref(db, `Usernames/${usernameToRemove}`));
             }
 
-            // 4. Animate and remove the card from the UI
             const cardEl = document.getElementById(`staffCard_${uid}`);
             if (cardEl) {
                 cardEl.style.transition = "opacity 0.25s, transform 0.25s";
@@ -718,9 +675,6 @@ function setupEmployeeManager() {
     }
 }
 
-// =========================================================
-// 6. CSV EXPORT
-// =========================================================
 function downloadAttendanceCSV() {
     if (!filteredRecords || filteredRecords.length === 0) {
         alert("No attendance records to export.");

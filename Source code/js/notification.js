@@ -1,17 +1,21 @@
 // GIMIK CAFE - CUSTOMER ORDER STATUS NOTIFICATIONS
 
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-import { database as db } from "./firebase-config.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+import { database as db, auth } from "./firebase-config.js";
 
 const ACTIVE_ORDER_KEY = "gimik_active_order_id";
 const READY_PICKUP_KEY = "gimik_ready_pickup_order_id";
-let toastTimeout = null;
+const SEEN_READY_ORDERS_KEY = "gimik_seen_ready_orders";
 
+let toastTimeout = null;
 let coinAudio = null;
 let cancelAudio = null;
 let isAudioUnlocked = false;
 let activeOrderUnsubscribe = null;
+let userOrdersUnsubscribe = null;
 let lastKnownStatus = null;
+const knownUserOrderStatuses = new Map();
 
 function initAudio() {
     if (!coinAudio) {
@@ -80,16 +84,61 @@ function playCancelSound() {
     }
 }
 
+function getSeenReadyOrders() {
+    try {
+        const raw = localStorage.getItem(SEEN_READY_ORDERS_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+    } catch {
+        return [];
+    }
+}
+
+function markOrderAsSeen(orderId) {
+    if (!orderId) return;
+    const seen = getSeenReadyOrders();
+    if (!seen.includes(orderId)) {
+        seen.push(orderId);
+        localStorage.setItem(SEEN_READY_ORDERS_KEY, JSON.stringify(seen.slice(-50)));
+    }
+}
+
+function isReadyStatus(status) {
+    const s = (status || "").toLowerCase().trim();
+    return s === "completed" || s === "ready" || s === "for pickup";
+}
+
+function ensureBadgeElement() {
+    const accountAnchor = document.getElementById("accountLink") || document.getElementById("navUserLink");
+    if (!accountAnchor) return null;
+
+    accountAnchor.classList.add("account-link");
+
+    let badge = document.getElementById("accountReadyBadge");
+    if (!badge || !accountAnchor.contains(badge)) {
+        if (badge) badge.remove();
+        badge = document.createElement("span");
+        badge.className = "account-badge";
+        badge.id = "accountReadyBadge";
+        badge.hidden = true;
+        accountAnchor.appendChild(badge);
+    }
+
+    return badge;
+}
+
 function setAccountReadyBadge(isReady, count = 1) {
-    const badge = document.getElementById("accountReadyBadge");
+    const badge = ensureBadgeElement();
     if (!badge) return;
 
     if (isReady) {
         badge.textContent = count > 1 ? String(count) : "!";
         badge.hidden = false;
+        badge.style.display = "inline-block";
     } else {
         badge.textContent = "";
         badge.hidden = true;
+        badge.style.display = "none";
     }
 }
 
@@ -99,6 +148,15 @@ function syncBadgeFromStorage() {
 }
 
 function clearAccountReadyBadge() {
+    const currentReadyId = localStorage.getItem(READY_PICKUP_KEY);
+    if (currentReadyId) {
+        markOrderAsSeen(currentReadyId);
+    }
+    knownUserOrderStatuses.forEach((status, orderId) => {
+        if (isReadyStatus(status)) {
+            markOrderAsSeen(orderId);
+        }
+    });
     localStorage.removeItem(READY_PICKUP_KEY);
     setAccountReadyBadge(false);
 }
@@ -210,7 +268,6 @@ function startOrderTracking() {
     const activeOrderId = localStorage.getItem(ACTIVE_ORDER_KEY);
     if (!activeOrderId) return;
 
-    // Unsubscribe from any previously attached listener to prevent duplicate triggers
     if (typeof activeOrderUnsubscribe === "function") {
         activeOrderUnsubscribe();
         activeOrderUnsubscribe = null;
@@ -228,37 +285,32 @@ function startOrderTracking() {
         const data = snapshot.val();
         const status = (data.status || "").toLowerCase().trim();
         const orderNum = data.orderNumber || data.orderId || "ONL Order";
+        const isFinished = isReadyStatus(status) || status.includes("cancel");
 
-        const isFinished = status === "completed" || status === "ready" || status === "for pickup" || status.includes("cancel");
-
-        // 1. Silent Initialization on Page Load:
-        // Record existing state without firing audio or showing toasts on fresh navigation/refresh
         if (isInitialFetch) {
             isInitialFetch = false;
             lastKnownStatus = status;
 
-            if (status === "completed" || status === "ready" || status === "for pickup") {
+            if (isReadyStatus(status) && !getSeenReadyOrders().includes(activeOrderId)) {
                 localStorage.setItem(READY_PICKUP_KEY, activeOrderId);
                 setAccountReadyBadge(true, 1);
             } else if (status.includes("cancel") && localStorage.getItem(READY_PICKUP_KEY) === activeOrderId) {
                 clearAccountReadyBadge();
             }
 
-            // If already complete or cancelled prior to page load, clean up localStorage
             if (isFinished) {
                 localStorage.removeItem(ACTIVE_ORDER_KEY);
             }
             return;
         }
 
-        // 2. Only notify when there is an actual live transition
         if (status === lastKnownStatus) {
             return;
         }
 
         if (status.includes("processing") || status.includes("process")) {
             showProcessingToast(orderNum);
-        } else if (status === "completed" || status === "ready" || status === "for pickup") {
+        } else if (isReadyStatus(status)) {
             localStorage.setItem(READY_PICKUP_KEY, activeOrderId);
             setAccountReadyBadge(true, 1);
             showReadyToast(orderNum);
@@ -275,6 +327,72 @@ function startOrderTracking() {
     });
 }
 
+function startLoggedInUserOrderTracking(user) {
+    if (typeof userOrdersUnsubscribe === "function") {
+        userOrdersUnsubscribe();
+        userOrdersUnsubscribe = null;
+    }
+    knownUserOrderStatuses.clear();
+
+    if (!user) return;
+
+    const ordersRef = ref(db, "orders");
+    let isInitialBatch = true;
+
+    userOrdersUnsubscribe = onValue(ordersRef, (snapshot) => {
+        if (!snapshot.exists()) return;
+
+        const seenReadyIds = getSeenReadyOrders();
+        const userEmail = (user.email || "").toLowerCase().trim();
+        let unseenReadyCount = 0;
+        let latestUnseenReadyId = null;
+
+        Object.entries(snapshot.val()).forEach(([orderId, order]) => {
+            if (!order) return;
+            const matchesUser =
+                order.userId === user.uid ||
+                order.uid === user.uid ||
+                order.customerId === user.uid ||
+                (userEmail && (order.customerEmail || order.email || "").toLowerCase().trim() === userEmail);
+
+            if (!matchesUser) return;
+
+            const status = (order.status || "").toLowerCase().trim();
+            const prevStatus = knownUserOrderStatuses.get(orderId);
+            const orderNum = order.orderNumber || order.orderId || "ONL Order";
+
+            if (isReadyStatus(status) && !seenReadyIds.includes(orderId)) {
+                unseenReadyCount++;
+                latestUnseenReadyId = orderId;
+            }
+
+            if (!isInitialBatch && prevStatus !== undefined && prevStatus !== status) {
+                if (status.includes("processing") || status.includes("process")) {
+                    showProcessingToast(orderNum);
+                } else if (isReadyStatus(status)) {
+                    localStorage.setItem(READY_PICKUP_KEY, orderId);
+                    showReadyToast(orderNum);
+                } else if (status.includes("cancel")) {
+                    showCancelledToast(orderNum);
+                }
+            }
+
+            knownUserOrderStatuses.set(orderId, status);
+        });
+
+        isInitialBatch = false;
+
+        if (window.location.pathname.endsWith("customer-dashboard.html")) {
+            clearAccountReadyBadge();
+        } else if (unseenReadyCount > 0) {
+            if (latestUnseenReadyId) {
+                localStorage.setItem(READY_PICKUP_KEY, latestUnseenReadyId);
+            }
+            setAccountReadyBadge(true, unseenReadyCount);
+        }
+    });
+}
+
 window.trackCustomerOrder = function(orderId) {
     if (!orderId) return;
     localStorage.setItem(ACTIVE_ORDER_KEY, orderId);
@@ -283,18 +401,25 @@ window.trackCustomerOrder = function(orderId) {
 };
 
 document.addEventListener("DOMContentLoaded", () => {
+    ensureBadgeElement();
     syncBadgeFromStorage();
 
     if (window.location.pathname.endsWith("customer-dashboard.html")) {
         clearAccountReadyBadge();
     }
 
-    document.getElementById("accountLink")?.addEventListener("click", () => {
-        clearAccountReadyBadge();
+    document.addEventListener("click", (e) => {
+        if (e.target.closest("#accountLink") || e.target.closest("#navUserLink")) {
+            clearAccountReadyBadge();
+        }
     });
 
-    document.getElementById("navUserLink")?.addEventListener("click", () => {
-        clearAccountReadyBadge();
+    onAuthStateChanged(auth, (user) => {
+        setTimeout(() => {
+            ensureBadgeElement();
+            syncBadgeFromStorage();
+        }, 50);
+        startLoggedInUserOrderTracking(user);
     });
 
     startOrderTracking();

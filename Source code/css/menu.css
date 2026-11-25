@@ -1,11 +1,5 @@
-/* ==========================================
-   GOOGLE FONTS IMPORT
-========================================== */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* ==========================================
-   PAGE VIEWPORT & BASE LAYOUT
-========================================== */
 html, body {
     height: 100%;
     margin: 0;
@@ -18,9 +12,6 @@ body {
     font-family: 'Poppins', sans-serif;
 }
 
-/* ==========================================
-   MENU SECTION & HEADER
-========================================== */
 .menu {
     flex: 1 0 auto;
     max-width: 1260px;
@@ -37,7 +28,6 @@ body {
     font-weight: 700;
 }
 
-/* Title image wrapper centered with text */
 .menu-title-wrap {
     display: flex;
     align-items: center;
@@ -70,9 +60,6 @@ body {
     font-size: 19px;
 }
 
-/* ==========================================
-   CATEGORY SELECTOR
-========================================== */
 .category-nav {
     display: flex;
     flex-direction: column;
@@ -110,9 +97,6 @@ body {
     box-shadow: 0 0 0 3px rgba(255, 210, 122, 0.5);
 }
 
-/* ==========================================
-   HORIZONTAL SCROLL SECTION & TRACK
-========================================== */
 .menu-grid {
     display: flex;
     flex-direction: column;
@@ -187,7 +171,6 @@ body {
     width: 100%;
 }
 
-/* Horizontal track container */
 .horizontal-menu-track {
     display: flex;
     gap: 24px;
@@ -199,7 +182,6 @@ body {
     scrollbar-color: rgba(255, 210, 122, 0.5) rgba(255, 255, 255, 0.05);
 }
 
-/* Custom scrollbar styling */
 .horizontal-menu-track::-webkit-scrollbar {
     height: 6px;
 }
@@ -218,9 +200,6 @@ body {
     background: #ffd27a;
 }
 
-/* ==========================================
-   PRODUCT CARD (HORIZONTAL SIZE)
-========================================== */
 .menu-card {
     flex: 0 0 240px;
     width: 240px;
@@ -272,7 +251,6 @@ body {
     font-family: 'Noto Serif', serif;
 }
 
-/* Footer layout anchoring */
 footer {
     flex-shrink: 0;
     margin-top: auto;
@@ -310,9 +288,6 @@ footer {
     }
 }
 
-/* ==========================================
-   PRODUCT DETAILS OVERLAY MODAL
-========================================== */
 .overlay {
     position: fixed;
     inset: 0;
@@ -492,9 +467,6 @@ footer {
     }
 }
 
-/* ==========================================
-   SIZE SELECTOR PILLS
-========================================== */
 .overlay-sizes-section {
     margin-bottom: 22px;
 }
@@ -541,9 +513,6 @@ footer {
     box-shadow: 0 4px 10px rgba(2, 78, 82, 0.2);
 }
 
-/* ==========================================
-   TOAST NOTIFICATION
-========================================== */
 .toast-notification {
     position: fixed;
     top: 35px;

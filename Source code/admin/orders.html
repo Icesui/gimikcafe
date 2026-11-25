@@ -182,9 +182,14 @@
                 <span id="modalOrderSource" class="order-tag">ORDER DETAILS</span>
                 <h2 id="modalOrderNumber">Order #00000</h2>
             </div>
-            <button type="button" class="order-modal-close" id="closeDetailsModal">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
+            <div class="modal-header-actions">
+                <button type="button" class="modal-print-receipt-btn" id="printOrderReceiptBtn" title="Print Order Receipt">
+                    <i class="fa-solid fa-print"></i> Print Receipt
+                </button>
+                <button type="button" class="order-modal-close" id="closeDetailsModal">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
         </div>
 
         <div class="order-modal-body">
@@ -218,6 +223,36 @@
             </div>
 
             <div class="modal-order-actions-footer" id="modalOrderActionsFooter"></div>
+        </div>
+    </div>
+</div>
+
+<!-- PRINTABLE RECEIPT CONTAINER -->
+<div class="printable-receipt-sheet" id="printableReceiptSheet" aria-hidden="true">
+    <div class="receipt-paper">
+        <div class="receipt-brand">
+            <h2>GIMIK CAFE</h2>
+            <p>2nd Floor Veraville Homes, Marcos Alvarez, Las Piñas City</p>
+            <p>Order Receipt</p>
+        </div>
+        <div class="receipt-divider-line"></div>
+        <div class="receipt-meta">
+            <div><span>Order #:</span> <strong id="receiptSheetOrderNum">-</strong></div>
+            <div><span>Customer:</span> <strong id="receiptSheetCustomer">-</strong></div>
+            <div><span>Date &amp; Time:</span> <strong id="receiptSheetDate">-</strong></div>
+            <div><span>Payment:</span> <strong id="receiptSheetPayment">-</strong></div>
+            <div><span>Status:</span> <strong id="receiptSheetStatus">-</strong></div>
+        </div>
+        <div class="receipt-divider-line"></div>
+        <div class="receipt-items-table" id="receiptSheetItems"></div>
+        <div class="receipt-divider-line"></div>
+        <div class="receipt-grand-total">
+            <span>TOTAL</span>
+            <strong id="receiptSheetTotal">₱0.00</strong>
+        </div>
+        <div class="receipt-footer-note">
+            <p>Thank you for ordering at Gimik Cafe!</p>
+            <p>Good Drinks. Good Food. Good Vibes.</p>
         </div>
     </div>
 </div>

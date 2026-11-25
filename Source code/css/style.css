@@ -1,8 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* ==========================================
-   RESET & BASE STYLES
-========================================== */
 *{
     margin:0;
     padding:0;
@@ -15,9 +12,6 @@ body{
     color:white;
 }
 
-/* ==========================================
-   HEADER & NAVBAR
-========================================== */
 header{
     position: fixed;
     top: 0;
@@ -60,7 +54,6 @@ header{
     margin-left:auto;
 }
 
-/* Header nav links styled with Noto Serif */
 .nav-links a{
     color:white;
     text-decoration:none;
@@ -83,7 +76,6 @@ header{
     cursor: pointer;
 }
 
-/* Profile Icon Notification Badge */
 .account-link{
     position: relative;
 }
@@ -92,6 +84,7 @@ header{
     position: absolute;
     top: -6px;
     right: -8px;
+    z-index: 10;
     min-width: 16px;
     height: 16px;
     padding: 0 4px;
@@ -105,6 +98,7 @@ header{
     text-align: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
     pointer-events: none;
+    flex-shrink: 0;
 }
 
 .account-badge:not([hidden]){
@@ -137,9 +131,6 @@ header{
     cursor: pointer;
 }
 
-/* ==========================================
-   HERO SECTION
-========================================== */
 .hero{
     position: relative;
     width: 100%;
@@ -156,7 +147,6 @@ header{
     max-width: 650px;
 }
 
-/* Hero Heading using Noto Serif */
 .hero-left h1{
     font-family:'Noto Serif', serif;
     font-weight: 700;
@@ -167,7 +157,6 @@ header{
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
-/* Button styled with Noto Serif */
 .btn{
     display:inline-block;
     background:white;
@@ -202,7 +191,6 @@ header{
     display: block;
 }
 
-/* Dark overlay for text readability */
 .hero-right::after {
     content: "";
     position: absolute;
@@ -211,9 +199,6 @@ header{
     z-index: 2;
 }
 
-/* ==========================================
-   HEADER & HERO RESPONSIVE (MOBILE SCREENS)
-========================================== */
 @media(max-width: 650px){
     header {
         padding: 12px 4% !important;
@@ -230,7 +215,6 @@ header{
         width: 105px !important;
     }
 
-    /* Keep nav-links fully visible on phones */
     .nav-links {
         display: flex !important;
         align-items: center;
@@ -274,9 +258,6 @@ header{
     }
 }
 
-/* ==========================================
-   FOOTER SECTION
-========================================== */
 footer{
     background:#024E52;
     color:white;
@@ -311,7 +292,6 @@ footer{
     margin-bottom:12px;
 }
 
-/* Footer links styled with Noto Serif */
 .footer-section a{
     color:white;
     text-decoration:none;
@@ -320,7 +300,6 @@ footer{
     transition:.3s;
 }
 
-/* Footer info paragraphs styled with Noto Serif */
 .footer-section p{
     margin-bottom:15px;
     line-height:1.8;
@@ -332,7 +311,6 @@ footer{
     margin-right:10px;
 }
 
-/* Footer map link styled with Noto Serif */
 .footer-map a {
     color: white;
     text-decoration: none;
@@ -344,7 +322,6 @@ footer{
     color:#4fa8ab;
 }
 
-/* Social icons layout */
 .social-icons{
     display:flex;
     gap:20px;
@@ -371,7 +348,6 @@ footer{
     border-color:#ffffff;
 }
 
-/* Footer section divider */
 footer hr{
     border:none;
     height:1px;
@@ -379,7 +355,6 @@ footer hr{
     margin:40px 0 20px;
 }
 
-/* Footer copyright notice */
 .footer-bottom{
     text-align:center;
     color:#ddd;
@@ -387,7 +362,6 @@ footer hr{
     font-size:14px;
 }
 
-/* Footer mobile responsive query */
 @media(max-width:768px){
     .footer-container{
         flex-direction:column;
@@ -400,9 +374,6 @@ footer hr{
     }
 }
 
-/* =========================================================
-   GLOBAL CUSTOMER ORDER STATUS TOAST POPUP (TOP RIGHT)
-========================================================= */
 .customer-order-toast,
 .customer-ready-toast {
     position: fixed;
@@ -538,11 +509,6 @@ footer hr{
     color: #263c3d;
 }
 
-/* =========================================================
-   CUSTOMER TOAST: STATUS THEMES (PROCESSING / CANCELLED)
-========================================================= */
-
-/* Processing State */
 .customer-order-toast.is-processing,
 .customer-ready-toast.is-processing {
     border-left-color: #0B7074 !important;
@@ -565,7 +531,6 @@ footer hr{
     color: #0B7074 !important;
 }
 
-/* Cancelled State */
 .customer-order-toast.is-cancelled,
 .customer-ready-toast.is-cancelled {
     border-left-color: #cf3d28 !important;
@@ -588,7 +553,6 @@ footer hr{
     color: #a03b2c !important;
 }
 
-/* Mobile Responsiveness */
 @media (max-width: 480px) {
     .customer-order-toast,
     .customer-ready-toast {
@@ -599,9 +563,6 @@ footer hr{
     }
 }
 
-/* =========================================================
-   STRICT ID-LEVEL OVERRIDES FOR TEXT CONTRAST & VISIBILITY
-========================================================= */
 #customerOrderToast,
 #customerOrderToast * {
     box-sizing: border-box;
@@ -637,9 +598,6 @@ footer hr{
     background: #eaf6f2 !important;
 }
 
-/* =========================================================
-   UNIVERSAL FIX: FORCE DARK TEXT ON ALL TOAST NOTIFICATIONS
-========================================================= */
 [class*="toast"],
 [id*="toast"],
 .customer-ready-toast,

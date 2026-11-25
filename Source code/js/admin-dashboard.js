@@ -1,14 +1,9 @@
-// =========================================================
-//            GIMIK CAFE - ADMIN DASHBOARD SYSTEM
-// =========================================================
-
 import { db, adminReady } from "./admin.js";
 import {
     ref,
     onValue
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
 
-// DOM references
 const dashboardDate = document.getElementById("dashboardDate");
 const todaySalesEl = document.getElementById("todaySales");
 const todayOrdersEl = document.getElementById("todayOrders");
@@ -17,12 +12,10 @@ const inventoryAlertsContainer = document.getElementById("inventoryAlertsContain
 const inventoryAlertSubtitle = document.getElementById("inventoryAlertSubtitle");
 const liveOrdersContainer = document.getElementById("liveOrdersContainer");
 
-// Runtime caches
 let cachedOrders = [];
 let cachedInventory = [];
 let cachedStaff = [];
 
-// Initialization
 const initDashboard = () => {
     updateDashboardDate();
     listenToTodayMetrics();
@@ -47,7 +40,6 @@ function updateDashboardDate() {
     });
 }
 
-// 1. LISTEN TO ORDERS & SALES METRICS
 function listenToTodayMetrics() {
     const ordersRef = ref(db, "orders");
 
@@ -125,7 +117,6 @@ function renderLiveOrders(orders) {
         return;
     }
 
-    // Sort newest first
     const sorted = [...orders].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0)).slice(0, 5);
 
     let html = "";
@@ -162,7 +153,6 @@ function renderLiveOrders(orders) {
     liveOrdersContainer.innerHTML = html;
 }
 
-// 2. LISTEN TO INVENTORY ALERTS
 function listenToInventoryAlerts() {
     const inventoryRef = ref(db, "inventory");
 
@@ -246,7 +236,6 @@ function renderInventoryAlerts(items) {
     inventoryAlertsContainer.innerHTML = html;
 }
 
-// 3. LISTEN TO STAFF ATTENDANCE
 function listenToStaffAttendance() {
     const attendanceRef = ref(db, "attendance");
 
@@ -259,7 +248,6 @@ function listenToStaffAttendance() {
         const data = snapshot.val();
         const records = Object.values(data);
 
-        // Count how many staff members are on-duty or working
         let activeCount = 0;
         records.forEach((staff) => {
             const status = String(staff.status || "").toLowerCase();
@@ -276,7 +264,6 @@ function listenToStaffAttendance() {
     });
 }
 
-// Helpers
 function formatOrderTime(timestamp) {
     if (!timestamp) return "Just now";
     const d = new Date(timestamp);

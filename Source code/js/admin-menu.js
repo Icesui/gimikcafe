@@ -1,4 +1,3 @@
-// Firebase Realtime Database imports
 import {
     ref,
     onValue,
@@ -13,7 +12,7 @@ import {
     adminReady
 } from "./admin.js";
 
-// DOM references
+
 const menuDateDisplay = document.getElementById("menuDateDisplay");
 const openAddProductBtn = document.getElementById("openAddProductBtn");
 const openDeleteProductBtn = document.getElementById("openDeleteProductBtn");
@@ -22,7 +21,6 @@ const categoryFilter = document.querySelector(".menu-filter select");
 const productTableBody = document.querySelector(".menu-table tbody");
 const productCount = document.getElementById("menuCountSubtitle");
 
-// Edit / Add modal elements
 const productModal = document.querySelector(".product-modal:not(#deleteProductModal)");
 const modalOverlay = productModal?.querySelector(".product-modal-overlay");
 const modalCloseBtn = productModal?.querySelector(".modal-close");
@@ -39,7 +37,6 @@ const productStatus = document.getElementById("productStatus");
 const pricesList = document.querySelector(".prices-list");
 const addPriceBtn = document.querySelector(".add-price-btn");
 
-// Per-variant recipe elements
 const variantRecipeTabs = document.getElementById("variantRecipeTabs");
 const variantIngredientsList = document.getElementById("variantIngredientsList");
 const addVariantIngredientBtn = document.getElementById("addVariantIngredientBtn");
@@ -47,24 +44,20 @@ const addVariantIngredientBtn = document.getElementById("addVariantIngredientBtn
 const largeProductImage = document.querySelector(".large-product-image img");
 const changeImageBtn = document.querySelector(".change-image-btn");
 
-// Delete confirmation modal elements
 const deleteProductModal = document.getElementById("deleteProductModal");
 const deleteModalPrompt = document.getElementById("deleteModalPrompt");
 const cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
 const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
 
-// Runtime state
 let products = [];
 let allInventoryItems = [];
 let currentProductId = null;
 let currentImage = "../Asset/Square Logo.jpg";
 let selectedProductId = null;
 
-// Tracks working variant recipes inside the modal: { [sizeName]: [ {name, amount, unit} ] }
 let variantRecipesState = {};
 let activeVariantSize = "";
 
-// System initialization
 const initMenu = () => {
     updateDateDisplay();
     initModalEvents();
@@ -88,7 +81,6 @@ function updateDateDisplay() {
     });
 }
 
-// Real-time Firebase sync
 function listenToProducts() {
     const productsRef = ref(db, "products");
 
@@ -138,7 +130,6 @@ function listenToInventory() {
     });
 }
 
-// Render products table
 function renderProducts() {
     if (!productTableBody) return;
 
@@ -298,7 +289,6 @@ if (productTableBody) {
     });
 }
 
-// Delete confirmation modal
 function openDeleteProductModal() {
     if (!selectedProductId) return;
 
@@ -321,7 +311,6 @@ function closeDeleteModal() {
     document.body.classList.remove("modal-open");
 }
 
-// Modal controls and form population
 function openAddProductModal() {
     currentProductId = null;
     currentImage = "../Asset/Square Logo.jpg";
@@ -433,7 +422,6 @@ function isFoodCategory(cat) {
     return c.includes("snack") || c.includes("food");
 }
 
-// Sizes & prices builder
 function renderPrices(variants) {
     if (!pricesList) return;
     pricesList.innerHTML = "";
@@ -556,7 +544,6 @@ function getNormalizedVariants(product) {
     return [];
 }
 
-// Variant-specific recipes
 function syncVariantTabs() {
     if (!variantRecipeTabs) return;
 
@@ -807,7 +794,6 @@ function updateIngredientNumbers() {
     });
 }
 
-// Save / update to Firebase
 async function saveProduct() {
     saveActiveVariantIngredients();
 
@@ -881,7 +867,6 @@ async function saveProduct() {
     }
 }
 
-// Image picker
 function openImagePicker() {
     const input = document.createElement("input");
     input.type = "file";
@@ -904,7 +889,6 @@ function openImagePicker() {
     input.click();
 }
 
-// Modal event bindings
 function initModalEvents() {
     if (openAddProductBtn) openAddProductBtn.addEventListener("click", openAddProductModal);
     if (openDeleteProductBtn) openDeleteProductBtn.addEventListener("click", openDeleteProductModal);
@@ -948,7 +932,7 @@ function initModalEvents() {
     });
 }
 
-// Helpers
+
 function normalizeStatus(status, isAvailable) {
     if (isAvailable === false) return "Unavailable";
     if (status === "Unavailable" || status === "unavailable" || status === "inactive") {

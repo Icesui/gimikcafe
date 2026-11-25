@@ -1,14 +1,9 @@
 {
   "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
     { "source": "/admin", "destination": "/admin/index.html" },
-    { "source": "/admin/attendance", "destination": "/admin/attendance.html" },
-    { "source": "/admin/pos", "destination": "/admin/pos.html" },
-    { "source": "/admin/orders", "destination": "/admin/orders.html" },
-    { "source": "/admin/inventory", "destination": "/admin/inventory.html" },
-    { "source": "/admin/menu", "destination": "/admin/menu.html" },
-    { "source": "/admin/order-history", "destination": "/admin/order-history.html" },
-    { "source": "/admin/customers", "destination": "/admin/customers.html" },
+    { "source": "/admin/:page", "destination": "/admin/:page.html" },
     { "source": "/attendance", "destination": "/admin/attendance.html" },
     { "source": "/pos", "destination": "/admin/pos.html" },
     { "source": "/orders", "destination": "/admin/orders.html" },

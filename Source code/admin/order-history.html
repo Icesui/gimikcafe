@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="../css/admin.css">
     <link rel="stylesheet" href="../css/admin-order-history.css">
     <link rel="stylesheet" href="../css/admin-notifications.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
 </head>
 
 <body>
@@ -175,6 +178,41 @@
             </div>
         </section>
 
+        <!-- Sales & Drinks Analytics Graph -->
+        <section class="sales-analytics-panel" id="salesAnalyticsSection">
+            <div class="sales-analytics-header">
+                <div>
+                    <h2>Sales &amp; Drinks Analytics</h2>
+                    <p id="analyticsSubtitle">Hourly drinks sold &amp; revenue (12:00 PM – 11:00 PM)</p>
+                </div>
+                <div class="analytics-timeframe-tabs" id="analyticsTimeframeTabs">
+                    <button type="button" class="analytics-tab active" data-range="Today">Today</button>
+                    <button type="button" class="analytics-tab" data-range="Weekly">Weekly</button>
+                    <button type="button" class="analytics-tab" data-range="Monthly">Monthly</button>
+                    <button type="button" class="analytics-tab" data-range="Yearly">Yearly</button>
+                </div>
+            </div>
+
+            <div class="analytics-highlights">
+                <div class="analytics-highlight-item">
+                    <span>PEAK TIME / PERIOD</span>
+                    <strong id="analyticsPeakSlot">-</strong>
+                </div>
+                <div class="analytics-highlight-item">
+                    <span>DRINKS / ITEMS SOLD</span>
+                    <strong id="analyticsTotalDrinks">0</strong>
+                </div>
+                <div class="analytics-highlight-item">
+                    <span>PERIOD REVENUE</span>
+                    <strong id="analyticsTotalRevenue">₱0.00</strong>
+                </div>
+            </div>
+
+            <div class="sales-chart-wrapper">
+                <canvas id="salesTimeChart"></canvas>
+            </div>
+        </section>
+
         <!-- Best Sellers Section -->
         <section class="best-sellers-panel" id="bestSellersSection">
             <div class="best-sellers-header">
@@ -199,7 +237,7 @@
                         <i class="fa-solid fa-trash-can"></i> Clear History
                     </button>
                     <button type="button" class="export-history-btn" id="exportHistoryBtn">
-                        <i class="fa-solid fa-download"></i> Export CSV
+                        <i class="fa-solid fa-file-pdf"></i> Export PDF
                     </button>
                 </div>
             </div>
@@ -268,6 +306,67 @@
     </section>
 
 </main>
+
+<!-- Custom Export PDF Report Modal -->
+<div class="order-modal" id="exportReportModal" style="display: none;">
+    <div class="order-modal-overlay" id="exportReportOverlay"></div>
+    <div class="order-modal-box">
+        <div class="order-modal-header">
+            <div>
+                <span class="history-tag">CUSTOM PDF REPORT</span>
+                <h2>Export PDF Report</h2>
+            </div>
+            <button type="button" class="order-modal-close" id="closeExportModalBtn" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="order-modal-body">
+            <div class="export-option-group">
+                <label for="exportRangeSelect">Select Timeframe</label>
+                <select id="exportRangeSelect" class="export-select">
+                    <option value="Today">Today (12 PM – 11 PM)</option>
+                    <option value="Weekly">Weekly (This Week)</option>
+                    <option value="Monthly">Monthly (This Month)</option>
+                    <option value="Yearly">Yearly (This Year)</option>
+                    <option value="All">All Records</option>
+                </select>
+            </div>
+
+            <div class="export-option-group">
+                <label>Include in PDF Report</label>
+                <div class="export-checklist">
+                    <label class="export-check-item">
+                        <input type="checkbox" id="includeGraphDataCheck" checked>
+                        <span><strong>Sales &amp; Drinks Graph</strong> — Embedded visual chart &amp; time breakdown</span>
+                    </label>
+                    <label class="export-check-item">
+                        <input type="checkbox" id="includeEarningsCheck" checked>
+                        <span><strong>Total Earnings</strong> — Completed orders revenue &amp; net summary</span>
+                    </label>
+                    <label class="export-check-item">
+                        <input type="checkbox" id="includeInventoryExpensesCheck" checked>
+                        <span><strong>Inventory Expenses</strong> — Inventory stock &amp; recorded expenses</span>
+                    </label>
+                    <label class="export-check-item">
+                        <input type="checkbox" id="includeBestSellersCheck">
+                        <span><strong>Best Sellers</strong> — Top-selling drinks &amp; units sold</span>
+                    </label>
+                    <label class="export-check-item">
+                        <input type="checkbox" id="includeOrdersListCheck">
+                        <span><strong>Previous Orders List</strong> — Individual order rows</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="export-modal-actions">
+                <button type="button" class="export-confirm-csv-btn" id="confirmExportPdfBtn">
+                    <i class="fa-solid fa-file-pdf"></i> Download PDF Report
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Order Details Modal -->
 <div class="order-modal" id="historyDetailsModal" style="display: none;">

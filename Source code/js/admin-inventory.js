@@ -1,4 +1,3 @@
-// Firebase Realtime Database imports
 import {
     ref,
     onValue,
@@ -13,7 +12,6 @@ import {
     adminReady
 } from "./admin.js";
 
-// DOM references
 const inventoryTableBody = document.getElementById("inventoryTableBody");
 const openRemoveModalBtn = document.getElementById("openRemoveModal");
 const inventoryEmpty = document.getElementById("inventoryEmpty");
@@ -21,12 +19,10 @@ const inventorySearch = document.getElementById("inventorySearch");
 const categoryFilter = document.getElementById("categoryFilter");
 const statusFilter = document.getElementById("statusFilter");
 
-// Statistics indicators
 const statTotalItems = document.getElementById("statTotalItems");
 const statInStock = document.getElementById("statInStock");
 const statLowStock = document.getElementById("statLowStock");
 
-// Item creation and editing modal
 const inventoryModal = document.getElementById("inventoryModal");
 const openInventoryModalBtn = document.getElementById("openInventoryModal");
 const closeInventoryModalBtn = document.getElementById("closeInventoryModal");
@@ -38,10 +34,12 @@ const inventoryForm = document.getElementById("inventoryForm");
 const inventoryName = document.getElementById("inventoryName");
 const inventoryCategory = document.getElementById("inventoryCategory");
 const inventoryUnit = document.getElementById("inventoryUnit");
+const inventoryPrice = document.getElementById("inventoryPrice");
+const priceInputLabel = document.getElementById("priceInputLabel");
+const priceInputHint = document.getElementById("priceInputHint");
 const inventoryStock = document.getElementById("inventoryStock");
 const inventoryMinimum = document.getElementById("inventoryMinimum");
 
-// Packaging configuration and units
 const hasPackagingToggle = document.getElementById("hasPackagingToggle");
 const packagingFields = document.getElementById("packagingFields");
 const packageTypeName = document.getElementById("packageTypeName");
@@ -49,7 +47,6 @@ const packageCapacity = document.getElementById("packageCapacity");
 const capacityUnitLabel = document.getElementById("capacityUnitLabel");
 const stockInputLabel = document.getElementById("stockInputLabel");
 
-// Quick stock adjustment controls
 const stockModal = document.getElementById("stockModal");
 const stockModalOverlay = document.getElementById("stockModalOverlay");
 const closeStockModalBtn = document.getElementById("closeStockModal");
@@ -66,21 +63,18 @@ const adjustUnitSelectorGroup = document.getElementById("adjustUnitSelectorGroup
 const adjustPackageNameLabel = document.getElementById("adjustPackageNameLabel");
 const adjustBaseUnitLabel = document.getElementById("adjustBaseUnitLabel");
 
-// Centered delete confirmation modal
 const deleteModal = document.getElementById("deleteModal");
 const deleteModalOverlay = document.getElementById("deleteModalOverlay");
 const cancelDeleteModalBtn = document.getElementById("cancelDeleteModal");
 const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
 const deleteTargetItemName = document.getElementById("deleteTargetItemName");
 
-// Runtime state variables
 let inventoryItems = [];
 let editingInventoryId = null;
 let selectedInventoryId = null;
 let activeStockItem = null;
 let activeStockMode = "add";
 
-// System initialization
 const initInventory = () => {
     updateInventoryDate();
     initPackagingConversionForm();
@@ -105,7 +99,6 @@ function updateInventoryDate() {
     });
 }
 
-// Real-time inventory sync from Firebase
 function listenToInventory() {
     const inventoryRef = ref(db, "inventory");
 
@@ -130,7 +123,6 @@ function listenToInventory() {
     });
 }
 
-// Table rendering and filtering
 function renderInventory() {
     if (!inventoryTableBody) return;
 
@@ -172,7 +164,6 @@ function renderInventory() {
     updateStatistics();
 }
 
-// Helper to format/pluralize unit names cleanly (e.g. slices, scoops, shots, pumps, cc, ml, g, pcs)
 function formatUnitName(unit, count) {
     const u = String(unit || "").trim().toLowerCase();
     const isPlural = count !== 1;
@@ -192,10 +183,16 @@ function formatUnitName(unit, count) {
         case "cc":
             return "cc";
         default:
-            return unit || "unit"; // ml, g, pcs, cc remain unchanged
+            return unit || "unit";
     }
 }
-// Row template builder
+
+function getUnitPrice(item) {
+    const raw = item.price ?? item.unitPrice ?? item.cost ?? 0;
+    const num = Number(raw);
+    return isNaN(num) || num < 0 ? 0 : num;
+}
+
 function createInventoryRow(item) {
     const row = document.createElement("tr");
     row.dataset.inventoryId = item.id;
@@ -210,6 +207,8 @@ function createInventoryRow(item) {
     const currentBaseStock = Number(item.stock) || 0;
     const baseUnit = item.unit || "unit";
     const isPackaged = Boolean(item.isPackaged && item.capacityPerPackage > 0);
+    const unitPrice = getUnitPrice(item);
+    const priceLabelUnit = isPackaged ? (item.packageType || "package") : baseUnit;
 
     let stockDisplayHTML = "";
 
@@ -240,6 +239,13 @@ function createInventoryRow(item) {
         `;
     }
 
+    const priceDisplayHTML = `
+        <div class="stock-dual-display">
+            <strong>${formatPeso(unitPrice)}</strong>
+            <span>per ${escapeHTML(priceLabelUnit)}</span>
+        </div>
+    `;
+
     let minStockDisplay = `${formatNumber(item.minimumStock || 0)} ${formatUnitName(baseUnit, item.minimumStock || 0)}`;
     if (isPackaged) {
         const minPkgs = (Number(item.minimumStock || 0) / Number(item.capacityPerPackage)).toFixed(1);
@@ -260,6 +266,7 @@ function createInventoryRow(item) {
         </td>
         <td>${escapeHTML(formatCategory(item.category))}</td>
         <td>${stockDisplayHTML}</td>
+        <td>${priceDisplayHTML}</td>
         <td><strong>${escapeHTML(baseUnit)}</strong></td>
         <td>${minStockDisplay}</td>
         <td>
@@ -294,7 +301,6 @@ function createInventoryRow(item) {
     return row;
 }
 
-// Threshold status computation
 function getInventoryStatus(item) {
     const stock = Number(item.stock) || 0;
     const minimum = Number(item.minimumStock) || 0;
@@ -322,7 +328,6 @@ function getStatusClass(status) {
     }
 }
 
-// Summary badges update (3 metrics)
 function updateStatistics() {
     let totalItems = 0;
     let inStock = 0;
@@ -341,7 +346,6 @@ function updateStatistics() {
     if (statLowStock) statLowStock.textContent = attentionCount;
 }
 
-// Unit packaging form helpers
 function initPackagingConversionForm() {
     if (!hasPackagingToggle) return;
 
@@ -372,17 +376,37 @@ function updateConversionLabels() {
 
     if (isPackaged) {
         if (stockInputLabel) stockInputLabel.textContent = `Current Stock (${capitalize(pkgName)}s)`;
+        if (priceInputLabel) priceInputLabel.textContent = `Price per ${capitalize(pkgName)} (₱)`;
+        if (priceInputHint) priceInputHint.textContent = `Example: 25.00 for 1 ${pkgName}`;
     } else {
         if (stockInputLabel) stockInputLabel.textContent = `Current Stock (${baseUnit})`;
+        if (priceInputLabel) priceInputLabel.textContent = `Price per ${baseUnit} (₱)`;
+        if (priceInputHint) priceInputHint.textContent = `Example: 25.00 for 1 ${baseUnit}`;
     }
 }
 
-// Search and filter event listeners
+async function recordInventoryExpense({ itemId, itemName, category, quantity, unitLabel, unitPrice, totalExpense, actionType }) {
+    if (!totalExpense || totalExpense <= 0) return;
+
+    const expensesRef = ref(db, "inventoryExpenses");
+    const newExpRef = push(expensesRef);
+    await set(newExpRef, {
+        inventoryId: itemId || null,
+        itemName: itemName || "Inventory Item",
+        category: category || "others",
+        quantity: Number(quantity) || 0,
+        unit: unitLabel || "unit",
+        unitPrice: Number(unitPrice) || 0,
+        amount: Math.round(Number(totalExpense) * 100) / 100,
+        actionType: actionType || "restock",
+        createdAt: Date.now()
+    });
+}
+
 inventorySearch?.addEventListener("input", renderInventory);
 categoryFilter?.addEventListener("change", renderInventory);
 statusFilter?.addEventListener("change", renderInventory);
 
-// Modal state handlers
 openInventoryModalBtn?.addEventListener("click", openAddInventoryModal);
 
 function openAddInventoryModal() {
@@ -390,6 +414,7 @@ function openAddInventoryModal() {
 
     if (inventoryModalTitle) inventoryModalTitle.textContent = "Add Inventory Item";
     if (inventoryForm) inventoryForm.reset();
+    if (inventoryPrice) inventoryPrice.value = "";
 
     if (hasPackagingToggle) hasPackagingToggle.checked = false;
     if (packagingFields) packagingFields.style.display = "none";
@@ -408,6 +433,7 @@ function openEditInventoryModal(inventoryId) {
     inventoryName.value = item.name || "";
     inventoryCategory.value = item.category || "";
     inventoryUnit.value = item.unit || "pcs";
+    if (inventoryPrice) inventoryPrice.value = getUnitPrice(item).toFixed(2);
 
     const isPackaged = Boolean(item.isPackaged && item.capacityPerPackage > 0);
     hasPackagingToggle.checked = isPackaged;
@@ -444,7 +470,6 @@ closeInventoryModalBtn?.addEventListener("click", closeModal);
 cancelInventoryModalBtn?.addEventListener("click", closeModal);
 inventoryModalOverlay?.addEventListener("click", closeModal);
 
-// Inventory form submission
 inventoryForm?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -453,10 +478,11 @@ inventoryForm?.addEventListener("submit", async (event) => {
     const unit = inventoryUnit.value;
     const isPackaged = hasPackagingToggle.checked;
 
+    const unitPrice = parseFloat(inventoryPrice?.value ?? 0);
     const rawStock = parseFloat(inventoryStock.value);
     const rawMin = parseFloat(inventoryMinimum.value);
 
-    if (!name || !category || !unit || isNaN(rawStock) || rawStock < 0) {
+    if (!name || !category || !unit || isNaN(rawStock) || rawStock < 0 || isNaN(unitPrice) || unitPrice < 0) {
         return;
     }
 
@@ -481,10 +507,12 @@ inventoryForm?.addEventListener("submit", async (event) => {
         const saveButton = inventoryForm.querySelector(".inventory-save-button");
         if (saveButton) saveButton.disabled = true;
 
+        const roundedPrice = Math.round(unitPrice * 100) / 100;
         const payload = {
             name,
             category,
             unit,
+            price: roundedPrice,
             stock: finalStockInBaseUnits,
             minimumStock: finalMinInBaseUnits,
             isPackaged: isPackaged,
@@ -501,6 +529,20 @@ inventoryForm?.addEventListener("submit", async (event) => {
             const inventoryRef = ref(db, "inventory");
             const newItemRef = push(inventoryRef);
             await set(newItemRef, payload);
+
+            if (rawStock > 0 && roundedPrice > 0) {
+                const displayUnit = isPackaged ? pkgType : unit;
+                await recordInventoryExpense({
+                    itemId: newItemRef.key,
+                    itemName: name,
+                    category,
+                    quantity: rawStock,
+                    unitLabel: displayUnit,
+                    unitPrice: roundedPrice,
+                    totalExpense: rawStock * roundedPrice,
+                    actionType: "new-item"
+                });
+            }
         }
 
         closeModal();
@@ -512,7 +554,6 @@ inventoryForm?.addEventListener("submit", async (event) => {
     }
 });
 
-// Quick adjustment modal
 function openStockModal(item, mode) {
     activeStockItem = item;
     activeStockMode = mode;
@@ -520,6 +561,7 @@ function openStockModal(item, mode) {
     const currentBaseStock = Number(item.stock) || 0;
     const baseUnit = item.unit || "unit";
     const isPackaged = Boolean(item.isPackaged && item.capacityPerPackage > 0);
+    const unitPrice = getUnitPrice(item);
 
     if (stockForm) stockForm.reset();
 
@@ -534,10 +576,14 @@ function openStockModal(item, mode) {
         adjustUnitSelectorGroup.style.display = "none";
     }
 
+    const priceNote = unitPrice > 0
+        ? ` (${formatPeso(unitPrice)} per ${isPackaged ? item.packageType : baseUnit})`
+        : "";
+
     if (mode === "add") {
         if (stockModalTitle) stockModalTitle.textContent = `Restock "${item.name}"`;
         if (stockModalDescription) {
-            stockModalDescription.innerHTML = `Add quantity to <strong>${escapeHTML(item.name)}</strong>:`;
+            stockModalDescription.innerHTML = `Add quantity to <strong>${escapeHTML(item.name)}</strong>${escapeHTML(priceNote)}:`;
         }
         if (confirmStockBtn) {
             confirmStockBtn.classList.remove("minus-btn");
@@ -616,6 +662,29 @@ stockForm?.addEventListener("submit", async (event) => {
             updatedAt: Date.now()
         });
 
+        if (activeStockMode === "add") {
+            const unitPrice = getUnitPrice(activeStockItem);
+            if (unitPrice > 0) {
+                const effectivePrice = isPackaged && adjustType === "base"
+                    ? unitPrice / Number(activeStockItem.capacityPerPackage)
+                    : unitPrice;
+                const unitLabel = isPackaged && adjustType === "package"
+                    ? activeStockItem.packageType
+                    : activeStockItem.unit;
+
+                await recordInventoryExpense({
+                    itemId: activeStockItem.id,
+                    itemName: activeStockItem.name,
+                    category: activeStockItem.category,
+                    quantity: quantityInput,
+                    unitLabel,
+                    unitPrice: effectivePrice,
+                    totalExpense: quantityInput * effectivePrice,
+                    actionType: "restock"
+                });
+            }
+        }
+
         closeStockModal();
     } catch (error) {
         console.error("Stock adjustment error:", error);
@@ -624,7 +693,6 @@ stockForm?.addEventListener("submit", async (event) => {
     }
 });
 
-// Centered delete modal handlers
 function openDeleteModal() {
     if (!selectedInventoryId) return;
 
@@ -673,7 +741,6 @@ confirmDeleteBtn?.addEventListener("click", async () => {
     }
 });
 
-// Table selection and adjustment interactions
 inventoryTableBody?.addEventListener("dblclick", (event) => {
     const row = event.target.closest("tr");
     if (!row) return;
@@ -717,7 +784,6 @@ inventoryTableBody?.addEventListener("click", (event) => {
     }
 });
 
-// ESC key keyboard listener
 document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
         if (deleteModal?.classList.contains("active")) closeDeleteModal();
@@ -726,7 +792,6 @@ document.addEventListener("keydown", (event) => {
     }
 });
 
-// UI formatting utilities
 function getCategoryIcon(category) {
     switch (String(category || "").toLowerCase()) {
         case "coffee-tea": return "fa-solid fa-mug-hot";
@@ -753,6 +818,14 @@ function formatCategory(category) {
         case "packaging": return "Cups & Packaging";
         default: return "Others";
     }
+}
+
+function formatPeso(amount) {
+    return new Intl.NumberFormat("en-PH", {
+        style: "currency",
+        currency: "PHP",
+        minimumFractionDigits: 2
+    }).format(Number(amount) || 0);
 }
 
 function formatNumber(number) {

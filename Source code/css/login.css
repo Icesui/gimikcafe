@@ -1,11 +1,5 @@
-/* ==========================================
-   GOOGLE FONTS IMPORT
-========================================== */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* ==========================================
-   LOGIN SECTION & WRAPPER
-========================================== */
 .login-section {
     min-height: 100vh;
     display: flex;
@@ -16,9 +10,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* ==========================================
-   LOGIN CARD CONTAINER
-========================================== */
 .login-container {
     width: 100%;
     max-width: 450px;
@@ -30,9 +21,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* ==========================================
-   LOGIN HEADINGS & TYPOGRAPHY
-========================================== */
 .login-container h1 {
     font-family: 'Noto Serif', serif;
     font-weight: 700;
@@ -49,9 +37,6 @@
     font-size: 15px;
 }
 
-/* ==========================================
-   INPUT FIELDS & LABELS
-========================================== */
 .input-box {
     text-align: left;
     margin-bottom: 25px;
@@ -81,9 +66,6 @@
     border-color: #04696D;
 }
 
-/* ==========================================
-   LOGIN FEEDBACK MESSAGE
-========================================== */
 .login-message {
     display: none;
     margin: 0 0 15px;
@@ -94,9 +76,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-/* ==========================================
-   LOGIN SUBMIT BUTTON
-========================================== */
 .login-btn {
     width: 100%;
     padding: 15px;
@@ -122,9 +101,6 @@
     cursor: not-allowed;
 }
 
-/* ==========================================
-   REGISTER & AUTH OPTIONS
-========================================== */
 .register-link {
     margin-top: 30px;
 }
@@ -179,9 +155,6 @@
     background: #e2ecec;
 }
 
-/* ==========================================
-   RESPONSIVE MEDIA QUERIES
-========================================== */
 @media(max-width: 768px) {
     .login-container {
         padding: 30px 25px;

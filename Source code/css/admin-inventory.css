@@ -643,6 +643,12 @@
     background-color: #f7fbfb;
 }
 
+.inventory-form-group input[type="number"] {
+    background-image: none;
+    padding-right: 14px;
+    cursor: text;
+}
+
 .inventory-form-group input:focus,
 .inventory-form-group select:focus {
     border-color: #72babc;
@@ -706,6 +712,20 @@
     position: relative;
     display: flex;
     align-items: center;
+}
+
+.input-with-unit .peso-prefix {
+    position: absolute;
+    left: 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #024E52;
+    pointer-events: none;
+}
+
+.input-with-unit input:has(~ .peso-prefix),
+.peso-prefix + input {
+    padding-left: 30px;
 }
 
 .input-with-unit input {

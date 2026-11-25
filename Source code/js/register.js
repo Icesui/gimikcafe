@@ -1,9 +1,3 @@
-// ==========================================
-//        GIMIK CAFE FIREBASE REGISTER
-//        WITH USERNAME INDEX & EMAIL VERIFICATION
-//        TERMS & CONDITIONS
-// ==========================================
-
 import { auth, database } from "./firebase-config.js";
 import { 
     createUserWithEmailAndPassword, 
@@ -30,9 +24,7 @@ const confirmPasswordInput = document.getElementById("confirmPassword");
 const messageElement = document.getElementById("registerMessage");
 const registerButton = document.getElementById("registerSubmit");
 
-// ==========================================
-//        TERMS & CONDITIONS MODAL
-// ==========================================
+//  TERMS & CONDITIONS MODAL
 if (termsModal && termsContent) {
     document.body.classList.add("terms-open");
 
@@ -64,9 +56,7 @@ if (termsModal && termsContent) {
     }
 }
 
-// ==========================================
 //   LOCK AT .COM BUT REMAIN FULLY EDITABLE
-// ==========================================
 if (emailInput) {
     emailInput.setAttribute("autocomplete", "new-password");
     emailInput.setAttribute("autocorrect", "off");
@@ -146,9 +136,7 @@ async function usernameExists(username) {
     return false;
 }
 
-// =========================================================
 //                  SUBMIT REGISTRATION
-// =========================================================
 if (registerForm) {
     registerForm.addEventListener("submit", async function(event) {
         event.preventDefault();

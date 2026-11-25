@@ -14,9 +14,7 @@ let cart = JSON.parse(localStorage.getItem(CART_STORAGE_KEY)) || [];
 let allProducts = [];
 let allInventory = [];
 
-// =========================================================
 // CUSTOMER ACTIVE ORDER LISTENER
-// =========================================================
 let cartHasNotifiedProcessing = false;
 
 function listenToCustomerActiveOrder() {

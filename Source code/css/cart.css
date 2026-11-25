@@ -1,11 +1,5 @@
-/* ==========================================
-   GOOGLE FONTS IMPORT
-========================================== */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@400;500;600;700;800&display=swap');
 
-/* ==========================================
-   CART SECTION & HEADINGS
-========================================== */
 .cart {
     max-width: 1200px;
     margin: auto;
@@ -30,9 +24,6 @@
     font-size: 18px;
 }
 
-/* ==========================================
-   CART TWO-COLUMN LAYOUT
-========================================== */
 .cart-container {
     display: grid;
     grid-template-columns: 1.6fr 1fr;
@@ -40,9 +31,6 @@
     align-items: start;
 }
 
-/* ==========================================
-   CART ITEMS CONTAINER & PRODUCT CARDS
-========================================== */
 .cart-items {
     display: flex;
     flex-direction: column;
@@ -53,7 +41,6 @@
     box-shadow: 2px 5px 25px rgba(0, 0, 0, 0.18);
 }
 
-/* Strip outer card layer when cart is empty */
 .cart-items:has(.empty-cart) {
     background: transparent !important;
     padding: 0 !important;
@@ -98,9 +85,6 @@
     font-family: 'Noto Serif', serif;
 }
 
-/* ==========================================
-   QUANTITY CONTROLS & ITEM ACTIONS
-========================================== */
 .cart-actions {
     display: flex;
     flex-direction: column;
@@ -133,7 +117,6 @@
     background: #034e51;
 }
 
-/* Editable Numeric Input */
 .quantity-input {
     width: 42px;
     height: 32px;
@@ -194,9 +177,6 @@
     transform: translateY(-1px);
 }
 
-/* ==========================================
-   ORDER SUMMARY SIDEBAR CARD
-========================================== */
 .order-summary {
     background: #04696D;
     padding: 35px;
@@ -251,9 +231,6 @@
     font-weight: 700;
 }
 
-/* ==========================================
-   PROCEED TO CHECKOUT BUTTON
-========================================== */
 .checkout-btn {
     width: 100%;
     border: none;
@@ -281,9 +258,6 @@
     transform: translateY(-2px);
 }
 
-/* ==========================================
-   EMPTY CART STATE
-========================================== */
 .empty-cart {
     background: #04696D;
     padding: 50px 20px;
@@ -335,9 +309,6 @@
     transform: translateY(-2px);
 }
 
-/* ==========================================
-   RESPONSIVE MEDIA QUERIES
-========================================== */
 @media(max-width: 1000px) {
     .cart-container {
         grid-template-columns: 1fr;
@@ -434,7 +405,6 @@
     }
 }
 
-/* Customer Ready Toast Notification */
 .customer-ready-toast {
     position: fixed;
     bottom: 30px;
